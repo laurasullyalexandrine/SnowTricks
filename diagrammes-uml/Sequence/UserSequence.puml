@@ -1,0 +1,49 @@
+@startuml UserSequence
+
+skinparam responseMessageBelowArrow true
+skinparam SequenceMessageAlignment center
+
+actor User as User #Plum
+
+entity Trick as Trick #LightYellow
+entity Message as Message #LightYellow
+entity Admin as Admin #LightYellow
+
+database SnowTricks as SnowTricks #HotPink
+
+User -> SnowTricks: créer un compte
+alt cas réussi
+SnowTricks-> User: valider création du compte
+else email déjà existant 
+SnowTricks-> User: échec de l'inscription
+
+User -> SnowTricks: demander authentification 
+SnowTricks-> User: valider authentification 
+else identification invalides
+SnowTricks-> User: échec de l'authentification
+
+User -> SnowTricks: réinitialiser mot de passe 
+SnowTricks-> User: valider réinitialisation 
+else nom invalide
+SnowTricks-> User: échec de la réinitialisation
+
+User -> Trick: ajouter Trick 
+Trick-> User: Trick ajouter 
+else cette Trick existe déjà
+SnowTricks-> User: échec de l'ajout
+
+User  -> Message: éditer message
+Message -> User: valider édition
+else 404
+Message -> User: ce message n'existe pas
+
+User -> Message: ajouter message
+Message -> User: message en attente de validation
+else 403
+User -> Message: Vous n'avez pas accès à cette ressource
+
+User -> Message: consulter tous ses messages
+Message -> User: afficher liste de ses messages
+
+end
+@enduml

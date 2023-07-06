@@ -1,0 +1,11 @@
+@startuml Message
+
+Class Message {
+
+    - content: string
+    - status : int
+    - date : DateTime 
+
+}
+
+@enduml

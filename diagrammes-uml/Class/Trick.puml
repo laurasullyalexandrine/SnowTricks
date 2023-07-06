@@ -1,0 +1,31 @@
+@startuml Trick
+
+!include Message.puml 
+!include User.puml 
+!include Role.puml
+!include TrickManager.puml
+!include MessageManager.puml
+!include UserManager.puml
+
+Class Trick {
+    
+    - name : string
+    - slug : string
+    - description : string
+    - TrickGroup : string
+    - picture : string
+    - video : string
+    - date : Datetime
+    
+}
+
+User *--"1" Role: have <>
+Trick *--"1" User: create <
+Trick "1"-* Message: have <>
+Message *--"1" User: create <
+TrickManager -- Trick: exec
+MessageManager -- Message: manage
+User - MessageManager: moderate
+UserManager - User: exec
+
+@enduml

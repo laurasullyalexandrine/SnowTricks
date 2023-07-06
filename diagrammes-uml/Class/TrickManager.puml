@@ -1,0 +1,10 @@
+@startuml TrickManager
+
+Class TrickManager {
+
+    + addTrick(Trick Trick, User user)
+    + updateTrick(Trick Trick, User user)
+    + deleteTrick(Trick Trick, User user)
+    + createListingTrick(Trick Trick, User user)
+
+}

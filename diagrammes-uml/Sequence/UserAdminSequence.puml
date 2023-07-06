@@ -1,0 +1,47 @@
+@startuml UserAdminSequence
+
+skinparam responseMessageBelowArrow true
+skinparam SequenceMessageAlignment center
+
+actor Admin as Admin #SteelBlue
+
+entity Trick as Trick #LightYellow
+entity Message as Message #LightYellow
+entity User as User #LightYellow
+
+database SnowTricks as SnowTricks #HotPink
+
+Admin -> SnowTricks: créer un compte
+alt cas réussi
+SnowTricks-> Admin: valider création du compte
+else email déjà existant 
+SnowTricks-> Admin: échec de l'inscription
+
+Admin -> SnowTricks: demander authentification 
+SnowTricks-> Admin: valider authentification 
+else identification invalides
+SnowTricks-> Admin: échec de l'authentification
+
+Admin -> Trick: ajouter Trick
+Trick -> Admin: valider ajout
+else le champ nom ne peut pas être vide
+Trick -> Admin: échec de l'ajout
+
+Admin -> Trick: éditer Trick
+Trick -> Admin: valider édition
+else cette Trick n'existe pas
+Trick -> Admin: la Trick en cours de modification n'existe pas
+
+Admin -> Trick: supprimer Trick
+Trick -> Admin: valider suppression
+
+Admin -> Message: modérer message
+Message -> Admin: accepter message
+Admin  -> Message: refuser message
+Message -> Admin: supprimer message
+
+Admin -> User: modifier utilisateurs
+User -> Admin: valider modification
+
+end
+@enduml

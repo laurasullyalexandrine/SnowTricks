@@ -1,0 +1,35 @@
+@startuml admin
+
+left to right direction
+
+actor "admin" as admin #OliveDrab
+
+rectangle SnowTricks{
+  usecase "Créer un compte" as UC1
+  usecase "Se connecter" as UC2
+  usecase "Consulter les Tricks" as UC3
+  usecase "Consulter une Trick" as UC4
+  usecase "Ajouter une Trick" as UC5
+  usecase "Modifier sa Trick" as UC6
+  usecase "Supprimer sa Trick" as UC7
+  usecase "Ajouter ses commentaires" as UC8
+  usecase "Modifier ses commentaires" as UC9
+  usecase "Supprimer ses commentaires" as UC10
+  usecase "Modérer les commentaires" as UC11
+  usecase "Réinitialiser son mot de passe" as UC12
+}
+
+admin --> UC1
+admin --> UC2
+admin --> UC3
+admin --> UC4
+admin --> UC5
+admin --> UC6
+admin --> UC7
+admin --> UC8
+admin --> UC9
+admin --> UC10
+admin --> UC11
+admin --> UC12
+
+@enduml
