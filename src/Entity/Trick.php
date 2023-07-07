@@ -7,8 +7,10 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Repository\TrickRepository;
 use App\Entity\Trait\CreatedAtTrait;
 use App\Entity\Trait\UpdatedAtTrait;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: TrickRepository::class)]
+#[UniqueEntity(fields: ['name'], message:"il existe déjà une figure avec ce nom")]
 class Trick
 {
     use CreatedAtTrait;
@@ -19,7 +21,7 @@ class Trick
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 64)]
+    #[ORM\Column(length: 64, unique: true)]
     private ?string $name = null;
 
     #[ORM\Column(length: 128)]
