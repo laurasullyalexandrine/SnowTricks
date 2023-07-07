@@ -1,0 +1,52 @@
+body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
+.main-title {
+    position: relative;
+}
+
+.main-title img {
+    max-width: 100%;
+}
+
+.hook {
+    font-family: "Londrina Solid", sans-serif;
+    font-weight: 300;
+}
+
+.marker-blue {
+    color: #1a7087;
+}
+
+/* sm */
+@media (min-width: 576px) {
+    .main-title .hook {
+        font-size: 20px;
+        position: absolute;
+        top: 55%;
+        right: 10px;
+        left: 56.1%;
+    }
+}
+
+/* md */
+@media (min-width: 768px) {
+    
+}
+
+/* lg */
+@media (min-width: 992px) {
+    
+}
+
+/* xl */
+@media (min-width: 1200px) {
+    
+}
