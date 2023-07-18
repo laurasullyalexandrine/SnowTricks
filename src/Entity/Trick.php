@@ -10,11 +10,7 @@ use App\Entity\Trait\UpdatedAtTrait;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: TrickRepository::class)]
-<<<<<<< HEAD
 #[UniqueEntity(fields: ['name'], message:"il existe déjà une figure avec ce nom")]
-=======
-#[UniqueEntity(fields: ['name'], message: "Il existe déjà une figure avec ce nom")]
->>>>>>> 20-datafixtures
 class Trick
 {
     use CreatedAtTrait;
