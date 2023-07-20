@@ -22,8 +22,14 @@ main {
     font-weight: 300;
 }
 
+.strong,
+.card-link,
 .marker-blue {
     color: #1a7087;
+}
+
+.card-link {
+    text-decoration: none;
 }
 
 /* NAV FOOTER */

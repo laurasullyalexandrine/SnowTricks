@@ -39,6 +39,15 @@ class TrickRepository extends ServiceEntityRepository
         }
     }
 
+    public function getAllTricksByOrderAsc(): array
+    {
+        return $this->createQueryBuilder('t')
+            ->orderBy('t.name', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
 //    /**
 //     * @return Trick[] Returns an array of Trick objects
 //     */
