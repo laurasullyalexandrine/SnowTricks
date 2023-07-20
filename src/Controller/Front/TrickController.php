@@ -2,8 +2,8 @@
 
 namespace App\Controller\Front;
 
+use App\Entity\Trick;
 use App\Repository\TrickRepository;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -13,9 +13,13 @@ class TrickController extends AbstractController
     public function __construct(private TrickRepository $trickRepository)
     {}
 
-    #[Route('/figures', name: 'app_trick')]
-    public function create(Request $request): Response
+    #[Route('/figure/{slug}', name: 'trick_slug', methods:['GET'])]
+    public function read(
+        Trick $trick): Response
     {
-        return $this->render('front/trick/trick.html.twig');
+        return $this->render('front/trick/read.html.twig', [
+            'trick' => $trick,
+            'slug' => $trick->getSlug(),
+        ]);
     }
 }

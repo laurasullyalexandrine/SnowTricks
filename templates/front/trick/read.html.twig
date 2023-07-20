@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}	
+
+{% block body %}
+	<article class="row d-flex">
+		<div class="d-flex" style="background-color: #82ccdd;">
+			<img src="{{ trick.picture }}" class="text-center" alt="trick-picture">
+			<p class="display-4 trick-name p-3"  style="background-color:#38ada9;">{{ trick.name }}</p>
+		</div>
+		<section class="d-flex flex-wrap py-3" style="background-color: #60a3bc;">
+			<p class="fs-4">Section images et vidéos</p>
+			{# TODO: comment faire pour avoir plusieurs images et vidéos pour un seul objet ? #}
+	    </section>
+		<section class="d-flex py-3" style="background-color: #3c6382;">
+			<p class="fs-5">{{ trick.description }}</p>
+	    </section>
+		<section class="d-flex text-light py-3" style="background-color: #0a3d62;">
+			<p class="fs-5 me-4"><time datetime="{{ trick.createdAt|date('d-m-Y') }}">{{ trick.createdAt|date('d-m-Y') }}</time></p>
+			{% if trick.updatedAt is not empty %}
+				<p class="fs-5 me-4"><time datetime="{{ trick.updatedAt|date('d-m-Y') }}">{{ trick.updatedAt|date('d-m-Y') }}</time></p>
+			{% endif %}
+			<p class="fs-5">{{ trick.trickGroup }}</p>
+	    </section>
+		<section class="d-flex py-3" style="background-color: #38ada9;">
+			<p class="fs-4">Section commentaires User connecté</p>
+			<p class="fs-4">Ajouter le formulaire de publication de commentaire</p>
+			<p class="fs-4">Les commentaires publié et validés par ordre desc</p>
+	    </section>
+    </article>
+{% endblock %}

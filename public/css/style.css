@@ -9,7 +9,8 @@ main {
     flex: 1;
 }
 
-.main-title {
+.main-title,
+.trick-name {
     position: relative;
 }
 
@@ -32,6 +33,9 @@ main {
     text-decoration: none;
 }
 
+.trick-image img {
+    max-width: 500px;
+}
 /* NAV FOOTER */
 
 .nav-link {
@@ -50,6 +54,10 @@ main {
     background-color:  #05a1b7;
 }
 
+.navbar-toggler-icon {
+    color:  #c4c2c2;
+    border:  none; 
+}
 /* MEDIA QUERIES */
 /* sm */
 @media (min-width: 576px) {
