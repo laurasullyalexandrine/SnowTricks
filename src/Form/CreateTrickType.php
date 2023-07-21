@@ -5,12 +5,16 @@ namespace App\Form;
 use App\Entity\Trick;
 use App\Entity\Trickgroup;
 use App\Repository\TrickRepository;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use App\Repository\TrickgroupRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class CreateTrickType extends AbstractType
 {
@@ -58,8 +62,8 @@ class CreateTrickType extends AbstractType
                 'expanded' => true,
                 'choice_label' => fn(Trickgroup $trickgroup) => $trickgroup->getName(),
                 'query_builder' => 
-                    fn(TrickRepository $trickRepository) 
-                        => $trickRepository->createQueryBuilder('tg')
+                    fn(TrickgroupRepository $trickgroupRepository) 
+                        => $trickgroupRepository->createQueryBuilder('tg')
                         ->orderBy('tg.name', 'ASC'),
                 'attr' => [
                     'class' => 'mb-3']
