@@ -30,9 +30,6 @@ class Trick
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
-    #[ORM\Column(length: 64, nullable: true)]
-    private ?string $trickGroup = null;
-
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $picture = null;
 
@@ -86,18 +83,6 @@ class Trick
     public function setDescription(string $description): static
     {
         $this->description = $description;
-
-        return $this;
-    }
-
-    public function getTrickGroup(): ?string
-    {
-        return $this->trickGroup;
-    }
-
-    public function setTrickGroup(?string $trickGroup): static
-    {
-        $this->trickGroup = $trickGroup;
 
         return $this;
     }

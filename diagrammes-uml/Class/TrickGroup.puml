@@ -1,0 +1,9 @@
+@startuml TrickGroup
+
+Class Trickgroup {
+
+    - name : string
+
+}
+
+@enduml
