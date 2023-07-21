@@ -36,6 +36,9 @@ class Trick
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $video = null;
 
+    #[ORM\ManyToOne(inversedBy: 'tricks')]
+    private ?Trickgroup $trick_group = null;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
@@ -131,6 +134,18 @@ class Trick
     public function setUpdatedAt(?\DateTimeImmutable $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getTrickGroup(): ?Trickgroup
+    {
+        return $this->trick_group;
+    }
+
+    public function setTrickGroup(?Trickgroup $trick_group): static
+    {
+        $this->trick_group = $trick_group;
 
         return $this;
     }

@@ -3,15 +3,16 @@
 namespace App\Form;
 
 use App\Entity\Trick;
+use App\Entity\Trickgroup;
+use App\Repository\TrickRepository;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
-class TrickAddType extends AbstractType
+class CreateTrickType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -34,6 +35,7 @@ class TrickAddType extends AbstractType
                     new NotBlank()
                 ]
             ])
+
             ->add('picture', FileType::class, [
                 'mapped' => false,
                 'required' => false,
@@ -49,6 +51,18 @@ class TrickAddType extends AbstractType
                     new File (['maxSize' => '20M'
                     ])
                 ]
+            ])
+            ->add('trick_group', EntityType::class, [
+                'class' => Trickgroup::class,
+                'multiple' => false,
+                'expanded' => true,
+                'choice_label' => fn(Trickgroup $trickgroup) => $trickgroup->getName(),
+                'query_builder' => 
+                    fn(TrickRepository $trickRepository) 
+                        => $trickRepository->createQueryBuilder('tg')
+                        ->orderBy('tg.name', 'ASC'),
+                'attr' => [
+                    'class' => 'mb-3']
             ])
         ;
     }
