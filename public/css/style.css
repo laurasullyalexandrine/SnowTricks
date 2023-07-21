@@ -33,7 +33,7 @@ main {
     text-decoration: none;
 }
 
-.trick-image img {
+.trick-image {
     max-width: 500px;
 }
 /* NAV FOOTER */
@@ -68,6 +68,7 @@ main {
         right: 10px;
         left: 56.1%;
     }
+    
 }
 
 /* md */
