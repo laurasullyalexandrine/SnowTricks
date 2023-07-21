@@ -1,5 +1,14 @@
 {% extends 'base.html.twig' %}	
 
 {% block body %}
-
+    <article class="row d-flex">
+		<div class="d-flex" style="background-color: #82ccdd;">
+			<img src="{{ trick.picture }}" class="trick-image text-center" alt="trick-picture">
+			<h1 class="display-4 position-absolute top-50 start-50 translate-middle trick-name p-3"  style="background-color:#38ada9;">{{ trick.name }}</h1>
+		</div>
+		<section class="d-flex flex-wrap py-3" style="background-color: #60a3bc;">
+			<p class="fs-4">Section images et vidéos</p>
+			{# TODO: comment faire pour avoir plusieurs images et vidéos pour un seul objet ? #}
+	    </section>
+    </article>
 {% endblock %}

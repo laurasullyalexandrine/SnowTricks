@@ -18,10 +18,12 @@ main {
     max-width: 100%;
 }
 
-.hook {
+.hook,
+h1 {
     font-family: "Londrina Solid", sans-serif;
     font-weight: 300;
 }
+
 
 .strong,
 .card-link,

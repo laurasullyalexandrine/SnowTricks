@@ -28,7 +28,7 @@ class TrickController extends AbstractController
     public function create(Request $request): Response
     {
         $trick = new Trick();
-        dd($trick);
+    
         return $this->render('front/trick/create.html.twig');
     }
 }
