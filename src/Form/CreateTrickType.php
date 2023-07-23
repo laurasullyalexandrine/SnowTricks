@@ -39,7 +39,6 @@ class CreateTrickType extends AbstractType
                     new NotBlank()
                 ]
             ])
-
             ->add('picture', FileType::class, [
                 'mapped' => false,
                 'required' => false,

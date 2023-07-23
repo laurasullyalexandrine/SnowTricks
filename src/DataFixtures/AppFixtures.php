@@ -14,12 +14,13 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 class AppFixtures extends Fixture
 {
     public function __construct(private SluggerInterface $slugger)
-    {}
+    {
+    }
 
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create('fr_FR');
-        
+
         // TricksGroup array
         $tricksGroupsArray = [
             'Butter Trick',
@@ -97,29 +98,17 @@ class AppFixtures extends Fixture
             $manager->persist($trickGroup);
         }
 
-       
-        // dd($nbTrickGrouptoAdd);
-            foreach ($tricks as $trick) {
-                $newTrick = new Trick();
-                $newTrick->setName($trick['name'])
-                    ->setSlug($this->slugger->slug(str_replace(' ', '-', $newTrick->getName()))->lower())
-                    ->setDescription($trick['description'])
-                    ->setPicture($trick['picture']);
+        foreach ($tricks as $trick) {
+            shuffle($trickdGroupsObjects);
+            $newTrick = new Trick();
+            $newTrick->setName($trick['name'])
+                ->setSlug($this->slugger->slug(str_replace(' ', '-', $newTrick->getName()))->lower())
+                ->setDescription($trick['description'])
+                ->setPicture($trick['picture'])
+                ->setTrickGroup($trickdGroupsObjects[0] ?? null);
 
-                    $nbTrickGrouptoAdd = rand(0, 8);
-
-                $selectedTrickGroups = [];
-                for ($tg = 0; $tg < $nbTrickGrouptoAdd; $tg++) {
-                   do { 
-                        $randomIndex = rand(0, count($trickdGroupsObjects) - 1);
-                    } while (in_array($randomIndex, $selectedTrickGroups));
-                    
-                    $newTrick->setTrickGroup($trickdGroupsObjects[$randomIndex]);
-
-                    $selectedTrickGroups[] = $randomIndex;
-                }
-                $manager->persist($newTrick);
-            }
+            $manager->persist($newTrick);
+        }
         $manager->flush();
     }
 }

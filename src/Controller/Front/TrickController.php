@@ -38,7 +38,7 @@ class TrickController extends AbstractController
         $form->handleRequest($request);
     
         if ($form->isSubmitted() && $form->isValid()) {
-
+            // TODO: Comment faire pour mettre une image par défaut
             $trick = $form->getData();
             $this->slugger->slugifyTrick($trick);
 
