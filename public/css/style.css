@@ -37,6 +37,17 @@ h1 {
 .trick-image {
     max-width: 500px;
 }
+
+.btn {
+    border: 0;
+    cursor: pointer;
+    /* margin: 3%; */
+    color: #fff;
+    font-size: 1em;
+    padding: 5px 15px;
+    border-radius: 3px;
+    background-color: #05a1b7;
+}
 /* NAV FOOTER */
 
 .nav-link {
@@ -49,9 +60,12 @@ h1 {
 }
 
 .logout {
+    border: 0;
+    cursor: pointer;
     color: #fff;
-    padding:  5px 15px;
-    border-radius:  3px;
+    font-size: 1em;
+    padding: 5px 15px;
+    border-radius: 3px;
     background-color:  #05a1b7;
 }
 

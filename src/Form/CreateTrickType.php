@@ -32,7 +32,7 @@ class CreateTrickType extends AbstractType
             ])
             ->add('description', TextareaType::class, [
                 'attr' => [
-                    'placeholder' => 'description de la figure',
+                    'placeholder' => 'Description de la figure',
                     'class' =>  'form-control mb-3'
                 ],
                 'constraints' => [
