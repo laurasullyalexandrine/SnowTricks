@@ -5,7 +5,6 @@ namespace App\Controller\Front;
 use App\Entity\Trick;
 use App\Form\CreateTrickType;
 use App\Repository\TrickRepository;
-use App\Service\Slugger;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,7 +15,6 @@ class TrickController extends AbstractController
 {
     public function __construct(
         private TrickRepository $trickRepository,
-        private Slugger $slugger,
         private EntityManagerInterface $manager)
     {}
 
@@ -40,7 +38,6 @@ class TrickController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             // TODO: Comment faire pour mettre une image par défaut
             $trick = $form->getData();
-            $this->slugger->slugifyTrick($trick);
 
             $this->manager->persist($trick);
 

@@ -32,7 +32,7 @@ class CreateTrickType extends AbstractType
             ])
             ->add('description', TextareaType::class, [
                 'attr' => [
-                    'placeholder' => 'Nom de la figure',
+                    'placeholder' => 'description de la figure',
                     'class' =>  'form-control mb-3'
                 ],
                 'constraints' => [
@@ -58,7 +58,7 @@ class CreateTrickType extends AbstractType
             ->add('trick_group', EntityType::class, [
                 'class' => Trickgroup::class,
                 'multiple' => false,
-                'expanded' => true,
+                'expanded' => false,
                 'choice_label' => fn(Trickgroup $trickgroup) => $trickgroup->getName(),
                 'query_builder' => 
                     fn(TrickgroupRepository $trickgroupRepository) 

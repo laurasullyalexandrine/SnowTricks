@@ -8,6 +8,7 @@ use App\Repository\TrickRepository;
 use App\Entity\Trait\CreatedAtTrait;
 use App\Entity\Trait\UpdatedAtTrait;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 #[ORM\Entity(repositoryClass: TrickRepository::class)]
 #[UniqueEntity(fields: ['name'], message:"il existe déjà une figure avec ce nom")]
@@ -24,6 +25,11 @@ class Trick
     #[ORM\Column(length: 64, unique: true)]
     private ?string $name = null;
 
+    /**
+     * @Gedmo\Slug(fields={"name"})
+     *
+     * @var string|null
+     */
     #[ORM\Column(length: 128)]
     private ?string $slug = null;
 
@@ -69,13 +75,6 @@ class Trick
     public function getSlug(): ?string
     {
         return $this->slug;
-    }
-
-    public function setSlug(string $slug): static
-    {
-        $this->slug = $slug;
-
-        return $this;
     }
 
     public function getDescription(): ?string
