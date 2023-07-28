@@ -39,7 +39,7 @@ class AppFixtures extends Fixture
             1 => [
                 'name' => 'Ollie Nollie',
                 'description' => "Nous avons parlé du Ollie ci-dessus, le Nollie c'est l'inverse. Accroupis-toi, déplace ton poids vers l'avant, puis utilise le nez de ta planche pour sauter.",
-                'picture' => 'https://img.freepik.com/photos-premium/personne-faisant-du-snowboard-devant-montagne_771335-49889.jpg'
+                'picture' => null
             ],
             2 => [
                 'name' => 'Tail Press',
@@ -49,7 +49,7 @@ class AppFixtures extends Fixture
             3 => [
                 'name' => 'Indy',
                 'description' => 'Attrape le carre des orteils de ta planche, entre les fixations, avec ta main arrière.',
-                'picture' => 'https://media.istockphoto.com/id/1304125483/fr/photo/sensation-forte-dans-la-neige.jpg?s=612x612&w=0&k=20&c=TG_EiLaJnmvu9p-JM9lBaPLr-2sg-u0BS-b8WYi0NJo='
+                'picture' =>  null
             ],
             4 => [
                 'name' => 'Stalefish',
@@ -64,7 +64,7 @@ class AppFixtures extends Fixture
             6 => [
                 'name' => 'Wildcat',
                 'description' => 'Un Wildcat est un Backflip qui garde la planche parallèle à la trajectoire, tu fais donc une sorte de Flip "latéral" sans perte de vitesse.',
-                'picture' => 'https://us.123rf.com/450wm/storyimage/storyimage2302/storyimage230201453/198799123-snowboarder-freeride-sur-la-pente-de-la-montagne-enneig%C3%A9e-ia-g%C3%A9n%C3%A9rative-illustrations-de-haute.jpg?ver=6'
+                'picture' =>  null
             ],
             7 => [
                 'name' => 'Tamedog',
@@ -79,7 +79,7 @@ class AppFixtures extends Fixture
             9 => [
                 'name' => 'Frontside Boardslide',
                 'description' => "Il s'agit de glisser jusqu'au rail sur ton côté arrière, puis de sauter dessus avec le nez de la planche au-dessus du rail. Tu atterris avec le rail entre tes fixations, ta planche perpendiculaire à la structure.",
-                'picture' => 'https://img.freepik.com/photos-premium/personne-faisant-du-snowboard-devant-montagne_771335-49889.jpg'
+                'picture' =>  null
             ],
             10 => [
                 'name' => 'Frontside Lipslide',
@@ -103,7 +103,7 @@ class AppFixtures extends Fixture
             $newTrick = new Trick();
             $newTrick->setName($trick['name'])
                 ->setDescription($trick['description'])
-                ->setPicture('snowboard-home.png')
+                ->setPicture($trick['picture'] ?? 'snowboard-home.png')
                 ->setTrickGroup($trickdGroupsObjects[0] ?? null);
 
             $manager->persist($newTrick);

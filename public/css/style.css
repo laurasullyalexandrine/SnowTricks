@@ -41,11 +41,14 @@ h1 {
 .btn {
     border: 0;
     cursor: pointer;
-    /* margin: 3%; */
-    color: #fff;
+    color: #05a1b7;;
     font-size: 1em;
     padding: 5px 15px;
+    border: 1px solid #05a1b7;
     border-radius: 3px;
+}
+.btn:hover {
+    color: #fff;
     background-color: #05a1b7;
 }
 /* NAV FOOTER */

@@ -16,7 +16,13 @@
 					<div class="col-sm-4 mb-3">
 						<div class="card shadow-sm bg-body rounded" style="max-width: 18rem; max-height: 14rem;">
 							<div class="card-body flex-wrap">
-                                <a href="{{ path('trick_slug', { slug: trick.slug } )}}"><img src="{{ asset('uploads/picture/' ~ trick.picture) }}" alt="trick-picture" style="max-width: 16rem; max-height: 16rem;"></a>
+                                {% if trick.picture == 'snowboard-home.png' %}
+                                    <a href="{{ path('trick_slug', { slug: trick.slug }) }}"><img src="{{ asset('image/' ~ trick.picture) }}" alt="trick-picture" style="max-width: 16rem; max-height: 16rem;"></a>
+                                {% elseif trick.picture matches '{^https}' %}
+                                    <a href="{{ path('trick_slug', { slug: trick.slug }) }}"><img src="{{ trick.picture }}" alt="trick-picture" style="max-width: 16rem; max-height: 16rem;"></a>
+                                {% else %}
+                                     <a href="{{ path('trick_slug', { slug: trick.slug } )}}"><img src="{{ asset('uploads/picture/' ~ trick.picture) }}" alt="trick-picture" style="max-width: 16rem; max-height: 16rem;"></a>
+                                {% endif %}
 								<div class="d-flex mt-2">
 									<a class="card-link" href="{{ path('trick_slug', { slug: trick.slug } )}}">{{ trick.name }}</a>
 								</div>

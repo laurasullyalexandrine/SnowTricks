@@ -38,7 +38,8 @@ class FileUploader
         if ($pictureName !== null) {
             $trick->setPicture($pictureName);
         } else {
-            $pictureName = __DIR__ . '/../public/image/snowboard-home.png';
+            $pictureName = 'snowboard-home.png';
+            $trick->setPicture($pictureName);
         }
         return $this->targetDirectoryPicture;
     }

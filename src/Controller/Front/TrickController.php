@@ -51,8 +51,8 @@ class TrickController extends AbstractController
             $this->manager->persist($trick);
             $this->manager->flush();
             
-            $this->addFlash('success', 'Votre figure a été créée');
-            return $this->redirect($request->headers->get('referer'));
+            $this->addFlash('success', 'Votre figure a été créée.');
+            return $this->redirectToRoute('home');
         }
         return $this->render('front/trick/create.html.twig', [
             'form' => $form->createView(),
