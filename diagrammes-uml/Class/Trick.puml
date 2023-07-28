@@ -3,6 +3,7 @@
 !include Message.puml 
 !include User.puml 
 !include Role.puml
+!include Trickgroup.puml
 !include TrickManager.puml
 !include MessageManager.puml
 !include UserManager.puml
@@ -12,13 +13,13 @@ Class Trick {
     - name : string
     - slug : string
     - description : string
-    - TrickGroup : string
     - picture : string
     - video : string
     - date : Datetime
     
 }
 
+Trickgroup "1"-* Trick: have <
 User *--"1" Role: have <>
 Trick *--"1" User: create <
 Trick "1"-* Message: have <>

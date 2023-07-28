@@ -8,6 +8,7 @@ use App\Repository\TrickRepository;
 use App\Entity\Trait\CreatedAtTrait;
 use App\Entity\Trait\UpdatedAtTrait;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 #[ORM\Entity(repositoryClass: TrickRepository::class)]
 #[UniqueEntity(fields: ['name'], message:"il existe déjà une figure avec ce nom")]
@@ -24,20 +25,25 @@ class Trick
     #[ORM\Column(length: 64, unique: true)]
     private ?string $name = null;
 
+    /**
+     * @Gedmo\Slug(fields={"name"})
+     *
+     * @var string|null
+     */
     #[ORM\Column(length: 128)]
     private ?string $slug = null;
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
-    #[ORM\Column(length: 64, nullable: true)]
-    private ?string $trickGroup = null;
-
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $picture = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $video = null;
+
+    #[ORM\ManyToOne(inversedBy: 'tricks')]
+    private ?Trickgroup $trick_group = null;
 
     public function __construct()
     {
@@ -71,13 +77,6 @@ class Trick
         return $this->slug;
     }
 
-    public function setSlug(string $slug): static
-    {
-        $this->slug = $slug;
-
-        return $this;
-    }
-
     public function getDescription(): ?string
     {
         return $this->description;
@@ -86,18 +85,6 @@ class Trick
     public function setDescription(string $description): static
     {
         $this->description = $description;
-
-        return $this;
-    }
-
-    public function getTrickGroup(): ?string
-    {
-        return $this->trickGroup;
-    }
-
-    public function setTrickGroup(?string $trickGroup): static
-    {
-        $this->trickGroup = $trickGroup;
 
         return $this;
     }
@@ -146,6 +133,18 @@ class Trick
     public function setUpdatedAt(?\DateTimeImmutable $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getTrickGroup(): ?Trickgroup
+    {
+        return $this->trick_group;
+    }
+
+    public function setTrickGroup(?Trickgroup $trick_group): static
+    {
+        $this->trick_group = $trick_group;
 
         return $this;
     }

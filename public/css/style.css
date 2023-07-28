@@ -9,7 +9,8 @@ main {
     flex: 1;
 }
 
-.main-title {
+.main-title,
+.trick-name {
     position: relative;
 }
 
@@ -17,7 +18,8 @@ main {
     max-width: 100%;
 }
 
-.hook {
+.hook,
+h1 {
     font-family: "Londrina Solid", sans-serif;
     font-weight: 300;
 }
@@ -32,6 +34,23 @@ main {
     text-decoration: none;
 }
 
+.trick-image {
+    max-width: 500px;
+}
+
+.btn {
+    border: 0;
+    cursor: pointer;
+    color: #05a1b7;;
+    font-size: 1em;
+    padding: 5px 15px;
+    border: 1px solid #05a1b7;
+    border-radius: 3px;
+}
+.btn:hover {
+    color: #fff;
+    background-color: #05a1b7;
+}
 /* NAV FOOTER */
 
 .nav-link {
@@ -44,12 +63,19 @@ main {
 }
 
 .logout {
+    border: 0;
+    cursor: pointer;
     color: #fff;
-    padding:  5px 15px;
-    border-radius:  3px;
+    font-size: 1em;
+    padding: 5px 15px;
+    border-radius: 3px;
     background-color:  #05a1b7;
 }
 
+.navbar-toggler-icon {
+    color:  #c4c2c2;
+    border:  none; 
+}
 /* MEDIA QUERIES */
 /* sm */
 @media (min-width: 576px) {
@@ -60,6 +86,7 @@ main {
         right: 10px;
         left: 56.1%;
     }
+    
 }
 
 /* md */

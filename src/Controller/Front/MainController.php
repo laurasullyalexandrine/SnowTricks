@@ -11,7 +11,7 @@ class MainController extends AbstractController
 {
     public function __construct(private TrickRepository $trickRepository)
     {}
-    #[Route('/', name: 'home')]
+    #[Route('/', name: 'home', methods:['GET'])]
     public function home(): Response
     {
         return $this->render('front/main/home.html.twig', [
