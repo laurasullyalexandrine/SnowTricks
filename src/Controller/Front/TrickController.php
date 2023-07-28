@@ -5,6 +5,7 @@ namespace App\Controller\Front;
 use App\Entity\Trick;
 use App\Form\CreateTrickType;
 use App\Repository\TrickRepository;
+use App\Service\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,6 +23,7 @@ class TrickController extends AbstractController
     public function read(
         Trick $trick): Response
     {
+
         return $this->render('front/trick/read.html.twig', [
             'trick' => $trick,
             'slug' => $trick->getSlug(),
@@ -29,7 +31,7 @@ class TrickController extends AbstractController
     }
 
     #[Route('/nouvelle-figure', name: 'trick_create', methods:['GET', 'POST'])]
-    public function create(Request $request): Response
+    public function create(Request $request, FileUploader $fileUploader): Response
     {
         $trick = new Trick();
         $form = $this->createForm(CreateTrickType::class);
@@ -37,17 +39,26 @@ class TrickController extends AbstractController
     
         if ($form->isSubmitted() && $form->isValid()) {
             // TODO: Comment faire pour mettre une image par défaut
+
             $trick = $form->getData();
 
-            $this->manager->persist($trick);
+            $pictureFile = $form->get('picture')->getData();
+            $fileUploader->getTargetDirectoryPicture($pictureFile, $trick);
 
+            $videoFile = $form->get('video')->getData();
+            $fileUploader->getTargetDirectoryVideo($videoFile, $trick);
+
+            $this->manager->persist($trick);
             $this->manager->flush();
             
             $this->addFlash('success', 'Votre figure a été créée');
             return $this->redirect($request->headers->get('referer'));
         }
         return $this->render('front/trick/create.html.twig', [
-            'form' => $form,
+            'form' => $form->createView(),
         ]);
     }
+
+    
 }
+

@@ -102,9 +102,8 @@ class AppFixtures extends Fixture
             shuffle($trickdGroupsObjects);
             $newTrick = new Trick();
             $newTrick->setName($trick['name'])
-                ->setSlug($this->slugger->slug(str_replace(' ', '-', $newTrick->getName()))->lower())
                 ->setDescription($trick['description'])
-                ->setPicture($trick['picture'])
+                ->setPicture('snowboard-home.png')
                 ->setTrickGroup($trickdGroupsObjects[0] ?? null);
 
             $manager->persist($newTrick);
