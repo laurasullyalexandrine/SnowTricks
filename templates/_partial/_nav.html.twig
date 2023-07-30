@@ -29,11 +29,11 @@
 					class="d-lg-flex flex-lg-row flex-xl-row lex-xxl-row flex-xs-column flex-sm-column">
 					{# s'indentifier #}
 					<li class="nav-item">
-						<a class="nav-link text-light fs-4" href="#">Connexion</a>
+						<a class="nav-link text-light fs-4" href="{{ path('app_login') }}">Connexion</a>
 					</li>
 					{# s'inscrire #}
 					<li class="nav-item">
-						<a class="nav-link text-light fs-4" href="{{ path('app_register')}}">Inscription</a>
+						<a class="nav-link text-light fs-4" href="{{ path('app_register') }}">Inscription</a>
 					</li>
 				</div>
 			</ul>
@@ -41,7 +41,7 @@
 				class="navbar-nav">
 				{# se connecter #}
 				<li class="nav-item mt-1 mb-lg-0 mb-3">
-					<a class="logout nav-link text-light fs-4" href="#">Déconnexion</a>
+					<a class="logout nav-link text-light fs-4" href="{{ path('app_logout') }}">Déconnexion</a>
 				</li>
 			</ul>
 		</div>

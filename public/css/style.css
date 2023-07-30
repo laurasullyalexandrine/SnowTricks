@@ -38,8 +38,7 @@ h1 {
     max-width: 500px;
 }
 
-.btn {
-    border: 0;
+.btn:not(.btn-floating) {
     cursor: pointer;
     color: #05a1b7;;
     font-size: 1em;
