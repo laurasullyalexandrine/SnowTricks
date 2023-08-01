@@ -10,7 +10,9 @@
                 <h1 class="hook m-lg-4"><strong>SnowTricks</strong> est site collaboratif pour faire connaître ce sport auprès du grand public et aider à l'apprentissage des figures <strong class="marker-blue">(tricks)</strong>.</h1>
             </div>
         </section>
-        <a class="card-link fs-5 my-4" href="{{ path('trick_create') }}">Ajoutes une nouvelle figure de snowboard</a>
+        {% if app.user %}
+            <a class="btn fs-5 my-4" href="{{ path('trick_create') }}">Nouvelle figure</a>
+        {% endif %}
         <section class="d-flex flex-wrap justify-content-center ">
 				{% for trick in tricks %}
 					<div class="col-sm-4 mb-3">
