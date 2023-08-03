@@ -2,6 +2,15 @@
 	<body>
 		{% include "_partial/_nav.html.twig" %}
 		{% include "_partial/_flash.html.twig" %}
+		{% if app.user and app.user.isVerified == false %}
+			<div class="alert alert-primary alert-dismissible" role="alert">
+				<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+				<div class="alert-message">
+					<strong>Ton compte n'a pas été activé</strong>, cliques sur ce lien pour recevoir un nouveau lien d'activation.
+				</div>
+			</div>
+		{% endif %}
+		
 
 		<main class="container my-3"> 
 			{% block body %}{% endblock %}
