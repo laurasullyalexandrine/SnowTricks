@@ -38,13 +38,15 @@
 					</div>
 				{% endif %}
 			</ul>
-			<ul
-				class="navbar-nav">
+			<ul class="navbar-nav">
 				{# se déconnecter #}
 				{% if app.user %}
-					<li class="nav-item mt-1 mb-lg-0 mb-3">
-						<a class="logout nav-link text-light fs-4" href="{{ path('app_logout') }}">Déconnexion</a>
-					</li>
+					<div class="mb-3">
+                    	<li class="nav-item text-light text-center fs-4 mt-1 mb-lg-0 mb-3">Hello {{ app.user.name }},
+						<li class="nav-item text-light text-center mt-1 mb-lg-0 mb-3">
+							<a class="btn nav-link text-light fs-4" href="{{ path('app_logout') }}">Déconnexion</a>
+						</li> 
+                	</div>
 				{% endif %}
 			</ul>
 		</div>
