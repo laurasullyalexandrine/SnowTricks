@@ -71,7 +71,7 @@ class Trickgroup
     {
         if ($this->tricks->removeElement($trick)) {
             // set the owning side to null (unless already changed)
-            if ($trick->getTrickGroup() === $this) {
+            if ($trick->getTrickgroup() === $this) {
                 $trick->setTrickGroup(null);
             }
         }

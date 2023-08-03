@@ -5,18 +5,13 @@ namespace App\Entity;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\TrickRepository;
-use App\Entity\Trait\CreatedAtTrait;
-use App\Entity\Trait\UpdatedAtTrait;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 #[ORM\Entity(repositoryClass: TrickRepository::class)]
-#[UniqueEntity(fields: ['name'], message:"il existe déjà une figure avec ce nom")]
+#[UniqueEntity(fields: ['name'], message:"il existe déjà une figure avec ce nom.")]
 class Trick
-{
-    use CreatedAtTrait;
-    use UpdatedAtTrait;
-    
+{   
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -44,11 +39,6 @@ class Trick
 
     #[ORM\ManyToOne(inversedBy: 'tricks')]
     private ?Trickgroup $trick_group = null;
-
-    public function __construct()
-    {
-        $this->createdAt = new \DateTimeImmutable();
-    }
 
     public function __toString()
     {
@@ -109,30 +99,6 @@ class Trick
     public function setVideo(?string $video): static
     {
         $this->video = $video;
-
-        return $this;
-    }
-
-    public function getCreatedAt(): ?\DateTimeImmutable
-    {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt(\DateTimeImmutable $createdAt): static
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    public function getUpdatedAt(): ?\DateTimeImmutable
-    {
-        return $this->updatedAt;
-    }
-
-    public function setUpdatedAt(?\DateTimeImmutable $updatedAt): static
-    {
-        $this->updatedAt = $updatedAt;
 
         return $this;
     }
