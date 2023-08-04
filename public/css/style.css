@@ -54,6 +54,7 @@ h1 {
 /* NAV FOOTER */
 
 .nav-link {
+    font-size: 1.3rem !important;
     color: #fff;
     border-bottom: 1px solid transparent;
 }

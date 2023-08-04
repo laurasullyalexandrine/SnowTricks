@@ -42,7 +42,7 @@
 				{% if app.user %}
 					<ul class="navbar-nav d-flex  ms-2">
                     	<li class="nav-item text-light text-center fs-4 mt-1 mb-lg-0 mb-3">
-							<strong class="marker-blue">Hello {{ app.user.name }}</strong>
+							<strong class="marker-blue">Bonjour {{ app.user.name|capitalize }}</strong>
 						</li> 
 					</ul>
 					<ul class="navbar-nav d-flex  ms-2">

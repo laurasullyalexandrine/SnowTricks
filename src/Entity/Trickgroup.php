@@ -31,6 +31,7 @@ class Trickgroup
     public function __construct()
     {
         $this->tricks = new ArrayCollection();
+        $this->created_at = new \DateTimeImmutable();
     }
 
     public function __toString()
