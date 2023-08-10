@@ -5,9 +5,9 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Service\SendMailService;
 use App\Form\RegistrationFormType;
-use App\Repository\UserRepository;
 use App\Security\LoginFormAuthenticator;
 use App\Service\GenerateToken;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,12 +22,12 @@ class RegistrationController extends AbstractController
         private SendMailService $mail,
         private GenerateToken $generateToken,
         private EntityManagerInterface $manager)
-    {
-        
-    }
+    {}
 
     #[Route('/inscription', name: 'app_register')]
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, LoginFormAuthenticator $authenticator, EntityManagerInterface $entityManager): Response
+    public function register(
+        Request $request, 
+        UserPasswordHasherInterface $userPasswordHasher): Response
     {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
@@ -43,14 +43,16 @@ class RegistrationController extends AbstractController
             );
             $token = $this->generateToken->generateToken();
       
-            $user->setToken($token);
+            $user->setToken($token)
+                ->setTokenCreatedAt(new DateTimeImmutable());
 
-            $entityManager->persist($user);
-            $entityManager->flush();
+            $this->manager->persist($user);
+            $this->manager->flush();
 
+            
+            // Create email confirmation url
             $host = $request->server->get("HTTP_HOST");
             $scheme = array_key_exists("HTTPS", $_SERVER) ? "https" : "http";
-
             $verifyUrl = "$scheme://$host/verification-email/$token";
        
             // do anything else you need here, like send an email
@@ -62,11 +64,7 @@ class RegistrationController extends AbstractController
                 compact('user', 'verifyUrl')
             );
 
-            return $userAuthenticator->authenticateUser(
-                $user,
-                $authenticator,
-                $request
-            );
+            return $this->redirectToRoute('confirmation_mail_sent');
         }
 
         return $this->render('registration/register.html.twig', [
@@ -74,31 +72,59 @@ class RegistrationController extends AbstractController
         ]);
     }
 
+    #[Route('/mail-de-confirmation-envoye', name: 'confirmation_mail_sent')]
+    public function mailSent(): Response 
+    {
+        $this->addFlash('primary', "Ton compte n'est pas encore activé. Vérifies tes mails et utilise le lien pour validé ton email.");
+        return $this->render('registration/mail_sent.html.twig');
+    }
+
     #[Route('/verification-email/{token}', name: 'verify_email')]
-    public function verifyEmail(string $token)
+    public function verifyEmail(
+        string $token,
+        Request $request,
+        UserAuthenticatorInterface $userAuthenticator, 
+        LoginFormAuthenticator $authenticator): Response
     {
         try {
+            // Stocker la date du jour et l'heure de l'activation de l'url de vérification
             $now = date_create();
+            // Retrouver le user depuis le token générer lors de l'inscription
             $user = $this->manager->getRepository(User::class)->findOneByToken($token);
     
             if (!$user) {
                 throw new \Exception('Aucun utilisateur associè à ce token');
             }
     
+            // Récupérer la date de création du token
             $tokenDate = $user->getTokenCreatedAt();
     
+            // Créer la date d'expiration du token
             $tokenExpirationDate = $tokenDate->modify('+3 hour');
     
+            // Si la date de création du token est suppérieur à la date de validité
             if ($now > $tokenExpirationDate) {
-                throw new \Exception('Ce token a expiré');
+                throw new \Exception('Ce token a expiré!');
             }
     
-            $user->setIsVerify(true);
+            $user->setIsVerified(true);
+            $this->manager->persist($user);
+            $this->manager->flush();
+
+            $this->addFlash('success', 'Ton compte est maintenant validé. Bienvenue sur SnowTricks!');
+            return $this->redirectToRoute('home',[
+                $userAuthenticator->authenticateUser(
+                    $user,
+                    $authenticator,
+                    $request
+                )
+            ]);
+
         } catch (\Exception $e) {
-            // TODO: Message erreur 
-            dd($e);
+            $this->addFlash('danger', $e->getMessage());
         }
 
+        return $this->render('/registration/registration_error.html.twig');
     }
 
 }
