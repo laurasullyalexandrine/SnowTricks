@@ -44,6 +44,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $token = null;
 
+    #[ORM\Column(options: ["default" => "CURRENT_TIMESTAMP"])]
+    private ?\DateTimeImmutable $token_created_at = null;
+
     public function __construct()
     {
         $this->created_at = new \DateTimeImmutable();
@@ -175,6 +178,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setToken(?string $token): static
     {
         $this->token = $token;
+
+        return $this;
+    }
+
+    public function getTokenCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->token_created_at;
+    }
+
+    public function setTokenCreatedAt(\DateTimeImmutable $token_created_at): static
+    {
+        $this->token_created_at = $token_created_at;
 
         return $this;
     }
