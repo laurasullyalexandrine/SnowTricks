@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Connexion!{% endblock %}
+
+{% block body %}
+<article class="row">
+    <section>
+        <form method="post">
+            {% if error %}
+                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            {% endif %}
+
+            <h1 class="h3 mb-3 font-weight-normal">Connexion</h1>
+            <label for="inputEmail">Prénom/Pseudo</label>
+            <input type="text" value="{{ last_username }}" name="name" id="Name" class="form-control mb-3" autocomplete="name" required autofocus>
+            <label for="inputPassword">Mot de passe</label>
+            <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
+
+            <input type="hidden" name="_csrf_token"
+                value="{{ csrf_token('authenticate') }}">
+
+            <div class="d-flex my-4">
+                <button class="btn me-4" type="submit">
+                    Connexion
+                </button>
+                <div>
+                    <a class="btn" href="#" class="text-body">Mot de passe oublié ?</a>
+                </div>
+            </div>
+        </form>
+    </section>
+
+    <section class="mt-3">
+        <p class="h5">Tu n'as pas encore de compte ?
+            <a class="fw-medium" href="{{ path('app_register') }}">Inscris toi !</a>
+        </p>
+    </section>
+
+</article>
+{% endblock %}

@@ -5,18 +5,13 @@ namespace App\Entity;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\TrickRepository;
-use App\Entity\Trait\CreatedAtTrait;
-use App\Entity\Trait\UpdatedAtTrait;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 #[ORM\Entity(repositoryClass: TrickRepository::class)]
-#[UniqueEntity(fields: ['name'], message:"il existe déjà une figure avec ce nom")]
+#[UniqueEntity(fields: ['name'], message:"il existe déjà une figure avec ce nom.")]
 class Trick
-{
-    use CreatedAtTrait;
-    use UpdatedAtTrait;
-    
+{   
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -45,9 +40,15 @@ class Trick
     #[ORM\ManyToOne(inversedBy: 'tricks')]
     private ?Trickgroup $trick_group = null;
 
+    #[ORM\Column(options: ["default" => "CURRENT_TIMESTAMP"])]
+    private ?\DateTimeImmutable $created_at = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $updated_at = null;
+
     public function __construct()
     {
-        $this->createdAt = new \DateTimeImmutable();
+        $this->created_at = new \DateTimeImmutable();
     }
 
     public function __toString()
@@ -113,30 +114,6 @@ class Trick
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
-    {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt(\DateTimeImmutable $createdAt): static
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    public function getUpdatedAt(): ?\DateTimeImmutable
-    {
-        return $this->updatedAt;
-    }
-
-    public function setUpdatedAt(?\DateTimeImmutable $updatedAt): static
-    {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
-
     public function getTrickGroup(): ?Trickgroup
     {
         return $this->trick_group;
@@ -145,6 +122,30 @@ class Trick
     public function setTrickGroup(?Trickgroup $trick_group): static
     {
         $this->trick_group = $trick_group;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->created_at;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $created_at): static
+    {
+        $this->created_at = $created_at;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeImmutable
+    {
+        return $this->updated_at;
+    }
+
+    public function setUpdatedAt(?\DateTimeImmutable $updated_at): static
+    {
+        $this->updated_at = $updated_at;
 
         return $this;
     }

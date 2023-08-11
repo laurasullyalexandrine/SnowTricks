@@ -22,9 +22,16 @@ class Trickgroup
     #[ORM\OneToMany(mappedBy: 'trick_group', targetEntity: Trick::class)]
     private Collection $tricks;
 
+    #[ORM\Column(options: ["default" => "CURRENT_TIMESTAMP"])]
+    private ?\DateTimeImmutable $created_at = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $updated_at = null;
+
     public function __construct()
     {
         $this->tricks = new ArrayCollection();
+        $this->created_at = new \DateTimeImmutable();
     }
 
     public function __toString()
@@ -71,10 +78,34 @@ class Trickgroup
     {
         if ($this->tricks->removeElement($trick)) {
             // set the owning side to null (unless already changed)
-            if ($trick->getTrickGroup() === $this) {
+            if ($trick->getTrickgroup() === $this) {
                 $trick->setTrickGroup(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->created_at;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $created_at): static
+    {
+        $this->created_at = $created_at;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeImmutable
+    {
+        return $this->updated_at;
+    }
+
+    public function setUpdatedAt(?\DateTimeImmutable $updated_at): static
+    {
+        $this->updated_at = $updated_at;
 
         return $this;
     }
