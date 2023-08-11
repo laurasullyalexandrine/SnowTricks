@@ -10,7 +10,8 @@
                 <h1 class="hook m-lg-4"><strong>SnowTricks</strong> est site collaboratif pour faire connaître ce sport auprès du grand public et aider à l'apprentissage des figures <strong class="marker-blue">(tricks)</strong>.</h1>
             </div>
         </section>
-        {% if app.user %}
+        {% if app.user and app.user.isverified == true %}
+        {{dump(app.user.isverified)}}
             <a class="btn fs-5 my-4" href="{{ path('trick_create') }}">Nouvelle figure</a>
         {% endif %}
         <section class="d-flex flex-wrap justify-content-center ">

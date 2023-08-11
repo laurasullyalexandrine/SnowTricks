@@ -3,15 +3,16 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use DateTimeImmutable;
+use App\Service\GenerateToken;
 use App\Service\SendMailService;
 use App\Form\RegistrationFormType;
 use App\Security\LoginFormAuthenticator;
-use App\Service\GenerateToken;
-use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
@@ -49,7 +50,6 @@ class RegistrationController extends AbstractController
             $this->manager->persist($user);
             $this->manager->flush();
 
-            
             // Create email confirmation url
             $host = $request->server->get("HTTP_HOST");
             $scheme = array_key_exists("HTTPS", $_SERVER) ? "https" : "http";
@@ -93,7 +93,7 @@ class RegistrationController extends AbstractController
             $user = $this->manager->getRepository(User::class)->findOneByToken($token);
     
             if (!$user) {
-                throw new \Exception('Aucun utilisateur associè à ce token');
+                throw new \Exception('Aucun utilisateur associè à ce token! Essayes de te connecter.');
             }
     
             // Récupérer la date de création du token
@@ -101,10 +101,14 @@ class RegistrationController extends AbstractController
     
             // Créer la date d'expiration du token
             $tokenExpirationDate = $tokenDate->modify('+3 hour');
-    
+          
             // Si la date de création du token est suppérieur à la date de validité
             if ($now > $tokenExpirationDate) {
-                throw new \Exception('Ce token a expiré!');
+                throw new \Exception('Ce token a expiré! Cliques sur lien pour recevoir un nouvel email de validation.');
+                $this->resendMail(
+                    $user,
+                    $request
+                );
             }
     
             $user->setIsVerified(true);
@@ -124,7 +128,39 @@ class RegistrationController extends AbstractController
             $this->addFlash('danger', $e->getMessage());
         }
 
-        return $this->render('/registration/registration_error.html.twig');
+        return $this->render('/registration/registration_error.html.twig', [
+            'user' => $user
+        ]);
     }
 
+    #[Route('renvoyer-mail-validation/{user_name}', name: 'resend_mail')]
+    public function resendMail(
+        #[MapEntity(mapping: ['user_name' => 'name'])] User $user,
+        Request $request)
+    {
+        // dd($request);
+        $token = $this->generateToken->generateToken();
+      
+        $user->setToken($token)
+            ->setTokenCreatedAt(new DateTimeImmutable());
+
+        $this->manager->persist($user);
+        $this->manager->flush();
+
+        // Create email confirmation url
+        $host = $request->server->get("HTTP_HOST");
+        $scheme = array_key_exists("HTTPS", $_SERVER) ? "https" : "http";
+        $verifyUrl = "$scheme://$host/verification-email/$token";
+   
+        // do anything else you need here, like send an email
+        $this->mail->send(
+            'no-reply@snowtricks.fr',
+            $user->getEmail(),
+            'Activation de compte',
+            'activation-account',
+            compact('user', 'verifyUrl')
+        );
+
+        return $this->redirectToRoute('confirmation_mail_sent');
+    }
 }
