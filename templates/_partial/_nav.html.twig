@@ -35,23 +35,28 @@
 			</ul>
 				{# se déconnecter #}
 				{% if app.user %}
-					<ul class="navbar-nav d-flex  ms-2">
-						<li class="nav-item text-light text-center mt-1 mb-lg-0 mb-3">
-							<a class="btn nav-link text-light fs-4" href="{{ path('app_logout') }}">Déconnexion</a>
+					<ul class="navbar-nav d-flex ms-2">
+						<li class="nav-item text-center mb-lg-0 mb-3">
+							<a class="logout" href="{{ path('app_logout') }}">Déconnexion</a>
 						</li> 
 					</ul>
 				{% endif %}
 		</div>
-
 	</nav>
-		<div style="background-color:#000;">
+	<div id="welcome">
+		<div class="m-auto py-4">
 			{% if app.user and app.user.isVerified == true %}
-				<div class=" m-auto">
-					<ul class="navbar-nav align-self-center ms-2">
-						<li class="nav-item text-light text-center fs-4 mt-1 mb-lg-0 mb-3">
-							<span class="fw-medium">Bonjour {{ app.user.name|capitalize }}</span>
-						</li> 
-					</ul>
-				</div>
+				<ul class="navbar-nav align-self-center ms-2">
+					<li class="nav-item text-light text-center mt-1 mb-lg-0 mb-3">
+						<span>Bonjour {{ app.user.name|capitalize }} !</span>
+					</li> 
+				</ul>
+			{% else %}
+				<ul class="navbar-nav align-self-center ms-2">
+					<li class="nav-item text-light text-center mt-1 mb-lg-0 mb-3">
+						<span>Bienvenue !</span>
+					</li> 
+				</ul>	
 			{% endif %}
 		</div>
+	</div>

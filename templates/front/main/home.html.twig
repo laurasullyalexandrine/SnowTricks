@@ -11,8 +11,9 @@
             </div>
         </section>
         {% if app.user and app.user.isverified == true %}
-        {{dump(app.user.isverified)}}
-            <a class="btn fs-5 my-4" href="{{ path('trick_create') }}">Nouvelle figure</a>
+        	<div>
+                <a class="btn fs-5 my-4" href="{{ path('trick_create') }}">Nouvelle figure</a>
+            </div>
         {% endif %}
         <section class="d-flex flex-wrap justify-content-center ">
 				{% for trick in tricks %}
