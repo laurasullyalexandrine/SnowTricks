@@ -3,7 +3,7 @@
 namespace App\Controller\Front;
 
 use App\Entity\Trick;
-use App\Form\CreateTrickType;
+use App\Form\TrickType;
 use App\Repository\TrickRepository;
 use App\Service\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
@@ -34,7 +34,7 @@ class TrickController extends AbstractController
     public function create(Request $request, FileUploader $fileUploader): Response
     {
         $trick = new Trick();
-        $form = $this->createForm(CreateTrickType::class);
+        $form = $this->createForm(TrickType::class);
         $form->handleRequest($request);
     
         if ($form->isSubmitted() && $form->isValid()) {
@@ -42,11 +42,7 @@ class TrickController extends AbstractController
 
             $trick = $form->getData();
 
-            $pictureFile = $form->get('picture')->getData();
-            $fileUploader->getTargetDirectoryPicture($pictureFile, $trick);
-
-            $videoFile = $form->get('video')->getData();
-            $fileUploader->getTargetDirectoryVideo($videoFile, $trick);
+            
 
             $this->manager->persist($trick);
             $this->manager->flush();

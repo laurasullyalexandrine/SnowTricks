@@ -9,6 +9,7 @@ use App\Repository\TrickgroupRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -16,7 +17,7 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
-class CreateTrickType extends AbstractType
+class TrickType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -39,21 +40,10 @@ class CreateTrickType extends AbstractType
                     new NotBlank()
                 ]
             ])
-            ->add('picture', FileType::class, [
-                'mapped' => false,
-                'required' => false,
-                'constraints' => [
-                    new File (['maxSize' => '2M'
-                    ])
-                ]
-            ])
-            ->add('video', FileType::class, [
-                'mapped' => false,
-                'required' => false,
-                'constraints' => [
-                    new File (['maxSize' => '20M'
-                    ])
-                ]
+            ->add('images', CollectionType::class, [
+                'entry_type' => ImageType::class,
+                'entry_options' => ['label' => false],
+                'allow_add' => true,
             ])
             ->add('trick_group', EntityType::class, [
                 'class' => Trickgroup::class,
