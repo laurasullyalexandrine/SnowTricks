@@ -3,7 +3,6 @@
 namespace App\DataFixtures;
 
 use App\Entity\Image;
-use Generator;
 use Faker\Factory;
 use App\Entity\Trick;
 use App\Entity\Trickgroup;
@@ -39,7 +38,8 @@ class AppFixtures extends Fixture
             'https://img.freepik.com/premium-photo/skier-is-flying-through-air-front-snowy-mountain_868783-347.jpg',
             'https://img.freepik.com/photos-premium/snowboarder-saute-montagne-generative-ai_851394-273.jpg?w=2000',
             'https://img.freepik.com/photos-premium/snowboarder-volant-montagnes-sports-hiver-extremes-ai-generative_391052-12657.jpg?w=2000',
-            'https://img.freepik.com/photos-premium/snowboard-glace-image-art-du-generateur-ai_848845-146.jpg?w=2000'
+            'https://img.freepik.com/photos-premium/snowboard-glace-image-art-du-generateur-ai_848845-146.jpg?w=2000',
+            'snowboard-home.png',
         ];
 
         //  Tricks array
@@ -86,40 +86,44 @@ class AppFixtures extends Fixture
             ],
         ];
 
-
-        $trickdGroupsObjects = [];
+        // Tricks Group
+        $trickGroupsToAdded = [];
         foreach ($tricksGroupsArray as $trickGroupRow) {
             $trickGroup = new Trickgroup();
             $trickGroup->setName($trickGroupRow);
 
-            $trickdGroupsObjects[] = $trickGroup;
+            $trickGroupsToAdded[] = $trickGroup;
 
             $manager->persist($trickGroup);
         }
 
-        $tricksToAdded = [];
+        // Tricks
+        $trickToAdded = [];
         foreach ($tricks as $trick) {
-            shuffle($trickdGroupsObjects);
+            shuffle($trickGroupsToAdded);
             $newTrick = new Trick();
             $newTrick->setName($trick['name'])
                 ->setDescription($trick['description'])
-                ->setTrickGroup($trickdGroupsObjects[0] ?? null);
-            
-            $tricksToAdded[] = $newTrick;
+                ->setTrickGroup($trickGroupsToAdded[0] ?? null);
+
+            $trickToAdded[] = $newTrick;
 
             $manager->persist($newTrick);
         }
 
-
+        $trickToAdd = 1;
+        // Images
         foreach ($imageNames as $imageName) {
-            shuffle($tricksToAdded);
+            shuffle($trickToAdded);
             $image = new Image();
             $image->setName($imageName)
-                ->setTrick($tricksToAdded[0] ?? null);
+                ->setTrick($trickToAdded[0] ?? null);
+            
+            $imagesToAdded[] = $image;
 
             $manager->persist($image);
         }
-        
+
         $manager->flush();
     }
 }

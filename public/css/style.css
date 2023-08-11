@@ -27,13 +27,16 @@ h1,
 }
 
 .strong,
-.card-link,
 .marker-blue {
     color: #1a7087;
 }
 
 .card-link {
+    color: #bdc3c7;
     text-decoration: none;
+}
+.card-link:hover {
+    color: #fff;
 }
 
 .trick-image {

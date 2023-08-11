@@ -22,7 +22,7 @@ class Video
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updated_at = null;
 
-    #[ORM\ManyToOne(inversedBy: 'videos', cascade:['persist'])]
+    #[ORM\ManyToOne(inversedBy: 'videos')]
     private ?Trick $trick = null;
 
     public function __construct()
