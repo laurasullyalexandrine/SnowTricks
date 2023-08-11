@@ -42,7 +42,7 @@ class TrickController extends AbstractController
 
             $trick = $form->getData();
 
-            
+            dd($trick);
 
             $this->manager->persist($trick);
             $this->manager->flush();
