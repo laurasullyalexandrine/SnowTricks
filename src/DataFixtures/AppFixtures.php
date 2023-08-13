@@ -39,11 +39,14 @@ class AppFixtures extends Fixture
             'https://img.freepik.com/photos-premium/snowboarder-saute-montagne-generative-ai_851394-273.jpg?w=2000',
             'https://img.freepik.com/photos-premium/snowboarder-volant-montagnes-sports-hiver-extremes-ai-generative_391052-12657.jpg?w=2000',
             'https://img.freepik.com/photos-premium/snowboard-glace-image-art-du-generateur-ai_848845-146.jpg?w=2000',
+            'https://img.freepik.com/photos-premium/homme-faisant-du-snowboard-montagne-ciel-nuageux-derriere-lui_779834-3731.jpg?w=2000',
+            'https://us.123rf.com/450wm/storyimage/storyimage2302/storyimage230201381/198798887-snowboarder-freeride-on-the-slope-in-snow-mountain-generative-ai-high-quality-illustration.jpg?ver=6',
+            'https://us.123rf.com/450wm/olegganko/olegganko2304/olegganko230404220/203081067-homme-de-snowboard-illustration-g%C3%A9n%C3%A9rative-ai.jpg?ver=6',
             'snowboard-home.png',
         ];
 
         //  Tricks array
-        $tricks = [
+        $tricksArray = [
             1 => [
                 'name' => 'Ollie Nollie',
                 'description' => "Nous avons parlé du Ollie ci-dessus, le Nollie c'est l'inverse. Accroupis-toi, déplace ton poids vers l'avant, puis utilise le nez de ta planche pour sauter.",
@@ -87,43 +90,53 @@ class AppFixtures extends Fixture
         ];
 
         // Tricks Group
-        $trickGroupsToAdded = [];
+        $trickGroupsToAdd = [];
         foreach ($tricksGroupsArray as $trickGroupRow) {
             $trickGroup = new Trickgroup();
             $trickGroup->setName($trickGroupRow);
 
-            $trickGroupsToAdded[] = $trickGroup;
+            $trickGroupsToAdd[] = $trickGroup;
 
             $manager->persist($trickGroup);
         }
+        
+        $tricksToAdd = [];
+        for ($t = 0; $t < 10; $t++) {
+            shuffle($trickGroupsToAdd);
 
-        // Tricks
-        $trickToAdded = [];
-        foreach ($tricks as $trick) {
-            shuffle($trickGroupsToAdded);
-            $newTrick = new Trick();
-            $newTrick->setName($trick['name'])
-                ->setDescription($trick['description'])
-                ->setTrickGroup($trickGroupsToAdded[0] ?? null);
+            $trickArray = $tricksArray[$t + 1]; // Adjust the index to start from 1
 
-            $trickToAdded[] = $newTrick;
+            $trick = new Trick();
+            $trick->setName($trickArray['name'])
+                ->setDescription($trickArray['description']);
 
-            $manager->persist($newTrick);
+            $nbGroupsToAdd = rand(0, count($trickGroupsToAdd)); // Random number of groups to add
+    
+            $groupsAdded = [];
+            for ($g = 0; $g < $nbGroupsToAdd; $g++) {
+                do {
+                    $trickGroup = $trickGroupsToAdd[rand(0, count($trickGroupsToAdd) - 1)];
+                    
+                } while (in_array($trickGroup->getName(), $groupsAdded));
+
+                $groupsAdded[] = $trickGroup->getName();
+                $trick->setTrickGroup($trickGroup);
+            }
+
+            $manager->persist($trick);
+            $tricksToAdd[] = $trick;
         }
 
-        $trickToAdd = 1;
-        // Images
-        foreach ($imageNames as $imageName) {
-            shuffle($trickToAdded);
+    // Image
+       for ($i = 0; $i < 10; $i++) {
             $image = new Image();
-            $image->setName($imageName)
-                ->setTrick($trickToAdded[0] ?? null);
-            
-            $imagesToAdded[] = $image;
-
+            $image->setName($imageNames[$i])
+                ->setTrick($tricksToAdd[$i]);
+        
             $manager->persist($image);
-        }
+       }
 
-        $manager->flush();
+    $manager->flush();
     }
 }
+
