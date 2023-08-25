@@ -26,16 +26,16 @@
 				<div class="mb-2">
 					{{ form_row(form.description, {'label': 'Description *'}) }}
 				</div>
-								{# <div class="mb-2">
-					{{ form_row(form.images, {'label': 'image *'}) }}
+				{# <div class="mb-2">
+					{{ form_row(form.images, {'label': 'image'}) }}
 				</div> #}
 				{# the data-index attribute is required for the JavaScript code below #}
+			{{ form_row(form.trick_group, {'label': 'Groupe de figure *'}) }}
 				<ul class="images"
 					data-index="{{ form.images|length > 0 ? form.images|last.vars.name + 1 : 0 }}"
 					data-prototype="{{ form_widget(form.images.vars.prototype)|e('html_attr') }}"
 				></ul>
 				<button type="button" class="add_item_link" data-collection-holder-class="images">Ajouter une image</button>
-			{{ form_row(form.trick_group, {'label': 'Groupe de figure *'}) }}
 			<div class="d-flex">
 				<button type="submit" class="btn my-3">{% trans %}Enregistrer{% endtrans %}</button>
 				{{ form_end(form) }}

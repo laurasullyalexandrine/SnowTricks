@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -48,9 +50,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(options: ["default" => "CURRENT_TIMESTAMP"])]
     private ?\DateTimeImmutable $token_created_at = null;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Trick::class)]
+    private Collection $tricks;
+
     public function __construct()
     {
         $this->created_at = new \DateTimeImmutable();
+        $this->tricks = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -191,6 +197,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setTokenCreatedAt(\DateTimeImmutable $token_created_at): static
     {
         $this->token_created_at = $token_created_at;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Trick>
+     */
+    public function getTricks(): Collection
+    {
+        return $this->tricks;
+    }
+
+    public function addTrick(Trick $trick): static
+    {
+        if (!$this->tricks->contains($trick)) {
+            $this->tricks->add($trick);
+            $trick->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTrick(Trick $trick): static
+    {
+        if ($this->tricks->removeElement($trick)) {
+            // set the owning side to null (unless already changed)
+            if ($trick->getUser() === $this) {
+                $trick->setUser(null);
+            }
+        }
 
         return $this;
     }

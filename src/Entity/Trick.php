@@ -48,6 +48,9 @@ class Trick
     #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Video::class)]
     private Collection $videos;
 
+    #[ORM\ManyToOne(inversedBy: 'tricks')]
+    private ?User $user = null;
+
     public function __construct()
     {
         $this->created_at = new \DateTimeImmutable();
@@ -186,6 +189,18 @@ class Trick
                 $video->setTrick(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
 
         return $this;
     }

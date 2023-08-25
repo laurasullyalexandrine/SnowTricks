@@ -40,11 +40,7 @@ class TrickType extends AbstractType
                     new NotBlank()
                 ]
             ])
-            ->add('images', CollectionType::class, [
-                'entry_type' => ImageType::class,
-                'entry_options' => ['label' => false],
-                'allow_add' => true,
-            ])
+
             ->add('trick_group', EntityType::class, [
                 'class' => Trickgroup::class,
                 'multiple' => false,
@@ -56,6 +52,12 @@ class TrickType extends AbstractType
                         ->orderBy('tg.name', 'ASC'),
                 'attr' => [
                     'class' => 'mb-3']
+            ])
+            ->add('images', CollectionType::class, [
+                'label' => false,
+                'entry_type' => ImageType::class,
+                'entry_options' => ['label' => false],
+                'allow_add' => true,
             ])
         ;
     }
