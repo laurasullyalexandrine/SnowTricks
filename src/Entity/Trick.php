@@ -33,7 +33,7 @@ class Trick
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
-    #[ORM\ManyToOne(inversedBy: 'tricks')]
+    #[ORM\ManyToOne(inversedBy: 'tricks', cascade: ['persist'])]
     private ?Trickgroup $trick_group = null;
 
     #[ORM\Column(options: ["default" => "CURRENT_TIMESTAMP"])]
@@ -48,7 +48,7 @@ class Trick
     #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Video::class)]
     private Collection $videos;
 
-    #[ORM\ManyToOne(inversedBy: 'tricks')]
+    #[ORM\ManyToOne(inversedBy: 'tricks', cascade: ['persist'])]
     private ?User $user = null;
 
     public function __construct()
