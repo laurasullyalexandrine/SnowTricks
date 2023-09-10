@@ -4,15 +4,15 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
-    upload_picture: '%kernel.project_dir%/public/uploads/picture'
-    upload_video: '%kernel.project_dir%/public/uploads/video'
+    upload_image: '%kernel.project_dir%/public/upload/image'
+    upload_video: '%kernel.project_dir%/public/upload/video'
 services:
     # default configuration for services in *this* file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
         bind:
-            $targetDirectoryPicture: '%upload_picture%'
+            $targetDirectoryImage: '%upload_image%'
             $targetDirectoryVideo: '%upload_video%'
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name

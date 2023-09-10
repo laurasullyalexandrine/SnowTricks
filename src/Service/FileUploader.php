@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 class FileUploader
 {
     public function __construct(
-        private string $targetDirectoryPicture,
+        private string $targetDirectoryImage,
         private string $targetDirectoryVideo,
         private EntityManagerInterface $manager
     ) {
@@ -34,12 +34,12 @@ class FileUploader
     public function getTargetDirectoryImage(?UploadedFile $file, Image $image): void
     {
         if ($file !== null) {
-            $imageName = $this->upload($file, $this->targetDirectoryPicture, 'trick-image');
+
+            $imageName = $this->upload($file, $this->targetDirectoryImage, 'trick-image');
            
             if ($imageName !== null) {
                 $image->setName($imageName);
                 $this->manager->persist($image);
-                $this->manager->flush();
             }
         }
     }

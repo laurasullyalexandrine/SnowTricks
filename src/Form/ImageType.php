@@ -14,14 +14,15 @@ class ImageType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('name', FileType::class, [
+            'label' => 'Ajoutes ton fichier',
             'required' => false,
-            'mapped' => false,
+            // 'mapped' => false,
             'constraints' => [
                 new File (['maxSize' => '2M'
                 ])
             ],
             'attr' => [
-                'accept' => 'image/*'
+                'accept' => 'image/*',
             ]
         ]);
     }

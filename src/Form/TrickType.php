@@ -8,11 +8,11 @@ use App\Repository\TrickgroupRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 class TrickType extends AbstractType
 {
@@ -51,12 +51,15 @@ class TrickType extends AbstractType
                     'class' => 'mb-3']
             ])
             ->add('images', CollectionType::class, [
+               'entry_type' => ImageType::class,
+               'entry_options' => [
                 'label' => false,
-                'entry_type' => ImageType::class,
-                'entry_options' => ['label' => false],
+               ],
                 'allow_add' => true,
                 'allow_delete' => true,
-                'by_reference' => false
+                'by_reference' => false,
+                'label' => false,
+                'mapped' => false,
             ])
         ;
     }

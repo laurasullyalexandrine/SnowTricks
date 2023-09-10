@@ -4,8 +4,10 @@ namespace App\Entity;
 
 use App\Repository\ImageRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 #[ORM\Entity(repositoryClass: ImageRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class Image
 {
     #[ORM\Id]
@@ -24,6 +26,8 @@ class Image
 
     #[ORM\ManyToOne(inversedBy: 'images', cascade: ['persist'])]
     private ?Trick $trick = null;
+
+    private ?UploadedFile $uploadedFile = null;
 
     public function __construct()
     {
@@ -86,6 +90,25 @@ class Image
         $this->trick = $trick;
 
         return $this;
+    }
+
+    /**
+     * Function to edit name of image upload
+     */
+    #[ORM\PrePersist]
+    public function setFileName(): void
+    {
+        $this->uploadedFile = new UploadedFile($this->name, ''); 
+        $this->name = uniqid() . '.' . $this->uploadedFile->guessExtension();
+    }
+
+    /**
+     * Function to save the recorded file
+     */
+    #[ORM\PostPersist]
+    public function saveFile(): void
+    {
+        $this->uploadedFile->move('upload/image', $this->name);
     }
 }
 
