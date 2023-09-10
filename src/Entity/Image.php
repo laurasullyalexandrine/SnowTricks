@@ -111,4 +111,3 @@ class Image
         $this->uploadedFile->move('upload/image', $this->name);
     }
 }
-

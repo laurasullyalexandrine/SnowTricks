@@ -43,15 +43,16 @@ class TrickController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-     
+
             $trick->setUser($this->getUser());
 
             $images = $form->get('images')->getData();
-           
-            foreach ($images as $image){
-               $this->manager->persist($image);
-;            }
-           
+
+            foreach ($images as $image) {
+                $this->manager->persist($image);
+                // Ajouter l'image à la figure et persister la figure
+            }
+
 
             $this->manager->flush();
 
