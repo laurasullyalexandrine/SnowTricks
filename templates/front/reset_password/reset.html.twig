@@ -6,24 +6,26 @@
 
 {% block body %}
 	<section class="row my-3">
-		<div class="col d-flex flex-column">
+		<div class="col d-flex flex-column justify-content-center">
 			<div class="">
-				<h2 class="text-center mb-3"><img src="/image/common/pw_reset.png" alt="icon-password_reset"></h2>
+				<h2 class="text-center mb-3"><img src="{{ asset('image/pw_reset.png') }}" alt="icon-password_reset"></h2>
 				<h1 class="text-center">
-					REINITIALISATION DE MOT DE PASSE
+					DES DIFFICULTÉS À TE CONNECTER ?
 				</h1>
-				<p class="text-center">Veuillez remplir le formulaire ci-dessous avec votre nouveau mot de passe</p>
-				<p class="text-center">Après validation, vous serez redirigé vers la page de connexion</p>
+				<p class="text-center">Réinitialiser ton mot de passe est facile! <br>
+					Saisies ton prénom ou pseudo (identifiant utilisateur) <br> 
+					pour recevoir ton lien de réinitialisation.
+				</p>
 			</div>
-			<div class="align-self-center mt-4">
-				{# {{ form_start(form) }}
+			<div class="align-self-center mt-3">
+				{{ form_start(form) }}
 				{{ form_errors(form) }}
 
-				{{ form_row(form.password, {label: ' '}) }} #}
+				{{ form_row(form.name, {label: ' '}) }}
 				<div class="d-flex mt-4">
-					<button type="submit" class="btn my-3">{% trans %}Réinitialiser{% endtrans %}</button>
+					<button type="submit" class="btn my-3">Réinitialiser</button>
 				</div>
-				{# {{ form_end(form) }} #}
+				{{ form_end(form) }}
 			</div>
 		</div>
 	</section>

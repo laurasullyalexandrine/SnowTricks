@@ -2,6 +2,7 @@
 
 namespace App\Controller\Front;
 
+use App\Form\RequestPasswordType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -12,7 +13,7 @@ class ResetPasswordController extends AbstractController
     #[Route('/reset/password', name: 'reset_password')]
     public function reset(Request $request): Response
     {
-        $form = $this->createForm(ResetPasswordType::class);
+        $form = $this->createForm(RequestPasswordType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
