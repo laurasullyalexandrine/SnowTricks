@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\User;
 use DateTimeImmutable;
-use App\Service\GenerateToken;
 use App\Service\SendMailService;
 use App\Form\RegistrationFormType;
 use App\Security\LoginFormAuthenticator;
@@ -13,19 +12,21 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 
 class RegistrationController extends AbstractController
 {
     public function __construct(
         private SendMailService $mail,
-        private GenerateToken $generateToken,
+        private TokenGeneratorInterface $tokenGenerator,
         private EntityManagerInterface $manager)
     {}
 
-    #[Route('/inscription', name: 'app_register')]
+    #[Route('/inscription', name: 'register')]
     public function register(
         Request $request, 
         UserPasswordHasherInterface $userPasswordHasher): Response
@@ -42,7 +43,8 @@ class RegistrationController extends AbstractController
                     $form->get('plainPassword')->getData()
                 )
             );
-            $token = $this->generateToken->generateToken();
+
+            $token = $this->tokenGenerator->generateToken();
       
             $user->setToken($token)
                 ->setTokenCreatedAt(new DateTimeImmutable());
@@ -52,9 +54,11 @@ class RegistrationController extends AbstractController
 
             // TODO: utiliser le generateur d'url
             // Create email confirmation url
-            $host = $request->server->get("HTTP_HOST");
-            $scheme = array_key_exists("HTTPS", $_SERVER) ? "https" : "http";
-            $verifyUrl = "$scheme://$host/verification-email/$token";
+            // $host = $request->server->get("HTTP_HOST");
+            // $scheme = array_key_exists("HTTPS", $_SERVER) ? "https" : "http";
+            // $verifyUrl = "$scheme://$host/verification-email/$token";
+
+           $verifyUrl = $this->generateUrl('verify_email', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
        
             // do anything else you need here, like send an email
             $this->mail->send(
@@ -73,12 +77,14 @@ class RegistrationController extends AbstractController
         ]);
     }
 
+
     #[Route('/mail-de-confirmation-envoye', name: 'confirmation_mail_sent')]
     public function mailSent(): Response 
     {
         $this->addFlash('primary', "Ton compte n'est pas encore activé. Vérifies tes mails et utilise le lien pour validé ton email.");
-        return $this->render('registration/mail_sent.html.twig');
+        return $this->redirectToRoute('home');
     }
+
 
     #[Route('/verification-email/{token}', name: 'verify_email')]
     public function verifyEmail(
@@ -139,19 +145,16 @@ class RegistrationController extends AbstractController
         #[MapEntity(mapping: ['user_name' => 'name'])] User $user,
         Request $request)
     {
-        // dd($request);
-        $token = $this->generateToken->generateToken();
+        $token = $this->tokenGenerator->generateToken();
       
         $user->setToken($token)
-            ->setTokenCreatedAt(new DateTimeImmutable());
+            ->setTokenCreatedAt(new \DateTimeImmutable());
 
         $this->manager->persist($user);
         $this->manager->flush();
 
         // Create email confirmation url
-        $host = $request->server->get("HTTP_HOST");
-        $scheme = array_key_exists("HTTPS", $_SERVER) ? "https" : "http";
-        $verifyUrl = "$scheme://$host/verification-email/$token";
+        $verifyUrl = $this->generateUrl('verify_email', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
    
         // do anything else you need here, like send an email
         $this->mail->send(

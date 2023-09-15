@@ -20,6 +20,7 @@ class RegistrationFormType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
+                'label' => false,
                 'attr' => [
                     'placeholder' => 'Saisis ton prénom ou pseudo'
                 ],
@@ -30,6 +31,7 @@ class RegistrationFormType extends AbstractType
                 ]
             ])
             ->add('email', EmailType::class, [
+                'label' => false,
                 'attr' => [
                     'placeholder' => 'Saisis ton email'
                 ],
@@ -50,6 +52,7 @@ class RegistrationFormType extends AbstractType
             ->add('plainPassword', PasswordType::class, [
                 // instead of being set onto the object directly,
                 // this is read and encoded in the controller
+                'label' => false,
                 'mapped' => false,
                 'attr' => [
                     'placeholder' => 'Saisis ton mot de passe',
