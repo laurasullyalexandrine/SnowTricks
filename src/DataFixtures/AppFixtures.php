@@ -2,18 +2,35 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Image;
 use Faker\Factory;
+use App\Entity\User;
+use App\Entity\Image;
 use App\Entity\Trick;
 use App\Entity\Trickgroup;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 
 class AppFixtures extends Fixture
 {
-    public function __construct(private SluggerInterface $slugger)
+    public function __construct(
+        private SluggerInterface $slugger,
+        private UserPasswordHasherInterface $hasher,
+        private TokenGeneratorInterface $tokenGenerator,
+    ) {
+    }
+
+    public function removeAccent(string $string)
     {
+        $strReplace = strtr(
+            $string,
+            'ÀÁÂàÄÅàáâàäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏ'.'ìíîïÙÚÛÜùúûüÿÑñ',
+            'aaaaaaaaaaaaooooooooooooeeeeeeeecciiiiiiiiuuuuuuuuynn'
+        );
+
+        return $strReplace;
     }
 
     public function load(ObjectManager $manager): void
@@ -89,6 +106,20 @@ class AppFixtures extends Fixture
             ],
         ];
 
+
+        $emailData = [
+            'sophie@sfr.fr',
+            'pierre@orange.fr',
+            'julie@bouygues.com',
+            'nicolas@hotmail.com',
+            'maryse@soch.net',
+            'dominique@outlook.fr',
+            'capucine@gmail.com',
+            'auguste@voila.fr',
+            'anais@likos.net',
+            'joseph@gmail.com',
+        ];
+
         // Tricks Group
         $trickGroupsToAdd = [];
         foreach ($tricksGroupsArray as $trickGroupRow) {
@@ -99,24 +130,41 @@ class AppFixtures extends Fixture
 
             $manager->persist($trickGroup);
         }
-        
+
         $tricksToAdd = [];
         for ($t = 0; $t < 10; $t++) {
+
+            $nameData = explode('@',$emailData[$t]);
+     
+            $user = new User();
+            $user->setName($nameData[0])
+                ->setEmail($emailData[$t])
+                ->setRoles(['ROLE_USER'])
+                ->setIsVerified(true)
+                ->setToken($this->tokenGenerator->generateToken())
+                ->setTokenCreatedAt(new \DateTimeImmutable())
+                ->setPassword(
+                    $this->hasher->hashPassword(
+                        $user,
+                        'userdatafixtures'
+                    )
+                );
+            $manager->persist($user);
             shuffle($trickGroupsToAdd);
 
             $trickArray = $tricksArray[$t + 1]; // Adjust the index to start from 1
 
             $trick = new Trick();
             $trick->setName($trickArray['name'])
-                ->setDescription($trickArray['description']);
+                ->setDescription($trickArray['description'])
+                ->setUser($user);
 
             $nbGroupsToAdd = rand(0, count($trickGroupsToAdd)); // Random number of groups to add
-    
+
             $groupsAdded = [];
             for ($g = 0; $g < $nbGroupsToAdd; $g++) {
                 do {
                     $trickGroup = $trickGroupsToAdd[rand(0, count($trickGroupsToAdd) - 1)];
-                    
                 } while (in_array($trickGroup->getName(), $groupsAdded));
 
                 $groupsAdded[] = $trickGroup->getName();
@@ -127,16 +175,15 @@ class AppFixtures extends Fixture
             $tricksToAdd[] = $trick;
         }
 
-    // Image
-       for ($i = 0; $i < 10; $i++) {
+        // Image
+        for ($i = 0; $i < 10; $i++) {
             $image = new Image();
             $image->setName($imageNames[$i])
                 ->setTrick($tricksToAdd[$i]);
-        
-            $manager->persist($image);
-       }
 
-    $manager->flush();
+            $manager->persist($image);
+        }
+
+        $manager->flush();
     }
 }
-
