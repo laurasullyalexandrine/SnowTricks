@@ -6,6 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class RequestPasswordType extends AbstractType
 {
@@ -14,8 +15,11 @@ class RequestPasswordType extends AbstractType
         $builder
             ->add('name', TextType::class, [
                 'attr' => [
-                    'placeholder' => 'ton prénom/pseudo',
+                    'placeholder' => 'Prénom/pseudo',
                     'class' => 'form-control'
+                ],
+                'constraints' => [
+                    new NotBlank,
                 ]
             ]);
     }

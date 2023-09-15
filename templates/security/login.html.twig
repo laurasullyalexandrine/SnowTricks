@@ -4,7 +4,7 @@
 
 {% block body %}
 <article class="row">
-    <section>
+    <section class="my-5">
         <form method="post">
             {% if error %}
                 <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
@@ -24,7 +24,7 @@
                     Connexion
                 </button>
                 <div>
-                    <a class="btn" href="{{ path('reset_password') }}" class="text-body">Mot de passe oublié ?</a>
+                    <a class="btn" href="{{ path('request_password') }}" class="text-body">Mot de passe oublié ?</a>
                 </div>
             </div>
         </form>

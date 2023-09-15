@@ -50,6 +50,7 @@ class RegistrationController extends AbstractController
             $this->manager->persist($user);
             $this->manager->flush();
 
+            // TODO: utiliser le generateur d'url
             // Create email confirmation url
             $host = $request->server->get("HTTP_HOST");
             $scheme = array_key_exists("HTTPS", $_SERVER) ? "https" : "http";
