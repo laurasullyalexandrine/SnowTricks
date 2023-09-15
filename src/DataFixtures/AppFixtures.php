@@ -9,6 +9,7 @@ use App\Entity\Trick;
 use App\Entity\Trickgroup;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Symfony\Component\Finder\Finder;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
@@ -22,20 +23,13 @@ class AppFixtures extends Fixture
     ) {
     }
 
-    public function removeAccent(string $string)
-    {
-        $strReplace = strtr(
-            $string,
-            'ÀÁÂàÄÅàáâàäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏ'.'ìíîïÙÚÛÜùúûüÿÑñ',
-            'aaaaaaaaaaaaooooooooooooeeeeeeeecciiiiiiiiuuuuuuuuynn'
-        );
-
-        return $strReplace;
-    }
-
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create('fr_FR');
+
+        $finder = new Finder();
+        $tempImage = iterator_to_array($finder->in(__DIR__ . '/../../var/temp'));
+ 
 
         // TricksGroup array
         $tricksGroupsArray = [
@@ -46,20 +40,6 @@ class AppFixtures extends Fixture
             'Rail',
             'Corks',
             'Spins',
-        ];
-
-        // Trick image array
-        $imageNames = [
-            'https://media.istockphoto.com/id/1092719712/fr/photo/snowboardeur-sautant-dans-les-airs-avec-le-bleu-intense-du-ciel-%C3%A0-larri%C3%A8re-plan.jpg?s=612x612&w=0&k=20&c=aT-Zm-FYNBTa5hjzlfp5x_06K1SZRVydHLN3GDTulpo=',
-            'https://img.freepik.com/premium-photo/active-snowboarder-board-slides-down-snowy-mountain-illustration_305419-2169.jpg?w=2000',
-            'https://img.freepik.com/premium-photo/skier-is-flying-through-air-front-snowy-mountain_868783-347.jpg',
-            'https://img.freepik.com/photos-premium/snowboarder-saute-montagne-generative-ai_851394-273.jpg?w=2000',
-            'https://img.freepik.com/photos-premium/snowboarder-volant-montagnes-sports-hiver-extremes-ai-generative_391052-12657.jpg?w=2000',
-            'https://img.freepik.com/photos-premium/snowboard-glace-image-art-du-generateur-ai_848845-146.jpg?w=2000',
-            'https://img.freepik.com/photos-premium/homme-faisant-du-snowboard-montagne-ciel-nuageux-derriere-lui_779834-3731.jpg?w=2000',
-            'https://us.123rf.com/450wm/storyimage/storyimage2302/storyimage230201381/198798887-snowboarder-freeride-on-the-slope-in-snow-mountain-generative-ai-high-quality-illustration.jpg?ver=6',
-            'https://us.123rf.com/450wm/olegganko/olegganko2304/olegganko230404220/203081067-homme-de-snowboard-illustration-g%C3%A9n%C3%A9rative-ai.jpg?ver=6',
-            'snowboard-home.png',
         ];
 
         //  Tricks array
@@ -105,7 +85,6 @@ class AppFixtures extends Fixture
                 'description' => " Identique à la figure précédente, mais tu te diriges vers le rail en le positionnant sur ton côté avant. Tu sautes ensuite avec le talon de la planche au-dessus du rail et tu atterris dessus avec le rail entre tes fixations.",
             ],
         ];
-
 
         $emailData = [
             'sophie@sfr.fr',
@@ -177,8 +156,16 @@ class AppFixtures extends Fixture
 
         // Image
         for ($i = 0; $i < 10; $i++) {
+
+            // Créer le nom du fichier
+            $tempFile = __DIR__ . '/' .  uniqid() . '.jpg';
+            // Choisir un fichier aléatoirement
+            $file = array_rand($tempImage);
+
+            // Copier ce fichier avant de la déplacer dans le dossier upload
+            copy($file, $tempFile);
             $image = new Image();
-            $image->setName($imageNames[$i])
+            $image->setName($tempFile)
                 ->setTrick($tricksToAdd[$i]);
 
             $manager->persist($image);
