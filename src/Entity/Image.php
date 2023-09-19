@@ -98,7 +98,6 @@ class Image
     #[ORM\PrePersist]
     public function setFileName(): void
     {
-        dump($this->name);
         $this->uploadedFile = new UploadedFile($this->name, 'test', null, null, true); 
         $this->name = uniqid() . '.' . $this->uploadedFile->guessExtension();
     }

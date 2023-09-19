@@ -28,8 +28,7 @@ class AppFixtures extends Fixture
         $faker = Factory::create('fr_FR');
 
         $finder = new Finder();
-        $tempImage = iterator_to_array($finder->in(__DIR__ . '/../../var/temp'));
- 
+        $tempImage = iterator_to_array($finder->in(__DIR__ . '/resources'));
 
         // TricksGroup array
         $tricksGroupsArray = [
@@ -158,7 +157,8 @@ class AppFixtures extends Fixture
         for ($i = 0; $i < 10; $i++) {
 
             // Créer le nom du fichier
-            $tempFile = __DIR__ . '/' .  uniqid() . '.jpg';
+            $tempFile = __DIR__ . '/../../var/temp' .  uniqid() . '.jpg';
+            
             // Choisir un fichier aléatoirement
             $file = array_rand($tempImage);
 
