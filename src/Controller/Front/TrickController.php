@@ -28,7 +28,7 @@ class TrickController extends AbstractController
     public function read(
         Trick $trick
     ): Response {
-
+ 
         return $this->render('front/trick/read.html.twig', [
             'trick' => $trick,
             'slug' => $trick->getSlug(),
@@ -67,7 +67,6 @@ class TrickController extends AbstractController
                     $image->setName($tempFile)
                         ->setTrick($trick);
     
-                        // dd($image);
                     $this->manager->persist($image);
                 }
 

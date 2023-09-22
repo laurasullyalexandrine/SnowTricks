@@ -52,24 +52,28 @@
 			});
 
 		function addFormToCollection(e) {
+			// Balise ul
 			const collectionHolder = document.querySelector('.' + e.currentTarget.dataset.collectionHolderClass);
-
+			
+			// Balise li
 			const item = document.createElement('li');
 				item.classList.add('image-item');
 
+			// Créer un button de suppression
 			const btnDelete = document.createElement('button');
 				btnDelete.classList.add('btn_red_cross');
 				btnDelete.type = 'button';
 				btnDelete.innerText = "Supprimes ton image";
 				btnDelete.style.color = '#f7021b';
 
-
+			// Créer la croix rouge 
 			const redCross = document.createElement('i');
 				redCross.classList.add('fa-solid');
 				redCross.classList.add('fa-xmark');
 				redCross.classList.add('fa-lg');
 				redCross.style.color = '#f7021b';
 	
+				// Ajouter la croix au button btnDelete
 				btnDelete.appendChild(redCross);
 
 				item.innerHTML += collectionHolder
@@ -81,10 +85,15 @@
 				);
 
 			collectionHolder.appendChild(item);
-			collectionHolder.appendChild(btnDelete);
-			
+
+			// Ajouter le button btnDelete et la croix redCross à la balise li
+			item.appendChild(btnDelete);
+			item.appendChild(redCross);
+
+			// Stocker l'index de la balise div créer dans le prototype
 			let indexItem = collectionHolder.dataset.index++;
 	
+			// Ecouter l'event click sur le sur le btn btnDelete pour actionner la suppression
 			btnDelete.addEventListener("click", function() {
 				deleteFormToCollection(indexItem);
 			});
@@ -92,12 +101,7 @@
 
 		function deleteFormToCollection(indexItem) {
 			const image = document.getElementById('trick_images_' + indexItem);
-			const btnDelete = document.querySelector('.btn_red_cross')
-			const imageItem = document.querySelector('.image-item');
-
-			imageItem.remove();
-			btnDelete.remove();
-			image.remove();
+			image.parentElement.remove();
 		};
 	</script>
 {% endblock %}

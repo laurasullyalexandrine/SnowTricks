@@ -23,13 +23,11 @@
 								<a class="card-link ps-2" href="{{ path('trick_slug', { slug: trick.slug } )}}">{{ trick.name }}</a>
 							</div>
 							<div class="card-body flex-wrap">
-                                {% for image in trick.images %}
-                                    {% if image.name == "snowboard-home.png" %}
-                                        <a href="{{ path('trick_slug', { slug: trick.slug }) }}"><img src="{{ asset('image/snowboard-home.png') }}" alt="trick-picture" style="max-width: 16rem; max-height: 16rem;"></a>
-                                    {% else %}
-                                        <a href="{{ path('trick_slug', { slug: trick.slug } )}}"><img src="{{ asset('upload/image/' ~ image) }}" alt="trick-image" style="max-width: 16rem; max-height: 16rem;"></a>
-                                    {% endif %}
-                                {% endfor %}
+                                {% if trick.mainImage == "snowboard-home.png" %}
+                                    <a href="{{ path('trick_slug', { slug: trick.slug }) }}"><img src="{{ asset('image/snowboard-home.png') }}" alt="trick-picture" style="max-width: 16rem; max-height: 16rem;"></a>
+                                {% else %}
+                                    <a href="{{ path('trick_slug', { slug: trick.slug } )}}"><img src="{{ asset('upload/image/' ~ trick.mainImage ) }}" alt="trick-image" style="max-width: 16rem; max-height: 16rem;"></a>
+                                {% endif %}
                             </div>
 						</div>
 					</div>
