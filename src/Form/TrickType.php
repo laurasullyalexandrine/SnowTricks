@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\Image;
 use App\Entity\Trick;
 use App\Entity\Trickgroup;
 use App\Repository\TrickgroupRepository;
@@ -42,26 +43,30 @@ class TrickType extends AbstractType
                 'class' => Trickgroup::class,
                 'multiple' => false,
                 'expanded' => false,
-                'choice_label' => fn(Trickgroup $trickgroup) => $trickgroup->getName(),
-                'query_builder' => 
-                    fn(TrickgroupRepository $trickgroupRepository) 
-                        => $trickgroupRepository->createQueryBuilder('tg')
-                        ->orderBy('tg.name', 'ASC'),
+                'choice_label' => fn (Trickgroup $trickgroup) => $trickgroup->getName(),
+                'query_builder' =>
+                fn (TrickgroupRepository $trickgroupRepository)
+                => $trickgroupRepository->createQueryBuilder('tg')
+                    ->orderBy('tg.name', 'ASC'),
                 'attr' => [
-                    'class' => 'mb-3']
+                    'class' => 'mb-3'
+                ]
             ])
             ->add('images', CollectionType::class, [
-               'entry_type' => ImageType::class,
-               'entry_options' => [
-                'label' => false,
-               ],
+                'entry_type' => ImageType::class,
+                'entry_options' => [
+                    'label' => false,
+                ],
                 'allow_add' => true,
                 'allow_delete' => true,
+                'delete_empty' =>
+                function (Image $image = null) {
+                    return null === $image || empty($image->getName());
+                },
                 'by_reference' => false,
                 'label' => false,
                 'mapped' => false,
-            ])
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

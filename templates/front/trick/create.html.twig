@@ -26,16 +26,15 @@
 				<div class="mb-2">
 					{{ form_row(form.description, {'label': 'Description *'}) }}
 				</div>
-				{# <div class="mb-2">
-					{{ form_row(form.images, {'label': 'image'}) }}
-				</div> #}
-				{# the data-index attribute is required for the JavaScript code below #}
+		
 			{{ form_row(form.trick_group, {'label': 'Groupe de figure *'}) }}
 				<ul class="images"
 					data-index="{{ form.images|length > 0 ? form.images|last.vars.name + 1 : 0 }}"
 					data-prototype="{{ form_widget(form.images.vars.prototype)|e('html_attr') }}"
 				></ul>
 				<button type="button" class="add_item_link btn" data-collection-holder-class="images">Ajouter une image</button>
+
+				{# <button type="button" class="delete_item_link btn-delete" data-collection-holder-class="images">Supprimer une image</button> #}
 			<div class="d-flex">
 				<button type="submit" class="btn my-3">{% trans %}Enregistrer{% endtrans %}</button>
 				{{ form_end(form) }}
@@ -43,6 +42,7 @@
 	    </section>
     </article>
 {% endblock %}
+
 {% block javascripts %}
 	<script>
 		document
@@ -55,8 +55,24 @@
 			const collectionHolder = document.querySelector('.' + e.currentTarget.dataset.collectionHolderClass);
 
 			const item = document.createElement('li');
+				item.classList.add('image-item');
 
-			item.innerHTML = collectionHolder
+			const btnDelete = document.createElement('button');
+				btnDelete.classList.add('btn_red_cross');
+				btnDelete.type = 'button';
+				btnDelete.innerText = "Supprimes ton image";
+				btnDelete.style.color = '#f7021b';
+
+
+			const redCross = document.createElement('i');
+				redCross.classList.add('fa-solid');
+				redCross.classList.add('fa-xmark');
+				redCross.classList.add('fa-lg');
+				redCross.style.color = '#f7021b';
+	
+				btnDelete.appendChild(redCross);
+
+				item.innerHTML += collectionHolder
 				.dataset
 				.prototype
 				.replace(
@@ -64,9 +80,24 @@
 				collectionHolder.dataset.index
 				);
 
-				collectionHolder.appendChild(item);
+			collectionHolder.appendChild(item);
+			collectionHolder.appendChild(btnDelete);
+			
+			let indexItem = collectionHolder.dataset.index++;
+	
+			btnDelete.addEventListener("click", function() {
+				deleteFormToCollection(indexItem);
+			});
+		};
 
-				collectionHolder.dataset.index++;
+		function deleteFormToCollection(indexItem) {
+			const image = document.getElementById('trick_images_' + indexItem);
+			const btnDelete = document.querySelector('.btn_red_cross')
+			const imageItem = document.querySelector('.image-item');
+
+			imageItem.remove();
+			btnDelete.remove();
+			image.remove();
 		};
 	</script>
 {% endblock %}

@@ -56,6 +56,24 @@ h1,
     background-color: #05a1b7;
 }
 
+.btn-delete:not(.btn-floating) {
+    cursor: pointer;
+    color: #d63031;;
+    font-size: 1em;
+    padding: 5px 15px;
+    border: 1px solid #d63031;
+    border-radius: 3px;
+}
+.btn-delete:hover {
+    color: #fff;
+    background-color: #d63031;
+}
+
+.btn_red_cross {
+    border: none;
+    background-color: #fff;
+}
+
 #welcome {
     font-size: 2.5rem;
     background-color: #006266;
