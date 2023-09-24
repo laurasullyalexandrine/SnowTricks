@@ -78,6 +78,11 @@ h1,
     font-size: 2.5rem;
     background-color: #006266;
 }
+
+.trick-name {
+    font-weight: 100;
+    background-color: #05a1b7;
+}
 /* NAV FOOTER */
 
 .nav-link {

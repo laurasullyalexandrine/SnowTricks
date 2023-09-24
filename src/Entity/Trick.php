@@ -164,6 +164,32 @@ class Trick
     }
 
     /**
+     * Permet d'afficher qu'une seule image
+     *
+     * @return Image|null
+     */
+    public function getMainImage(): ?Image
+    {
+        if (!$this->images) {
+            return null;
+        } 
+
+        return $this->images[0] ?? null;
+    }
+
+    public function getTags(): array
+    {
+        $tags = [];
+        $tags = [
+            'createdAt' => $this->created_at,
+            'updatedAt' => ($this->updated_at === null) ? '' : $this->updated_at,
+            'trickGroup' => $this->trick_group,
+        ];
+
+        return $tags;
+    }
+
+    /**
      * @return Collection<int, Video>
      */
     public function getVideos(): Collection

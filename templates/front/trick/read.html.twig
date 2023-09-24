@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}	
+
+{% block body %}
+    <article class="row d-flex flex-column">
+		<h1 class="position-absolute top-25 end-0 py-2">
+            <img class="mw-100 position-absolute top-50 " src="{{ asset('upload/image/' ~  trick.mainImage ) }}" alt="image-snowboard-{{ trick.name }}"/>
+            <span class="trick-name fs-1 mt-lg-3 position-absolute top-0 start-50 translate-middle badge">{{ trick.name }}</span>
+        </h1>
+
+		<section class="d-flex ms-4 my-5 py-5">
+            {% for image in trick.images %}
+                <div>
+                    <img class="mw-100" src="{{ asset('upload/image/' ~ image.name ) }}" alt="image-snowboard-{{ trick.name }}"/>
+                </div>
+            {% endfor %}    
+
+            {% for video in trick.videos %}
+                <div>{{ video.name }}</div>
+            {% endfor %}   
+
+	    </section>
+
+        <section class="d-flex justify-content-center ms-4 my-5 py-5">
+            <ul class="list-group d-flex flex-row">
+                 <li class="list-group-item d-flex bg-primary rounded">
+                    Date de création :
+                    {{trick.tags.createdAt|format_datetime('short', 'none', locale='fr')}}
+                </li>
+                {% if trick.tags.updatedAt is not empty %}
+                     <li class="list-group-item d-flex bg-primary rounded">
+                        Date de mise à jour : 
+                        {{trick.tags.updatedAt|format_datetime('short', 'none', locale='fr')}}
+                    </li>
+                {% endif %}
+                <li class="list-group-item d-flex bg-primary rounded">
+                     Groupe de figure :
+                    {{trick.tags.trickGroup}}
+                </li>
+            </ul>
+
+       
+        </section>
+
+        
+    </article>
+{% endblock %}
