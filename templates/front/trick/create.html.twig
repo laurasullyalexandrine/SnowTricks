@@ -34,7 +34,12 @@
 				></ul>
 				<button type="button" class="add_item_link btn" data-collection-holder-class="images">Ajouter une image</button>
 
-				{# <button type="button" class="delete_item_link btn-delete" data-collection-holder-class="images">Supprimer une image</button> #}
+				<ul class="videos"
+					data-index="{{ form.videos|length > 0 ? form.videos|last.vars.name + 1 : 0 }}"
+					data-prototype="{{ form_widget(form.videos.vars.prototype)|e('html_attr') }}"
+				></ul>
+				<button type="button" class="add_item_link btn" data-collection-holder-class="videos">Ajouter une video</button>
+				
 			<div class="d-flex">
 				<button type="submit" class="btn my-3">{% trans %}Enregistrer{% endtrans %}</button>
 				{{ form_end(form) }}
