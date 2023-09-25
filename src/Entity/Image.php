@@ -12,4 +12,13 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 class Image
 {
     use MediaTrait;
+
+    /**
+     * Function to save the recorded file
+     */
+    #[ORM\PostPersist]
+    public function saveFile(): void
+    {
+        $this->uploadedFile->move(__DIR__ . '/../../public/upload/image', $this->name);
+    }
 }

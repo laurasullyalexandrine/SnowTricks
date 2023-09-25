@@ -14,14 +14,14 @@ class VideoType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('name', FileType::class, [
-            'label' => 'Ajoutes ton fichier',
+            'label' => 'Ajoutes ton fichier video',
             'required' => false,
             'constraints' => [
-                new File (['maxSize' => '2M'
+                new File (['maxSize' => '20M'
                 ])
             ],
             'attr' => [
-                'accept' => 'image/*',
+                'accept' => 'video/*',
             ]
         ]);
     }

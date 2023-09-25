@@ -11,4 +11,13 @@ use Doctrine\ORM\Mapping as ORM;
 class Video
 {
     use MediaTrait;
+
+    /**
+     * Function to save the recorded file
+     */
+    #[ORM\PostPersist]
+    public function saveFile(): void
+    {
+        $this->uploadedFile->move(__DIR__ . '/../../public/upload/video', $this->name);
+    }
 }

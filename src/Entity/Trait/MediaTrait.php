@@ -103,14 +103,4 @@ trait MediaTrait
         $this->uploadedFile = new UploadedFile($this->name, 'test', null, null, true); 
         $this->name = uniqid() . '.' . $this->uploadedFile->guessExtension();
     }
-
-    /**
-     * Function to save the recorded file
-     */
-    #[ORM\PostPersist]
-    public function saveFile(): void
-    {
-        $this->uploadedFile->move(__DIR__ . '/../../../public/upload/image', $this->name);
-    }
-
 }

@@ -28,7 +28,7 @@ class TrickController extends AbstractController
     public function read(
         Trick $trick
     ): Response {
- 
+
         return $this->render('front/trick/read.html.twig', [
             'trick' => $trick,
             'slug' => $trick->getSlug(),
@@ -48,40 +48,49 @@ class TrickController extends AbstractController
             try {
                 // Enregistrer le user connecter à la figure en cours de création
                 $trick->setUser($this->getUser());
-                
+
                 // Récupérer les images soumises depuis le formulaire
                 $images = $form->get('images')->getData();
+
+                // Récupérer les videos soumises depuis le formulaire
+                $videos = $form->get('videos')->getData();
 
                 // Si tableau d'image est vide créer l'image par défaut
                 if (empty($images)) {
                     $image = new Image();
 
                     $publicDirectory = realpath($this->getParameter('kernel.project_dir') . '/public');
-                  
+
                     $defaultFile = $publicDirectory . '/image/snowboard-home.png';
 
                     $tempFile = realpath($this->getParameter('kernel.project_dir') . '/var/temp') . '/' .  uniqid() . '.jpg';
-           
+
                     copy($defaultFile, $tempFile);
 
                     $image->setName($tempFile)
                         ->setTrick($trick);
-    
+
                     $this->manager->persist($image);
                 }
 
                 foreach ($images as $image) {
                     $image->setTrick($trick);
-    
+
                     $this->manager->persist($image);
                 }
+
+                foreach ($videos as $video) {
+                    $video->setTrick($trick);
+
+                    $this->manager->persist($video);
+                }
+                
                 $this->manager->persist($trick);
-    
+
                 $this->manager->flush();
-    
+
                 $this->addFlash('success', 'Ta figure a été créée.');
                 return $this->redirectToRoute('home');
-
             } catch (\Exception $e) {
                 $this->addFlash('error', 'Une erreur est survenue lors de la création de la figure erreur : ' . $e->getMessage());
             }
