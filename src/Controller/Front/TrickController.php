@@ -24,7 +24,7 @@ class TrickController extends AbstractController
     ) {
     }
 
-    #[Route('/figure/{slug}', name: 'trick_slug', methods: ['GET'])]
+    #[Route('/figure-de-snowboard/{slug}', name: 'trick_slug', methods: ['GET'])]
     public function read(
         Trick $trick
     ): Response {
@@ -35,7 +35,7 @@ class TrickController extends AbstractController
         ]);
     }
 
-    #[Route('/nouvelle-figure', name: 'trick_create', methods: ['GET', 'POST'])]
+    #[Route('/nouvelle-figure-de-snowboard', name: 'trick_create', methods: ['GET', 'POST'])]
     public function create(Request $request): Response
     {
         $trick = new Trick();
@@ -98,5 +98,25 @@ class TrickController extends AbstractController
         return $this->render('front/trick/create.html.twig', [
             'form' => $form->createView(),
         ]);
+    }
+
+    #[Route('/suppression-de-la-figure-de-snowboard/{slug}', name: 'trick_delete', methods: ['POST', 'DELETE'])]
+    public function delete(
+        Request $request,
+        Trick $trick): Response
+    {
+        if (!$this->getUser()) {
+            throw $this->createNotFoundException('Cet utilisateur n\'existe pas.');
+            return $this->redirectToRoute('login');
+        }
+        // TODO: voter
+
+        if ($this->isCsrfTokenValid('delete' . $trick->getSlug(), $request->request->get('_token'))) {
+            $this->manager->remove($trick);
+            $this->manager->flush();
+        }
+
+        $this->addFlash('success', 'Ta figure de snowboard ' . $trick->getName() . ' a été supprimée.');
+        return $this->redirectToRoute('home');
     }
 }
