@@ -1,12 +1,18 @@
 {% extends 'base.html.twig' %}	
 {# TODO: faire la mise en page #}
-{% block body %}
-    <article class="row d-flex flex-column">
-        {# Block main title and image #}
+    {% block divers %}
         <div class="edit-delete text-center bg-opacity-50">
             <a class="me-3" href="#"><i class="fa-solid fa-pen fa-lg" style="color: #ecf0f1;"></i></a>
-            <a class="" href="#"><i class="fa-solid fa-trash-can fa-lg" style="color:#c0392b;"></i></a>
+            {{ include('front/trick/_delete_form.html.twig') }}
+            {# <a class="" href="#"><i class="fa-solid fa-trash-can fa-lg" style="color:#c0392b;"></i></a> #}
         </div>
+    {% endblock %}
+{% block body %}
+
+
+    <article class="row d-flex flex-column">
+        {# Block main title and image #}
+
 
 		<h1 class="position-absolute top-25 end-0">
             <span class="trick-name fs-1 mt-lg-3 position-absolute top-0 start-50 translate-middle badge">{{ trick.name }}</span>
