@@ -1,16 +1,15 @@
 <?php
-// Cette class qui n'en ai pas une intégre la notion de 'trait' 
-// Cette notion permet d'alléger le code en mutualisant les propriétés communes
-// aux entités (elle ne peut pas être instanciée et n'a pas de méthode __construct)
-namespace App\Entity\Trait;
 
+namespace App\Entity;
+
+use App\Entity\Trait\MediaTrait;
+use App\Repository\MediaRepository;
 use Doctrine\ORM\Mapping as ORM;
-use App\Entity\Trick;
-
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-
-trait MediaTrait
+#[ORM\Entity(repositoryClass: MediaRepository::class)]
+#[ORM\HasLifecycleCallbacks]
+class Media
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -102,5 +101,14 @@ trait MediaTrait
     {
         $this->uploadedFile = new UploadedFile($this->name, 'test', null, null, true); 
         $this->name = uniqid() . '.' . $this->uploadedFile->guessExtension();
+    }
+
+    /**
+     * Function to save the recorded file
+     */
+    #[ORM\PostPersist]
+    public function saveFile(): void
+    {
+        $this->uploadedFile->move(__DIR__ . '/../../public/upload/image', $this->name);
     }
 }
