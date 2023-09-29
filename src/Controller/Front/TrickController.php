@@ -8,6 +8,7 @@ use App\Form\TrickType;
 use App\Repository\ImageRepository;
 use App\Service\FileUploader;
 use App\Repository\TrickRepository;
+use App\Security\Voter\TrickVoter;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -110,6 +111,7 @@ class TrickController extends AbstractController
             return $this->redirectToRoute('login');
         }
         // TODO: voter
+        $this->denyAccessUnlessGranted(TrickVoter::DELETE, $trick);
 
         if ($this->isCsrfTokenValid('delete' . $trick->getSlug(), $request->request->get('_token'))) {
             $this->manager->remove($trick);

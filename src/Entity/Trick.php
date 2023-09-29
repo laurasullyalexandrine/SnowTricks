@@ -181,6 +181,7 @@ class Trick
     {
         $tags = [];
         $tags = [
+            'author' => $this->user,
             'createdAt' => $this->created_at,
             'updatedAt' => ($this->updated_at === null) ? '' : $this->updated_at,
             'trickGroup' => $this->trick_group,
