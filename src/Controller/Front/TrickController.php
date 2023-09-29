@@ -59,13 +59,14 @@ class TrickController extends AbstractController
                 // Si tableau d'image est vide créer l'image par défaut
                 if (empty($images)) {
                     $image = new Image();
-
+                    // Récupérer le chemin racine du projet et descendre au dossier public
                     $publicDirectory = realpath($this->getParameter('kernel.project_dir') . '/public');
 
+                    // Récupérer chemin de l'image par défaut
                     $defaultFile = $publicDirectory . '/image/snowboard-home.png';
 
+                    // Faire une copie du fichier dans le dossier temporaire
                     $tempFile = realpath($this->getParameter('kernel.project_dir') . '/var/temp') . '/' .  uniqid() . '.jpg';
-
                     copy($defaultFile, $tempFile);
 
                     $image->setName($tempFile)
@@ -74,15 +75,15 @@ class TrickController extends AbstractController
                     $this->manager->persist($image);
                 }
 
+                // Ajouter les images
                 foreach ($images as $image) {
                     $image->setTrick($trick);
-
                     $this->manager->persist($image);
                 }
 
+                // Ajouter les images
                 foreach ($videos as $video) {
                     $video->setTrick($trick);
-
                     $this->manager->persist($video);
                 }
                 
@@ -101,6 +102,27 @@ class TrickController extends AbstractController
         ]);
     }
 
+    #[Route('/edition-figure-de-snowboard/{slug}', name: 'trick_edit', methods: ['GET', 'POST'])]
+    public function edit(
+        Request $request,
+        Trick $trick): Response
+    {
+        if (!$this->getUser()) {
+            throw $this->createNotFoundException('Cet utilisateur n\'existe pas.');
+            return $this->redirectToRoute('login');
+        }
+
+        $this->denyAccessUnlessGranted(TrickVoter::EDIT, $trick);
+        
+        $form = $this->createForm(TrickType::class, $trick);
+
+        $form->handleRequest($request);
+        return $this->render('front/trick/edit.html.twig', [
+            'form' => $form->createView(),
+            'trick' => $trick,
+        ]);
+    }
+
     #[Route('/suppression-de-la-figure-de-snowboard/{slug}', name: 'trick_delete', methods: ['POST', 'DELETE'])]
     public function delete(
         Request $request,
@@ -110,7 +132,7 @@ class TrickController extends AbstractController
             throw $this->createNotFoundException('Cet utilisateur n\'existe pas.');
             return $this->redirectToRoute('login');
         }
-        // TODO: voter
+
         $this->denyAccessUnlessGranted(TrickVoter::DELETE, $trick);
 
         if ($this->isCsrfTokenValid('delete' . $trick->getSlug(), $request->request->get('_token'))) {

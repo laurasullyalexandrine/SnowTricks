@@ -2,7 +2,7 @@
 {# TODO: faire la mise en page #}
     {% block miscellaneous %}
         <div class="d-flex block-edit-delete text-center">
-            <a class="btn-edit me-3" href="#"><i class="fa-solid fa-pen fa-xl" style="color: #030303;"></i></i></a>
+            <a class="btn-edit me-3" href="{{ path('trick_edit', { slug: trick.slug } )}}"><i class="fa-solid fa-pen fa-xl" style="color: #030303;"></i></i></a>
             {{ include('front/trick/_delete_form.html.twig') }}
         </div>
     {% endblock %}
