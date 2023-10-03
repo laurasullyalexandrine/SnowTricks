@@ -4,34 +4,54 @@
 
 {% block body %}
     <article class="row d-flex m-5">
+        {# Block main title #}
         <section class="d-flex justify-content-center">
             <div class="main-title fs-5 mb-sm-3">
                 <img src="{{asset('image/snowboard-home.png')}}" alt="image-home-snowboard" class="mw=100">
                 <h1 class="hook m-lg-4"><strong>SnowTricks</strong> est un site collaboratif pour faire connaître ce sport auprès du grand public et aider à l'apprentissage des figures <strong class="marker-blue">(tricks)</strong>.</h1>
             </div>
         </section>
+
+        {# Block down #}
+        <section id="up" class="d-flex my-2 justify-content-end">
+            <div class="my-4">
+                <a href="#down"><i class="fa-solid fa-down-long fa-xl"></i></a>
+            </div>
+        </section>
+
+        {# Block create button #}
         {% if app.user and app.user.isverified == true %}
         	<div>
                 <a class="btn fs-5 my-4" href="{{ path('trick_create') }}">Nouvelle figure</a>
             </div>
         {% endif %}
-        <section class="d-flex flex-wrap justify-content-center ">
-				{% for trick in tricks %}
-					<div class="col-sm-4 mb-3">
-						<div class="card shadow-sm bg-body rounded" style="max-width: 18rem; max-height: 16rem;">
-                            <div class="d-flex mx-2 mt-2 p-1 rounded" style="background-color: #000;">
-								<a class="card-link ps-2" href="{{ path('trick_slug', { slug: trick.slug } )}}">{{ trick.name }}</a>
-							</div>
-							<div class="card-body flex-wrap">
-                                {% if trick.mainImage == "snowboard-home.png" %}
-                                    <a href="{{ path('trick_slug', { slug: trick.slug }) }}"><img src="{{ asset('image/snowboard-home.png') }}" alt="trick-picture" style="max-width: 16rem; max-height: 16rem;"></a>
-                                {% else %}
-                                    <a href="{{ path('trick_slug', { slug: trick.slug } )}}"><img src="{{ asset('upload/image/' ~ trick.mainImage ) }}" alt="trick-image" style="max-width: 16rem; max-height: 16rem;"></a>
-                                {% endif %}
-                            </div>
+
+      {# Block display trick #}
+        <section class="d-flex flex-wrap justify-content-center">
+			{% for trick in tricks %}
+				<div class="col-sm-4 mb-3">
+					<div class="card shadow-sm bg-body rounded" style="max-width: 18rem; max-height: 16rem;">
+                        <div class="d-flex mx-2 mt-2 p-1 rounded" style="background-color: #000;">
+							<a class="card-link ps-2" href="{{ path('trick_slug', { slug: trick.slug } )}}">{{ trick.name }}</a>
 						</div>
+						<div class="card-body flex-wrap">
+                            {% if trick.mainImage == "snowboard-home.png" %}
+                                <a href="{{ path('trick_slug', { slug: trick.slug }) }}"><img src="{{ asset('image/snowboard-home.png') }}" alt="trick-picture" style="max-width: 16rem; max-height: 16rem;"></a>
+                            {% else %}
+                                <a href="{{ path('trick_slug', { slug: trick.slug } )}}"><img src="{{ asset('upload/image/' ~ trick.mainImage ) }}" alt="trick-image" style="max-width: 16rem; max-height: 16rem;"></a>
+                            {% endif %}
+                        </div>
 					</div>
-			    {% endfor %}
+				</div>
+			{% endfor %}
 	    </section>
+
+        {# Block up #}
+        <section id="down" class="d-flex my-2 justify-content-end">
+            <div class="my-4" class="my-4">
+                <a href="#up"><i class="fa-solid fa-up-long fa-xl"></i></a>
+            </div>
+        </section>
+     
     </article>
 {% endblock %}
