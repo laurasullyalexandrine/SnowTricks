@@ -2,11 +2,10 @@
 
 namespace App\Controller\Front;
 
-use App\Entity\Image;
+use App\Entity\Media;
 use App\Entity\Trick;
 use App\Form\TrickType;
-use App\Repository\ImageRepository;
-use App\Service\FileUploader;
+use App\Repository\MediaRepository;
 use App\Repository\TrickRepository;
 use App\Security\Voter\TrickVoter;
 use Doctrine\ORM\EntityManagerInterface;
@@ -20,8 +19,7 @@ class TrickController extends AbstractController
     public function __construct(
         private TrickRepository $trickRepository,
         private EntityManagerInterface $manager,
-        private FileUploader $fileUploader,
-        private ImageRepository $imageRepository
+        private MediaRepository $imageRepository
     ) {
     }
 
@@ -51,14 +49,14 @@ class TrickController extends AbstractController
                 $trick->setUser($this->getUser());
 
                 // Récupérer les images soumises depuis le formulaire
-                $images = $form->get('images')->getData();
+                $medias = $form->get('medias')->getData();
 
                 // Récupérer les videos soumises depuis le formulaire
-                $videos = $form->get('videos')->getData();
+                // $videos = $form->get('videos')->getData();
 
                 // Si tableau d'image est vide créer l'image par défaut
-                if (empty($images)) {
-                    $image = new Image();
+                if (empty($medias)) {
+                    $media = new Media();
                     // Récupérer le chemin racine du projet et descendre au dossier public
                     $publicDirectory = realpath($this->getParameter('kernel.project_dir') . '/public');
 
@@ -69,23 +67,23 @@ class TrickController extends AbstractController
                     $tempFile = realpath($this->getParameter('kernel.project_dir') . '/var/temp') . '/' .  uniqid() . '.jpg';
                     copy($defaultFile, $tempFile);
 
-                    $image->setName($tempFile)
+                    $media->setName($tempFile)
                         ->setTrick($trick);
 
-                    $this->manager->persist($image);
+                    $this->manager->persist($media);
                 }
 
                 // Ajouter les images
-                foreach ($images as $image) {
-                    $image->setTrick($trick);
-                    $this->manager->persist($image);
+                foreach ($medias as $media) {
+                    $media->setTrick($trick);
+                    $this->manager->persist($media);
                 }
 
                 // Ajouter les images
-                foreach ($videos as $video) {
-                    $video->setTrick($trick);
-                    $this->manager->persist($video);
-                }
+                // foreach ($videos as $video) {
+                //     $video->setTrick($trick);
+                //     $this->manager->persist($video);
+                // }
                 
                 $this->manager->persist($trick);
 
@@ -97,8 +95,9 @@ class TrickController extends AbstractController
                 $this->addFlash('error', 'Une erreur est survenue lors de la création de la figure erreur : ' . $e->getMessage());
             }
         }
-        return $this->render('front/trick/create.html.twig', [
+        return $this->render('front/trick/edit.html.twig', [
             'form' => $form->createView(),
+            'trick' => $trick,
         ]);
     }
 

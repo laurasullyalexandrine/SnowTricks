@@ -27,18 +27,11 @@
 	            <div class="mb-2">
 			     {{ form_row(form.trick_group, {'label': 'Groupe de figure *'}) }}
                 </div>
-				<ul class="images"
-					data-index="{{ form.images|length > 0 ? form.images|last.vars.name + 1 : 0 }}"
-					data-prototype="{{ form_widget(form.images.vars.prototype)|e('html_attr') }}"
+				<ul class="medias"
+					data-index="{{ form.medias|length > 0 ? form.medias|last.vars.name + 1 : 0 }}"
+					data-prototype="{{ form_widget(form.medias.vars.prototype)|e('html_attr') }}"
 				></ul>
-				<button type="button" class="add_item_link btn" data-collection-holder-class="images">Ajouter une image</button>
-
-				<ul class="videos"
-					data-index="{{ form.videos|length > 0 ? form.videos|last.vars.name + 1 : 0 }}"
-					data-prototype="{{ form_widget(form.videos.vars.prototype)|e('html_attr') }}"
-				></ul>
-				<button type="button" class="add_item_link btn" data-collection-holder-class="videos">Ajouter une video</button>
-				
+				<button type="button" class="add_item_link btn" data-collection-holder-class="medias">Ajoutes ton media</button>
 			<div class="d-flex">
 				<button type="submit" class="btn my-3">Modifier</button>
 				{{ form_end(form) }}
@@ -61,13 +54,13 @@
 			
 			// Balise li
 			const item = document.createElement('li');
-				item.classList.add('image-item');
+				item.classList.add('media-item');
 
 			// Créer un button de suppression
 			const btnDelete = document.createElement('button');
 				btnDelete.classList.add('btn-red-cross');
 				btnDelete.type = 'button';
-				btnDelete.innerText = "Supprimes ton image";
+				btnDelete.innerText = "Supprimes ton media";
 				btnDelete.style.color = '#f7021b';
 
 			// Créer la croix rouge 
@@ -104,8 +97,8 @@
 		};
 
 		function deleteFormToCollection(indexItem) {
-			const image = document.getElementById('trick_images_' + indexItem);
-			image.parentElement.remove();
+			const media = document.getElementById('trick_medias_' + indexItem);
+			media.parentElement.remove();
 		};
 	</script>
 {% endblock %}

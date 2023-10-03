@@ -21,18 +21,11 @@
 
         {# Block image and video #}
             <section class="d-flex justify-content-center mb-3 py-3 bg-dark">
-                {% for image in trick.images %}
+                {% for media in trick.medias %}
                     <div class="me-2">
-                        <img class="mw-100 rounded" src="{{ asset('upload/image/' ~ image.name ) }}"  width="250px" alt="image-snowboard-{{ trick.name }}"/>
+                        <img class="mw-100 rounded" src="{{ asset('upload/image/' ~ media.name ) }}"  width="250px" alt="image-snowboard-{{ trick.name }}"/>
                     </div>
                 {% endfor %}    
-
-                {% for video in trick.videos %}
-                    <div class="me-2">
-                        <video controls width="300">
-                        <source class ="rounded" src="{{ asset('upload/video/' ~ video.name ) }}" type="video/mp4" />
-                    </div>
-                {% endfor %}   
             </section>
 
             {# Block description #}
