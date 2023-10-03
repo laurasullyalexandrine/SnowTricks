@@ -56,20 +56,13 @@ h1,
     background-color: #05a1b7;
 }
 
-.btn-delete:not(.btn-floating) {
-    cursor: pointer;
-    color: #d63031;;
-    font-size: 1em;
-    padding: 5px 15px;
-    border: 1px solid #d63031;
-    border-radius: 3px;
-}
-.btn-delete:hover {
-    color: #fff;
-    background-color: #d63031;
+.btn-delete,
+.btn-edit {
+    border: none;
+    background-color: transparent;
 }
 
-.btn_red_cross {
+.btn-red-cross {
     border: none;
     background-color: #fff;
 }
@@ -82,6 +75,21 @@ h1,
 .trick-name {
     font-weight: 100;
     background-color: #05a1b7;
+}
+
+li {
+    list-style: none;
+}
+
+.block-edit-delete {
+    width: 100px;
+    position: absolute;
+    border-radius: 3px;
+    margin-top: 30px;
+    margin-left: 1080px;
+    padding: 8px;
+    z-index: 10;
+    background-color: #fff;
 }
 /* NAV FOOTER */
 

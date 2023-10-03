@@ -1,49 +1,80 @@
 {% extends 'base.html.twig' %}	
 {# TODO: faire la mise en page #}
+    {% block miscellaneous %}
+        <div class="d-flex block-edit-delete text-center">
+            <a class="btn-edit me-3" href="{{ path('trick_edit', { slug: trick.slug } )}}"><i class="fa-solid fa-pen fa-xl" style="color: #030303;"></i></i></a>
+            {{ include('front/trick/_delete_form.html.twig') }}
+        </div>
+    {% endblock %}
 {% block body %}
 
+
     <article class="row d-flex flex-column">
-		<h1 class="position-absolute top-25 end-0 py-2">
-            <img class="mw-100 position-absolute top-50 " src="{{ asset('upload/image/' ~  trick.mainImage ) }}" alt="image-snowboard-{{ trick.name }}"/>
+        {# Block main title and image #}
+		<h1 class="position-absolute top-25 end-0">
             <span class="trick-name fs-1 mt-lg-3 position-absolute top-0 start-50 translate-middle badge">{{ trick.name }}</span>
         </h1>
 
-		<section class="d-flex ms-4 my-5 py-5">
-            {% for image in trick.images %}
-                <div>
-                    <img class="mw-100" src="{{ asset('upload/image/' ~ image.name ) }}" alt="image-snowboard-{{ trick.name }}"/>
-                </div>
-            {% endfor %}    
+        <div>
+            <img id="main-image" class="mw-100" src="{{ asset('upload/image/' ~  trick.mainImage ) }}" healt="image-snowboard-{{ trick.name }}"/>
+        </div>
 
-            {% for video in trick.videos %}
-                <div>
-                    <video controls width="250">
-                    <source src="{{ asset('upload/video/' ~ video.name ) }}" type="video/mp4" />
-                </div>
-            {% endfor %}   
-	    </section>
+        {# Block image and video #}
+            <section class="d-flex justify-content-center mb-3 py-3 bg-dark">
+                {% for image in trick.images %}
+                    <div class="me-2">
+                        <img class="mw-100 rounded" src="{{ asset('upload/image/' ~ image.name ) }}"  width="250px" alt="image-snowboard-{{ trick.name }}"/>
+                    </div>
+                {% endfor %}    
 
-        <section class="d-flex justify-content-center ms-4 my-5 py-5">
-            <ul class="list-group d-flex flex-row">
-                 <li class="list-group-item d-flex bg-primary rounded">
-                    Date de création :
-                    {{trick.tags.createdAt|format_datetime('short', 'none', locale='fr')}}
-                </li>
-                {% if trick.tags.updatedAt is not empty %}
-                     <li class="list-group-item d-flex bg-primary rounded">
-                        Date de mise à jour : 
-                        {{trick.tags.updatedAt|format_datetime('short', 'none', locale='fr')}}
+                {% for video in trick.videos %}
+                    <div class="me-2">
+                        <video controls width="300">
+                        <source class ="rounded" src="{{ asset('upload/video/' ~ video.name ) }}" type="video/mp4" />
+                    </div>
+                {% endfor %}   
+            </section>
+
+            {# Block description #}
+            <section class="d-flex justify-content-center mb-3">
+                <div class="fs-4 w-75 p-3"> {{ trick.description }} </div>
+            </section>
+        
+
+            {# Block tags #}
+            <section class="d-flex justify-content-center">
+                <ul class="d-flex flex-row">
+                    <li class="me-3 p-2 text-light bg-dark rounded">
+                        Auteur :
+                        {{ trick.tags.author|capitalize }}
                     </li>
-                {% endif %}
-                <li class="list-group-item d-flex bg-primary rounded">
-                     Groupe de figure :
-                    {{trick.tags.trickGroup}}
-                </li>
-            </ul>
+                    <li class="me-3 p-2 text-light bg-dark rounded">
+                        Date de création :
+                        {{ trick.tags.createdAt|format_datetime('short', 'none', locale='fr') }}
+                    </li>
+                    {% if trick.tags.updatedAt is not empty %}
+                        <li class="me-3 p-2 text-light bg-dark rounded">
+                            Date de mise à jour : 
+                            {{ trick.tags.updatedAt|format_datetime('short', 'none', locale='fr') }}
+                        </li>
+                    {% endif %}
+                        <li class="me-3 p-2 text-light bg-dark rounded">
+                            Groupe de figure :
+                            {{ trick.tags.trickGroup }}
+                        </li>
+                </ul>
+            </section>
 
+        {# Block comment #}
+        {% if app.user and app.user.isverified == true %}
+			<section class="d-flex" style="background-color: #38ada9;">
+				<p class="fs-4">Section commentaires User connecté</p>
+				<p class="fs-4">Ajouter le formulaire de publication de commentaire</p>
+				<p class="fs-4">Les commentaires publié et validés par ordre desc</p>
+			</section>
+		{% endif %}
+   
        
-        </section>
-
         
     </article>
 {% endblock %}

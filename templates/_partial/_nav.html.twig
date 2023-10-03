@@ -43,20 +43,3 @@
 				{% endif %}
 		</div>
 	</nav>
-	<div id="welcome">
-		<div class="m-auto py-4">
-			{% if app.user and app.user.isVerified == true %}
-				<ul class="navbar-nav align-self-center ms-2">
-					<li class="nav-item text-light text-center mt-1 mb-lg-0 mb-3">
-						<span>Bonjour {{ app.user.name|capitalize }} !</span>
-					</li> 
-				</ul>
-			{% else %}
-				<ul class="navbar-nav align-self-center ms-2">
-					<li class="nav-item text-light text-center mt-1 mb-lg-0 mb-3">
-						<span>Bienvenue !</span>
-					</li> 
-				</ul>	
-			{% endif %}
-		</div>
-	</div>
