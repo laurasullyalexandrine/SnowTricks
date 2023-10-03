@@ -20,3 +20,4 @@
 ###< symfony/phpunit-bridge ###
 
 /public/upload/image
+/public/upload/video
