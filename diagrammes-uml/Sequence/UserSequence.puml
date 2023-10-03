@@ -1,12 +1,12 @@
 @startuml UserSequence
 
-skinparam responseMessageBelowArrow true
-skinparam SequenceMessageAlignment center
+skinparam responseCommentBelowArrow true
+skinparam SequenceCommentAlignment center
 
 actor User as User #Plum
 
 entity Trick as Trick #LightYellow
-entity Message as Message #LightYellow
+entity Comment as Comment #LightYellow
 entity Admin as Admin #LightYellow
 
 database SnowTricks as SnowTricks #HotPink
@@ -32,18 +32,18 @@ Trick-> User: Trick ajouter
 else cette Trick existe déjà
 SnowTricks-> User: échec de l'ajout
 
-User  -> Message: éditer message
-Message -> User: valider édition
+User  -> Comment: éditer Comment
+Comment -> User: valider édition
 else 404
-Message -> User: ce message n'existe pas
+Comment -> User: ce Comment n'existe pas
 
-User -> Message: ajouter message
-Message -> User: message en attente de validation
+User -> Comment: ajouter Comment
+Comment -> User: Comment en attente de validation
 else 403
-User -> Message: Vous n'avez pas accès à cette ressource
+User -> Comment: Vous n'avez pas accès à cette ressource
 
-User -> Message: consulter tous ses messages
-Message -> User: afficher liste de ses messages
+User -> Comment: consulter tous ses Comments
+Comment -> User: afficher liste de ses Comments
 
 end
 @enduml

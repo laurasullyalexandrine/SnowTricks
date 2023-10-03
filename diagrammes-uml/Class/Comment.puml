@@ -1,6 +1,6 @@
-@startuml Message
+@startuml Comment
 
-Class Message {
+Class Comment {
 
     - content: string
     - status : int
