@@ -122,7 +122,7 @@ class TrickController extends AbstractController
         ]);
     }
 
-    #[Route('/suppression-de-la-figure-de-snowboard/{slug}', name: 'trick_delete', methods: ['POST', 'DELETE'])]
+    #[Route('/supprimer-la-figure-de-snowboard/{slug}', name: 'trick_delete', methods: ['POST', 'DELETE'])]
     public function delete(
         Request $request,
         Trick $trick): Response
