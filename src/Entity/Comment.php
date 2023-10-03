@@ -29,6 +29,9 @@ class Comment
     #[ORM\ManyToOne(inversedBy: 'Comments')]
     private ?User $users = null;
 
+    #[ORM\ManyToOne(inversedBy: 'comments')]
+    private ?Trick $trick = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -90,6 +93,18 @@ class Comment
     public function setUsers(?User $users): static
     {
         $this->users = $users;
+
+        return $this;
+    }
+
+    public function getTrick(): ?Trick
+    {
+        return $this->trick;
+    }
+
+    public function setTrick(?Trick $trick): static
+    {
+        $this->trick = $trick;
 
         return $this;
     }
