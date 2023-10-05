@@ -1,105 +1,151 @@
 {% extends 'base.html.twig' %}
 
 {% block miscellaneous %}
-{% if app.user and app.user.isverified == true %}
-	<div class="d-flex block-edit-delete text-center">
-		<a class="btn-edit me-3" href="{{ path('trick_edit', { slug: trick.slug } )}}">
-			<i class="fa-solid fa-pen fa-xl" style="color: #030303;"></i>
-		</i>
-	</a>
-	{{ include('front/trick/_delete_form.html.twig') }}
-</div>{% endif %}{% endblock %}{% block body %}<article
-class="row d-flex flex-column">
-{# Block main title and image #}
-<h1 class="position-absolute top-25 end-0">
-	<span class="trick-name fs-1 mt-lg-3 position-absolute top-0 start-50 translate-middle badge">{{ trick.name }}</span>
-</h1>
-
-<div>
-	<img id="main-image" class="mw-100" src="{{ asset('upload/image/' ~ trick.mainImage ) }}" healt="image-snowboard-{{ trick.name }}"/>
-</div>
-
-{# TODO: à modifier pour masquer en responsive et remplacer par un bouton #}
-{# Block image and video #}
-<section class="d-flex justify-content-center mb-3 py-3 bg-dark">
-	{% for media in trick.medias %}
-		<div class="me-2">
-			<img class="mw-100 rounded" src="{{ asset('upload/image/' ~ media.name ) }}" width="250px" alt="image-snowboard-{{ trick.name }}"/>
-		</div>
-	{% endfor %}
-</section>
-
-{# Block description #}
-<section class="d-flex justify-content-center mb-3">
-	<div class="align-self-center fs-4 w-75 p-3">
-		{{ trick.description }}
-	</div>
-</section>
-
-
-{# Block tags #}
-<section class="d-flex justify-content-center">
-	<ul class="d-flex flex-row">
-		<li class="text-center fs-5 me-3 p-2 text-light bg-dark rounded">
-			Auteur :
-			{{ trick.tags.author|capitalize }}
-		</li>
-		<li class="text-center fs-5 me-3 p-2 text-light bg-dark rounded">
-			Date de création :
-			{{ trick.tags.createdAt|format_datetime('short', 'none', locale='fr') }}
-		</li>
-		{% if trick.tags.updatedAt is not empty %}
-			<li class="text-center fs-5 me-3 p-2 text-light bg-dark rounded">
-				Date de mise à jour :
-				{{ trick.tags.updatedAt|format_datetime('short', 'none', locale='fr') }}
-			</li>
-		{% endif %}
-		<li class="text-center fs-5 me-3 p-2 text-light bg-dark rounded">
-			Groupe de figure :
-			{{ trick.tags.trickGroup }}
-		</li>
-	</ul>
-</section>
-
-{# Block ajout de commentaire #}
-<section class="d-flex flex-column justify-content-center mt-4 p-3 bg-dark">
 	{% if app.user and app.user.isverified == true %}
-		{{ form_start(form) }}
-
-		{% set errors = form_errors(form) %}
-		{% if errors is empty %}
-			<div>
-				{{form_errors(form)  }}
-			</div>
-		{% else %}
-			<div class="alert alert-danger">
-				{{form_errors(form)  }}
-			</div>
-		{% endif %}
-		<div class="d-flex flex-wrap justify-content-center my-3">
-			<div class="w-50 mx-5">
-				{{ form_row(form.content, {label: ' '}) }}
-			</div>
-
-			<div class="m-4 align-self-end">
-				<button type="submit" class="btn my-3">
-					{% trans %}Laisses un commentaire{% endtrans %}</button>
-				{{ form_end(form) }}
-			</div>
+		<div class="d-flex block-edit-delete text-center">
+			<a class="btn-edit me-3" href="{{ path('trick_edit', { slug: trick.slug } )}}">
+				<i class="fa-solid fa-pen fa-xl" style="color: #030303;"></i>
+			</i>
+		</a>
+			{{ include('front/trick/_delete_form.html.twig') }}
 		</div>
 	{% endif %}
-</section>
+{% endblock %}
 
-{# Block commentaires #}
-{% for comment in comments|slice(0, 6) %}
-	{% if comment.status == 1 %}
-		<section class="d-flex flex-row justify-content-center mt-4">
-			<div class="mx-3 p-3">
-				{{ comment.users }}
+{% block body %}
+	<article class="row d-flex flex-column">
+	{# Block main title and image #}
+	<h1 class="position-absolute top-25 end-0">
+		<span class="trick-name fs-1 mt-lg-3 position-absolute top-0 start-50 translate-middle badge">{{ trick.name }}</span>
+	</h1>
+
+	<div>
+		<img id="main-image" class="mw-100" src="{{ asset('upload/image/' ~ trick.mainImage ) }}" healt="image-snowboard-{{ trick.name }}"/>
+	</div>
+
+	{# TODO: à modifier pour masquer en responsive et remplacer par un bouton #}
+	{# Block image and video #}
+	<section class="d-flex justify-content-center mb-3 py-3 bg-dark d-none d-sm-none d-md-block d-lg-block">
+		{% for media in trick.medias %}
+			<div class="me-2">
+				<img class="mw-100 rounded" src="{{ asset('upload/image/' ~ media.name ) }}" width="250px" alt="image-snowboard-{{ trick.name }}"/>
 			</div>
-			<div class="mx-3 my-2 p-3 border border-1 border-dark rounded w-75">
-				{{ comment.content }}
-			</div>
+		{% endfor %}
+	</section>
+
+	{# Block reponsive media #}
+	<div class="text-center my-4 d-block d-sm-block d-md-none d-lg-none">
+		<a data-bs-toggle="collapse" href="#display" aria-expanded="false" aria-controls="display"></a>
+		<button class="btn" type="button" data-bs-toggle="collapse" href="#display" aria-expanded="false" aria-controls="display">Voir médias</button>
+	</div>
+
+	<div class="collapse" id="display">
+	{# TODO: revoir comment obtenir la longueur du tab des commentaires #}
+		<section class="d-flex justify-content-center mb-3 py-3 bg-dark">
+			{% for media in trick.medias %}
+				<div class="me-2">
+					<img class="mw-100 rounded" src="{{ asset('upload/image/' ~ media.name ) }}" width="250px" alt="image-snowboard-{{ trick.name }}"/>
+				</div>
+			{% endfor %}
 		</section>
-	{% endif %}
-{% endfor %}</article>{% endblock %}
+	</div>
+
+	{# Block description #}
+	<section class="d-flex justify-content-center mb-3">
+		<div class="align-self-center fs-4 w-75 p-3">
+			{{ trick.description }}
+		</div>
+	</section>
+
+
+	{# Block tags #}
+	<section class="d-flex justify-content-center">
+		<ul class="d-flex flex-row">
+			<li class="text-center fs-5 me-3 p-2 text-light bg-dark rounded">
+				Auteur :
+				{{ trick.tags.author|capitalize }}
+			</li>
+			<li class="text-center fs-5 me-3 p-2 text-light bg-dark rounded">
+				Date de création :
+				{{ trick.tags.createdAt|format_datetime('short', 'none', locale='fr') }}
+			</li>
+			{% if trick.tags.updatedAt is not empty %}
+				<li class="text-center fs-5 me-3 p-2 text-light bg-dark rounded">
+					Date de mise à jour :
+					{{ trick.tags.updatedAt|format_datetime('short', 'none', locale='fr') }}
+				</li>
+			{% endif %}
+			<li class="text-center fs-5 me-3 p-2 text-light bg-dark rounded">
+				Groupe de figure :
+				{{ trick.tags.trickGroup }}
+			</li>
+		</ul>
+	</section>
+
+	{# Block ajout de commentaire #}
+	<section class="d-flex flex-column justify-content-center my-4 p-3 bg-dark">
+		{% if app.user and app.user.isverified == true %}
+			{{ form_start(form) }}
+
+			{% set errors = form_errors(form) %}
+			{% if errors is empty %}
+				<div>
+					{{form_errors(form)  }}
+				</div>
+			{% else %}
+				<div class="alert alert-danger">
+					{{form_errors(form)  }}
+				</div>
+			{% endif %}
+			<div class="d-flex flex-wrap justify-content-center my-3">
+				<div class="w-50 mx-5">
+					{{ form_row(form.content, {label: ' '}) }}
+				</div>
+
+				<div class="m-4 align-self-end">
+					<button type="submit" class="btn my-3">
+						{% trans %}Laisses un commentaire{% endtrans %}</button>
+					{{ form_end(form) }}
+				</div>
+			</div>
+		{% endif %}
+	</section>
+
+	{# Block commentaires #}
+	{% for comment in comments|slice(0, 4) %}
+		{% if comment.status == 1 %}
+			<section class="d-flex flex-row justify-content-center mt-3">
+				<div class="mx-3 p-3">
+					{{ comment.users }}
+				</div>
+				<div class="mx-3 my-2 p-3 border border-1 border-dark rounded w-75">
+					{{ comment.content }}
+				</div>
+			</section>
+		{% endif %}
+	{% endfor %}
+
+	{# Block voir plus de commentaires #}
+	<div class="text-center my-4">
+		<a data-bs-toggle="collapse" href="#display" aria-expanded="false" aria-controls="display"></a>
+		<button class="btn" type="button" data-bs-toggle="collapse" href="#display" aria-expanded="false" aria-controls="display">Voir plus</button>
+	</div>
+
+	<div class="collapse" id="display">
+	{# TODO: revoir comment obtenir la longueur du tab des commentaires #}
+		{% for comment in comments|slice(5, comments|length) %}
+			{% if comment.status == 1 %}
+				<section class="d-flex flex-row justify-content-center mt-4">
+					<div class="mx-3 p-3">
+						{{ comment.users }}
+					</div>
+					<div class="mx-3 my-2 p-3 border border-1 border-dark rounded w-75">
+						{{ comment.content }}
+					</div>
+				</section>
+			{% endif %}
+		{% endfor %}
+	</div>
+</article>
+
+{% endblock %}
