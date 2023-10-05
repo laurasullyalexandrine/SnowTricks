@@ -4,10 +4,12 @@ namespace App\Controller\Front;
 
 use App\Entity\Media;
 use App\Entity\Trick;
+use App\Entity\Comment;
 use App\Form\TrickType;
+use App\Form\CommentType;
+use App\Security\Voter\TrickVoter;
 use App\Repository\MediaRepository;
 use App\Repository\TrickRepository;
-use App\Security\Voter\TrickVoter;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,13 +26,21 @@ class TrickController extends AbstractController
     }
 
     #[Route('/figure-de-snowboard/{slug}', name: 'trick_slug', methods: ['GET'])]
-    public function read(
-        Trick $trick
+    public function trick(
+        Trick $trick,
+        Request $request
     ): Response {
 
-        return $this->render('front/trick/read.html.twig', [
+        // Ajout de la variable form pour l'inclusion du template comment.html.twig
+        $comment = new Comment();
+        $form = $this->createForm(CommentType::class, $comment);
+        $form->handleRequest($request);
+
+
+        return $this->render('front/trick/trick.html.twig', [
             'trick' => $trick,
             'slug' => $trick->getSlug(),
+            'form' => $form->createView(),
         ]);
     }
 
