@@ -36,12 +36,12 @@
 	{# Block reponsive media #}
 	<div class="text-center my-4 d-block d-sm-block d-md-none d-lg-none">
 		<a data-bs-toggle="collapse" href="#display" aria-expanded="false" aria-controls="display"></a>
-		<button class="btn" type="button" data-bs-toggle="collapse" href="#display" aria-expanded="false" aria-controls="display">Voir médias</button>
+		<button class="btn" type="button" data-bs-toggle="collapse" href="#display" aria-expanded="false" aria-controls="display">Voir média{% if trick.medias|length > 1 %}s{% endif %}</button>
 	</div>
 
 	<div class="collapse" id="display">
 	{# TODO: revoir comment obtenir la longueur du tab des commentaires #}
-		<section class="d-flex justify-content-center mb-3 py-3 bg-dark">
+		<section class="d-flex flex-wrap justify-content-center mb-3 py-3 bg-dark">
 			{% for media in trick.medias %}
 				<div class="me-2">
 					<img class="mw-100 rounded" src="{{ asset('upload/image/' ~ media.name ) }}" width="250px" alt="image-snowboard-{{ trick.name }}"/>
