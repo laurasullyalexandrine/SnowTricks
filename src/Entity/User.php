@@ -53,14 +53,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Trick::class)]
     private Collection $tricks;
 
-    #[ORM\OneToMany(mappedBy: 'users', targetEntity: Message::class)]
-    private Collection $messages;
+    #[ORM\OneToMany(mappedBy: 'users', targetEntity: Comment::class)]
+    private Collection $comments;
 
     public function __construct()
     {
         $this->created_at = new \DateTimeImmutable();
         $this->tricks = new ArrayCollection();
-        $this->messages = new ArrayCollection();
+        $this->comments = new ArrayCollection();
     }
 
     public function __toString()
@@ -241,29 +241,29 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<int, Message>
+     * @return Collection<int, Comment>
      */
-    public function getMessages(): Collection
+    public function getComment(): Collection
     {
-        return $this->messages;
+        return $this->comments;
     }
 
-    public function addMessage(Message $message): static
+    public function addComment(Comment $comment): static
     {
-        if (!$this->messages->contains($message)) {
-            $this->messages->add($message);
-            $message->setUsers($this);
+        if (!$this->comments->contains($comment)) {
+            $this->comments->add($comment);
+            $comment->setUsers($this);
         }
 
         return $this;
     }
 
-    public function removeMessage(Message $message): static
+    public function removeComment(Comment $comment): static
     {
-        if ($this->messages->removeElement($message)) {
+        if ($this->comments->removeElement($comment)) {
             // set the owning side to null (unless already changed)
-            if ($message->getUsers() === $this) {
-                $message->setUsers(null);
+            if ($comment->getUsers() === $this) {
+                $comment->setUsers(null);
             }
         }
 

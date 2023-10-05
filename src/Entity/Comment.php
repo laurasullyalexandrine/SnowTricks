@@ -2,13 +2,17 @@
 
 namespace App\Entity;
 
-use App\Repository\MessageRepository;
+use App\Repository\CommentRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: MessageRepository::class)]
-class Message
+#[ORM\Entity(repositoryClass: CommentRepository::class)]
+class Comment
 {
+    const STATUS_ACCEPTED = 1;
+    const STATUS_WAITING = 2;
+    const STATUS_REFUSED = 0;
+    
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -26,8 +30,11 @@ class Message
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updatedAt = null;
 
-    #[ORM\ManyToOne(inversedBy: 'messages')]
+    #[ORM\ManyToOne(inversedBy: 'Comments')]
     private ?User $users = null;
+
+    #[ORM\ManyToOne(inversedBy: 'comments')]
+    private ?Trick $trick = null;
 
     public function getId(): ?int
     {
@@ -90,6 +97,18 @@ class Message
     public function setUsers(?User $users): static
     {
         $this->users = $users;
+
+        return $this;
+    }
+
+    public function getTrick(): ?Trick
+    {
+        return $this->trick;
+    }
+
+    public function setTrick(?Trick $trick): static
+    {
+        $this->trick = $trick;
 
         return $this;
     }

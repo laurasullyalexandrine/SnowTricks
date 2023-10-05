@@ -1,12 +1,12 @@
 @startuml UserAdminSequence
 
-skinparam responseMessageBelowArrow true
-skinparam SequenceMessageAlignment center
+skinparam responseCommentBelowArrow true
+skinparam SequenceCommentAlignment center
 
 actor Admin as Admin #SteelBlue
 
 entity Trick as Trick #LightYellow
-entity Message as Message #LightYellow
+entity Comment as Comment #LightYellow
 entity User as User #LightYellow
 
 database SnowTricks as SnowTricks #HotPink
@@ -35,10 +35,10 @@ Trick -> Admin: la Trick en cours de modification n'existe pas
 Admin -> Trick: supprimer Trick
 Trick -> Admin: valider suppression
 
-Admin -> Message: modérer message
-Message -> Admin: accepter message
-Admin  -> Message: refuser message
-Message -> Admin: supprimer message
+Admin -> Comment: modérer Comment
+Comment -> Admin: accepter Comment
+Admin  -> Comment: refuser Comment
+Comment -> Admin: supprimer Comment
 
 Admin -> User: modifier utilisateurs
 User -> Admin: valider modification

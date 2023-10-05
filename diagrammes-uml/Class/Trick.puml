@@ -1,10 +1,10 @@
 @startuml Trick
 
-!include Message.puml 
+!include Comment.puml 
 !include User.puml 
 !include Trickgroup.puml
 !include TrickManager.puml
-!include MessageManager.puml
+!include CommentManager.puml
 !include UserManager.puml
 
 Class Trick {
@@ -20,11 +20,11 @@ Class Trick {
 
 Trickgroup "1"-* Trick: have <
 Trick *--"1" User: create <
-Trick "1"-* Message: have <>
-Message *--"1" User: create <
+Trick "1"-* Comment: have <>
+Comment *--"1" User: create <
 TrickManager -- Trick: exec
-MessageManager -- Message: manage
-User - MessageManager: moderate
+CommentManager -- Comment: manage
+User - CommentManager: moderate
 UserManager - User: exec
 
 @enduml
