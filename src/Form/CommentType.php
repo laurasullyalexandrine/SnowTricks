@@ -14,7 +14,9 @@ class CommentType extends AbstractType
     {
         $builder
             ->add('content', TextareaType::class, [
-                'attr' => ['class' => 'tinymce'],
+                'attr' => [
+                    'class' => 'form-control mb-3 w-100'
+                ],
             ])
         ;
     }

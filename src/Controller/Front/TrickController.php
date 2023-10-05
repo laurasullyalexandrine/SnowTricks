@@ -7,6 +7,7 @@ use App\Entity\Trick;
 use App\Entity\Comment;
 use App\Form\TrickType;
 use App\Form\CommentType;
+use App\Repository\CommentRepository;
 use App\Security\Voter\TrickVoter;
 use App\Repository\MediaRepository;
 use App\Repository\TrickRepository;
@@ -20,6 +21,7 @@ class TrickController extends AbstractController
 {
     public function __construct(
         private TrickRepository $trickRepository,
+        private CommentRepository $commentRepository,
         private EntityManagerInterface $manager,
         private MediaRepository $imageRepository
     ) {
@@ -52,7 +54,6 @@ class TrickController extends AbstractController
                 ->setUsers($this->getUser())
                 ->setTrick($trick);
 
-            // dd($comment);
             $this->manager->persist($comment);
             $this->manager->flush();
 
@@ -69,8 +70,10 @@ class TrickController extends AbstractController
             'trick' => $trick,
             'slug' => $trick->getSlug(),
             'form' => $form->createView(),
+            'comments' => $this->commentRepository->findCommentsByTrick($trick),
         ]);
     }
+
 
     #[Route('/nouvelle-figure-de-snowboard', name: 'trick_create', methods: ['GET', 'POST'])]
     public function create(Request $request): Response
@@ -139,6 +142,7 @@ class TrickController extends AbstractController
         ]);
     }
 
+    
     #[Route('/edition-figure-de-snowboard/{slug}', name: 'trick_edit', methods: ['GET', 'POST'])]
     public function edit(
         Request $request,
