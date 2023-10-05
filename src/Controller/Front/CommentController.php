@@ -14,12 +14,6 @@ class CommentController extends AbstractController
         return $this->render('comment/comments.html.twig');
     }
 
-    #[Route('/ajouter-un-commentaire', name: 'comment_new', methods: ['GET', 'POST'])]
-    public function new(): Response
-    {
-        return $this->render('comment/new-edit.html.twig');
-    }
-
     #[Route('/commentaire/{id}', name: 'comment', methods: ['GET'])]
     public function comment(): Response
     {
