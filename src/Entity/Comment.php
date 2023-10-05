@@ -9,6 +9,10 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: CommentRepository::class)]
 class Comment
 {
+    const STATUS_ACCEPTED = 1;
+    const STATUS_WAITING = 2;
+    const STATUS_REFUSED = 0;
+    
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
