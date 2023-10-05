@@ -1,5 +1,5 @@
 {% extends 'base.html.twig' %}
-{# TODO: faire la mise en page #}
+
 {% block miscellaneous %}
 	<div class="d-flex block-edit-delete text-center">
 		<a class="btn-edit me-3" href="{{ path('trick_edit', { slug: trick.slug } )}}">
@@ -62,8 +62,34 @@
 		</ul>
 	</section>
 
-	{# Block comment #}
-    {% include "front/comment/comment.html.twig" %}
+
+	{% if app.user and app.user.isverified == true %}
+		<section class="align-self-center bg-dark">
+			{{ form_start(form) }}
+
+			{% set errors = form_errors(form) %}
+			{% if errors is empty %}
+				<div>
+					{{form_errors(form)  }}
+				</div>
+			{% else %}
+				<div class="alert alert-danger">
+					{{form_errors(form)  }}
+				</div>
+			{% endif %}
+
+			<div class="w-50 mx-5">
+				{{ form_row(form.content, {label: ' '}) }}
+			</div>
+
+			<div class="m-3 align-self-end">
+				<button type="submit" class="btn my-3">
+					{% trans %}Publies ton commentaire{% endtrans %}</button>
+				{{ form_end(form) }}
+			</div>
+		</section>
+
+	{% endif %}
 
 
 </article>{% endblock %}

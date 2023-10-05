@@ -25,17 +25,45 @@ class TrickController extends AbstractController
     ) {
     }
 
-    #[Route('/figure-de-snowboard/{slug}', name: 'trick_slug', methods: ['GET'])]
-    public function trick(
+    #[Route('/figure-de-snowboard/{slug}', name: 'trick_slug', methods: ['GET', 'POST'])]
+    public function trickNewComment(
         Trick $trick,
         Request $request
     ): Response {
 
-        // Ajout de la variable form pour l'inclusion du template comment.html.twig
         $comment = new Comment();
+
         $form = $this->createForm(CommentType::class, $comment);
         $form->handleRequest($request);
 
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            // Contrôler si utilisateur connecté ...
+            if (!$this->getUser()) {
+                // ... Rediriger vers la page de connexion
+                throw $this->createNotFoundException('Merci de te connecter.');
+                return $this->redirectToRoute('login');
+            }
+
+            $content = $form->get('content')->getData();
+            $comment->setContent($content)
+                ->setStatus(Comment::STATUS_WAITING)
+                ->setCreatedAt(new \DateTimeImmutable())
+                ->setUsers($this->getUser())
+                ->setTrick($trick);
+
+            // dd($comment);
+            $this->manager->persist($comment);
+            $this->manager->flush();
+
+            if (!$comment) {
+                $this->addFlash('warning', 'Ton commenaitre n\'a pas pu être enregistré.');
+                return $this->redirect($request->headers->get('referer'));
+            } else {
+                $this->addFlash('success', 'Ton commentaire est enregistré. Il est en cours de validation.');
+                return $this->redirect($request->headers->get('referer'));
+            }
+        }
 
         return $this->render('front/trick/trick.html.twig', [
             'trick' => $trick,
@@ -94,7 +122,7 @@ class TrickController extends AbstractController
                 //     $video->setTrick($trick);
                 //     $this->manager->persist($video);
                 // }
-                
+
                 $this->manager->persist($trick);
 
                 $this->manager->flush();
@@ -114,15 +142,15 @@ class TrickController extends AbstractController
     #[Route('/edition-figure-de-snowboard/{slug}', name: 'trick_edit', methods: ['GET', 'POST'])]
     public function edit(
         Request $request,
-        Trick $trick): Response
-    {
+        Trick $trick
+    ): Response {
         if (!$this->getUser()) {
             throw $this->createNotFoundException('Cet utilisateur n\'existe pas.');
             return $this->redirectToRoute('login');
         }
 
         $this->denyAccessUnlessGranted(TrickVoter::EDIT, $trick);
-        
+
         $form = $this->createForm(TrickType::class, $trick);
 
         $form->handleRequest($request);
@@ -135,8 +163,8 @@ class TrickController extends AbstractController
     #[Route('/supprimer-la-figure-de-snowboard/{slug}', name: 'trick_delete', methods: ['POST', 'DELETE'])]
     public function delete(
         Request $request,
-        Trick $trick): Response
-    {
+        Trick $trick
+    ): Response {
         if (!$this->getUser()) {
             throw $this->createNotFoundException('Cet utilisateur n\'existe pas.');
             return $this->redirectToRoute('login');
