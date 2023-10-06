@@ -140,16 +140,14 @@ class TrickController extends AbstractController
                 $this->addFlash('error', 'Une erreur est survenue lors de la création de la figure erreur : ' . $e->getMessage());
             }
         }
-        return $this->render('front/trick/edit.html.twig', [
+        return $this->render('front/trick/edit-new.html.twig', [
             'form' => $form->createView(),
             'trick' => $trick,
         ]);
     }
 
 
-
-    
-    #[Route('/edition-figure-de-snowboard/{slug}', name: 'trick_edit', methods: ['GET', 'POST'])]
+    #[Route('/modification-figure-de-snowboard/{slug}', name: 'trick_edit', methods: ['GET', 'POST'])]
     public function edit(
         Request $request,
         Trick $trick
@@ -164,11 +162,17 @@ class TrickController extends AbstractController
         $form = $this->createForm(TrickType::class, $trick);
 
         $form->handleRequest($request);
-        return $this->render('front/trick/edit.html.twig', [
+        return $this->render('front/trick/edit-new.html.twig', [
             'form' => $form->createView(),
             'trick' => $trick,
         ]);
     }
+
+
+    // public function TricksUser(): Response
+    // {
+
+    // }
 
     #[Route('/supprimer-la-figure-de-snowboard/{slug}', name: 'trick_delete', methods: ['POST', 'DELETE'])]
     public function delete(
