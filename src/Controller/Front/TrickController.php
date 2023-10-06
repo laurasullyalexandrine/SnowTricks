@@ -66,11 +66,15 @@ class TrickController extends AbstractController
             }
         }
 
+        // Récupérer le total des commentaires valides liés à la figure
+        $commentsIsValid = $this->commentRepository->findCommentIsValid($trick);
+        
         return $this->render('front/trick/trick.html.twig', [
             'trick' => $trick,
             'slug' => $trick->getSlug(),
             'form' => $form->createView(),
             'comments' => $this->commentRepository->findCommentsByTrick($trick),
+            'commentsIsValid' => $commentsIsValid[0]['total_is_valid'],
         ]);
     }
 
@@ -141,6 +145,8 @@ class TrickController extends AbstractController
             'trick' => $trick,
         ]);
     }
+
+
 
     
     #[Route('/edition-figure-de-snowboard/{slug}', name: 'trick_edit', methods: ['GET', 'POST'])]

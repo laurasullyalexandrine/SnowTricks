@@ -22,7 +22,7 @@ class CommentRepository extends ServiceEntityRepository
         parent::__construct($registry, Comment::class);
     }
 
-    public function findCommentsByTrick(Trick $trick)
+    public function findCommentsByTrick(Trick $trick): array
     {
         return $this->createQueryBuilder('c')
             ->addSelect('t')
@@ -30,6 +30,19 @@ class CommentRepository extends ServiceEntityRepository
             ->andWhere('t.id = :id')
             ->setParameter('id', $trick->getId())
             ->orderBy('c.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findCommentIsValid(Trick $trick): array
+    {
+        return $this->createQueryBuilder('c')
+            ->select('COUNT(c.id) as total_is_valid')
+            ->andWhere('c.status = :status')
+            ->setParameter('status', true)
+            ->leftJoin('c.trick', 't')
+            ->andWhere('t.id = :id')
+            ->setParameter('id', $trick->getId())
             ->getQuery()
             ->getResult();
     }
