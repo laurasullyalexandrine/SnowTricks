@@ -3,7 +3,7 @@
 		{% include "_partial/_nav.html.twig" %}
 		{% include "_partial/_flash.html.twig" %}
 		<main class="mb-3"> 
-			{% block miscellaneous %}
+			{% block editanddelete %}
 				<div id="welcome">
 					<div class="m-auto py-4">
 						{% if app.user and app.user.isVerified == true %}

@@ -1,8 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block miscellaneous %}
+
+{% block body %}
+{% block editanddelete %}
 	{% if app.user and app.user.isverified == true %}
-		<div class="d-flex block-edit-delete text-center">
+		<div class="d-flex block-edit-delete">
 			<a class="btn-edit me-3" href="{{ path('trick_edit', { slug: trick.slug } )}}">
 				<i class="fa-solid fa-pen fa-xl" style="color: #030303;"></i>
 			</i>
@@ -11,11 +13,9 @@
 		</div>
 	{% endif %}
 {% endblock %}
-
-{% block body %}
 	<article class="row d-flex flex-column">
 	{# Block main title and image #}
-	<h1 class="position-absolute top-25 end-0">
+	<h1 class="position-absolute top-50 start-50 translate-middle">
 		<span class="trick-name fs-1 mt-lg-3 position-absolute top-0 start-50 translate-middle badge">{{ trick.name }}</span>
 	</h1>
 
@@ -34,7 +34,7 @@
 	</section>
 
 	{# Block reponsive media #}
-	<div class="text-center my-4 d-block d-sm-block d-md-none d-lg-none">
+	<div class="text-center py-3 d-block bg-dark d-sm-block d-md-none d-lg-none">
 		<a data-bs-toggle="collapse" href="#display" aria-expanded="false" aria-controls="display"></a>
 		<button class="btn" type="button" data-bs-toggle="collapse" href="#display" aria-expanded="false" aria-controls="display">Voir média{% if trick.medias|length > 1 %}s{% endif %}</button>
 	</div>
@@ -126,26 +126,28 @@
 	{% endfor %}
 
 	{# Block voir plus de commentaires #}
-	<div class="text-center my-4">
-		<a data-bs-toggle="collapse" href="#display" aria-expanded="false" aria-controls="display"></a>
-		<button class="btn" type="button" data-bs-toggle="collapse" href="#display" aria-expanded="false" aria-controls="display">Voir plus</button>
-	</div>
+	{% if comments|length > 4 %}
+		<div class="text-center my-4">
+			<a data-bs-toggle="collapse" href="#display" aria-expanded="false" aria-controls="display"></a>
+			<button class="btn" type="button" data-bs-toggle="collapse" href="#display" aria-expanded="false" aria-controls="display">Voir plus</button>
+		</div>
 
-	<div class="collapse" id="display">
-	{# TODO: revoir comment obtenir la longueur du tab des commentaires #}
-		{% for comment in comments|slice(5, comments|length) %}
-			{% if comment.status == 1 %}
-				<section class="d-flex flex-row justify-content-center mt-4">
-					<div class="mx-3 p-3">
-						{{ comment.users }}
-					</div>
-					<div class="mx-3 my-2 p-3 border border-1 border-dark rounded w-75">
-						{{ comment.content }}
-					</div>
-				</section>
-			{% endif %}
-		{% endfor %}
-	</div>
+		<div class="collapse" id="display">
+		{# TODO: revoir comment obtenir la longueur du tab des commentaires #}
+			{% for comment in comments|slice(5, comments|length) %}
+				{% if comment.status == 1 %}
+					<section class="d-flex flex-row justify-content-center mt-4">
+						<div class="mx-3 p-3">
+							{{ comment.users }}
+						</div>
+						<div class="mx-3 my-2 p-3 border border-1 border-dark rounded w-75">
+							{{ comment.content }}
+						</div>
+					</section>
+				{% endif %}
+			{% endfor %}
+		</div>
+	{% endif %}
 </article>
 
 {% endblock %}
