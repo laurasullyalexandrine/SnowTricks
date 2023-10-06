@@ -9,6 +9,7 @@ use App\Repository\UserRepository;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[UniqueEntity(fields: ['email'], message: 'Il existe déjà un compte avec cet email.')]
@@ -55,6 +56,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\OneToMany(mappedBy: 'users', targetEntity: Comment::class)]
     private Collection $comments;
+
+    /**
+     * @Gedmo\Slug(fields={"name"})
+     *
+     * @var string|null
+     */
+    #[ORM\Column(length: 128)]
+    private ?string $slug = null;
 
     public function __construct()
     {
@@ -266,6 +275,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $comment->setUsers(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): static
+    {
+        $this->slug = $slug;
 
         return $this;
     }

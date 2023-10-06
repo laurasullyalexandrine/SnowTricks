@@ -2,15 +2,19 @@
 
 namespace App\Controller\Front;
 
+use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class CommentController extends AbstractController
 {
-    #[Route('/les-commentaires', name: 'comments', methods: ['GET'])]
-    public function comments(): Response
+    #[Route('/tes-commentaires/{user_slug}', name: 'comments_user_slug', methods: ['GET'])]
+    public function commentsUser(User $user
+
+    ): Response
     {
+        
         return $this->render('comment/comments.html.twig');
     }
 

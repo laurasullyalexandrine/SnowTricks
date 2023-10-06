@@ -33,11 +33,11 @@
 					</div>
 				{% endif %}
 			</ul>
-				{# se déconnecter #}
+				{# user logged in #}
 				{% if app.user %}
 					<ul class="navbar-nav d-flex ms-2">
 						<li class="nav-item me-4">
-							<a class="nav-link text-light fs-4" href="{{path('home')}}">Tricks</a>
+							<a class="nav-link text-light fs-4" href="{{path('comments_user_slug', { user_slug: app.user.slug } )}}">Tricks</a>
 						</li>
 						<li class="nav-item text-center mb-lg-0 mb-3">
 							<a class="logout" href="{{ path('logout') }}">Déconnexion</a>
