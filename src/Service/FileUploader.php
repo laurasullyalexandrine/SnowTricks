@@ -31,13 +31,13 @@ class FileUploader
         return $fileName;
     }
 
-    public function getTargetDirectoryPicture(?UploadedFile $file, User $user): string
+    public function getTargetDirectoryAvatar(?UploadedFile $file, User $user): string
     {
-        $pictureName = $this->upload($file, $this->targetDirectoryAvatar, 'user-avatar');
-        if ($pictureName !== null) {
-            $user->setAvatar($pictureName);
+        $avatarName = $this->upload($file, $this->targetDirectoryAvatar, 'user-avatar-');
+        if ($avatarName !== null) {
+            $user->setAvatar($avatarName);
         } 
-        
+
         return $this->targetDirectoryAvatar;
     }
 }
