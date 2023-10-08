@@ -58,12 +58,6 @@ class RegistrationController extends AbstractController
             $this->manager->persist($user);
             $this->manager->flush();
 
-            // TODO: utiliser le generateur d'url
-            // Create email confirmation url
-            // $host = $request->server->get("HTTP_HOST");
-            // $scheme = array_key_exists("HTTPS", $_SERVER) ? "https" : "http";
-            // $verifyUrl = "$scheme://$host/verification-email/$token";
-
            $verifyUrl = $this->generateUrl('verify_email', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
        
             // do anything else you need here, like send an email
