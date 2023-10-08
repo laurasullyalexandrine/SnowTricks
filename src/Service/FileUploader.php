@@ -33,7 +33,7 @@ class FileUploader
 
     public function getTargetDirectoryAvatar(?UploadedFile $file, User $user): string
     {
-        $avatarName = $this->upload($file, $this->targetDirectoryAvatar, 'user-avatar-');
+        $avatarName = $this->upload($file, $this->targetDirectoryAvatar, 'user-avatar');
         if ($avatarName !== null) {
             $user->setAvatar($avatarName);
         } 
