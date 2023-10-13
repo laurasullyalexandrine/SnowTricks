@@ -85,12 +85,11 @@ li {
     width: 100px;
     position: absolute;
     border-radius: 3px;
-    margin-top: 30px;
-    margin-left: 1080px;
     padding: 8px;
     z-index: 10;
     background-color: #fff;
 }
+
 /* NAV FOOTER */
 
 .nav-link {

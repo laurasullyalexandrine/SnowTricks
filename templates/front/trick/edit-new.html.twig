@@ -2,7 +2,11 @@
 
 {% block body %}
     <article class="row d-flex">
-		<h1 class="position-absolute top-25 end-0 py-2" style="background-color:#38ada9;">Modifies ta figure {{ trick.name }}</h1>
+		{% if app.request.attributes.get("_route") == "trick_edit" %}
+			<h1 class="position-absolute top-25 end-0 py-2" style="background-color:#38ada9;">Modifies ta figure {{ trick.name }}</h1>
+		{% elseif app.request.attributes.get("_route") == "trick_create" %}
+			<h1 class="position-absolute top-25 end-0 py-2" style="background-color:#38ada9;">Nouvelle figure</h1>
+		{% endif %}
 		<section class="d-flex ms-4 mt-5 py-5">
 			{{ form_start(form) }}
 

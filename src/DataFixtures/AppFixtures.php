@@ -112,10 +112,11 @@ class AppFixtures extends Fixture
         $tricksToAdd = [];
         for ($t = 0; $t < 10; $t++) {
 
-            $nameData = explode('@',$emailData[$t]);
-     
+            $nameData = explode('@', $emailData[$t]);
+
             $user = new User();
             $user->setName($nameData[0])
+                ->setSlug($user->getName())
                 ->setEmail($emailData[$t])
                 ->setRoles(['ROLE_USER'])
                 ->setIsVerified(true)
@@ -158,7 +159,7 @@ class AppFixtures extends Fixture
 
             // Créer le nom du fichier
             $tempFile = __DIR__ . '/../../var/temp' .  uniqid() . '.jpg';
-            
+
             // Choisir un fichier aléatoirement
             $file = array_rand($tempImage);
 
