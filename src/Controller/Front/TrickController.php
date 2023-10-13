@@ -33,6 +33,11 @@ class TrickController extends AbstractController
         Request $request
     ): Response {
 
+        // Trouver le numéro de page depuis l'url
+        $page =  $request->query->getInt('page', 1);
+        // Récupérer les commentaires de la figure
+        $comments = $this->commentRepository->findCommentsPaginated($trick, $page);
+   
         $comment = new Comment();
 
         $form = $this->createForm(CommentType::class, $comment);
@@ -70,7 +75,7 @@ class TrickController extends AbstractController
             'trick' => $trick,
             'slug' => $trick->getSlug(),
             'form' => $form->createView(),
-            'comments' => $this->commentRepository->findCommentsByTrick($trick),
+            'comments' => $comments,
         ]);
     }
 
