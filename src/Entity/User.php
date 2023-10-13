@@ -57,13 +57,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'users', targetEntity: Comment::class)]
     private Collection $comments;
 
-    /**
-     * @Gedmo\Slug(fields={"name"})
-     *
-     * @var string|null
-     */
-    #[ORM\Column(length: 128)]
-    private ?string $slug = null;
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $avatar = null;
 
     public function __construct()
     {
@@ -279,14 +274,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getSlug(): ?string
+    public function getAvatar(): ?string
     {
-        return $this->slug;
+        return $this->avatar;
     }
 
-    public function setSlug(string $slug): static
+    public function setAvatar(?string $avatar): static
     {
-        $this->slug = $slug;
+        $this->avatar = $avatar;
 
         return $this;
     }

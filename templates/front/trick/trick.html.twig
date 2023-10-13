@@ -1,51 +1,50 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-	<article class="row d-flex flex-column">
-		{% if app.user and app.user.isverified == true %}
-				<div class="d-flex block-edit-delete position-absolute top-50 end-0 translate-middle">
-					<a class="btn-edit me-3" href="{{ path('trick_edit', { slug: trick.slug } )}}">
-						<i class="fa-solid fa-pen fa-xl" style="color: #030303;"></i>
-					</a>
-					{{ include('front/trick/_delete_form.html.twig') }}
-				</div>
-		{% endif %}
+	{% if app.user and app.user.isverified == true %}
+		<div class="d-flex block-edit-delete text-center">
+			<a class="btn-edit me-3" href="{{ path('trick_edit', { slug: trick.slug } )}}">
+				<i class="fa-solid fa-pen fa-xl" style="color: #030303;"></i>
+			</i>
+		</a>
+		{{ include('front/trick/_delete_form.html.twig') }}
+		</div>
+	{% endif %}
 
+	<article class="row d-flex flex-column">
 		{# Block main title and image #}
-		<h1 class="position-absolute top-50 start-50 translate-middle">
+		<h1 class="position-absolute top-25 end-0">
 			<span class="trick-name fs-1 mt-lg-3 position-absolute top-0 start-50 translate-middle badge">{{ trick.name }}</span>
 		</h1>
-
 		<div>
 			<img id="main-image" class="mw-100" src="{{ asset('upload/image/' ~ trick.mainImage ) }}" healt="image-snowboard-{{ trick.name }}"/>
 		</div>
 
-		{# TODO: à modifier pour masquer en responsive et remplacer par un bouton #}
-		{# Block image and video #}
-		<section class="d-flex justify-content-center mb-3 py-3 bg-dark d-none d-sm-none d-md-block d-lg-block">
+		{# Block medias #}
+		<section class="mb-3 py-3 bg-dark d-none d-sm-none d-md-block d-lg-block">
 			{% for media in trick.medias %}
-				<div class="me-2">
+				<div class="d-flex flex-wrap justify-content-center me-2">
 					<img class="mw-100 rounded" src="{{ asset('upload/image/' ~ media.name ) }}" width="250px" alt="image-snowboard-{{ trick.name }}"/>
 				</div>
 			{% endfor %}
 		</section>
 
-		{# Block reponsive media #}
-		<div class="text-center py-3 d-block bg-dark d-sm-block d-md-none d-lg-none">
-			<a data-bs-toggle="collapse" href="#display" aria-expanded="false" aria-controls="display"></a>
-			<button class="btn" type="button" data-bs-toggle="collapse" href="#display" aria-expanded="false" aria-controls="display">Voir média{% if trick.medias|length > 1 %}s{% endif %}</button>
-		</div>
-
-		<div class="collapse" id="display">
-		{# TODO: revoir comment obtenir la longueur du tab des commentaires #}
-			<section class="d-flex flex-wrap justify-content-center mb-3 py-3 bg-dark">
+		{# Block medias responsive #}
+		<section class="d-flex justify-content-center bg-dark d-block d-sm-block d-md-none d-lg-none">
+			<div class="text-center my-3">
+				<a data-bs-toggle="collapse" href="#media" aria-expanded="false" aria-controls="media"></a>
+				<button class="btn" type="button" data-bs-toggle="collapse" href="#media" aria-expanded="false" aria-controls="media">Média{% if trick.medias|length > 1 %}s{% endif %}</button>
+			</div>
+		</section>
+		<section class="d-flex flex-wrap justify-content-center mb-3 py-3 bg-dark d-block d-sm-block d-md-none d-lg-none">
+			<div class="collapse" id="media">
 				{% for media in trick.medias %}
 					<div class="me-2">
 						<img class="mw-100 rounded" src="{{ asset('upload/image/' ~ media.name ) }}" width="250px" alt="image-snowboard-{{ trick.name }}"/>
 					</div>
 				{% endfor %}
-			</section>
-		</div>
+			</div>
+		</section>
 
 		{# Block description #}
 		<section class="d-flex justify-content-center mb-3">
@@ -59,29 +58,29 @@
 		<section class="d-flex justify-content-center">
 			<ul class="d-flex flex-row">
 				<li class="text-center fs-5 me-3 p-2 text-light bg-dark rounded">
-					Auteur :
+					Auteur
 					{{ trick.tags.author|capitalize }}
 				</li>
 				<li class="text-center fs-5 me-3 p-2 text-light bg-dark rounded">
-					Date de création :
+					Date de création
 					{{ trick.tags.createdAt|format_datetime('short', 'none', locale='fr') }}
 				</li>
 				{% if trick.tags.updatedAt is not empty %}
 					<li class="text-center fs-5 me-3 p-2 text-light bg-dark rounded">
-						Date de mise à jour :
+						Date de mise à jour
 						{{ trick.tags.updatedAt|format_datetime('short', 'none', locale='fr') }}
 					</li>
 				{% endif %}
 				<li class="text-center fs-5 me-3 p-2 text-light bg-dark rounded">
-					Groupe de figure :
+					Groupe de figure
 					{{ trick.tags.trickGroup }}
 				</li>
 			</ul>
 		</section>
 
 		{# Block ajout de commentaire #}
-		<section class="d-flex flex-column justify-content-center my-4 p-3 bg-dark">
 			{% if app.user and app.user.isverified == true %}
+		<section class="d-flex flex-column justify-content-center mt-4 p-3 bg-dark">
 				{{ form_start(form) }}
 
 				{% set errors = form_errors(form) %}
@@ -105,58 +104,72 @@
 						{{ form_end(form) }}
 					</div>
 				</div>
-			{% endif %}
 		</section>
+			{% endif %}
 
 		{# Block commentaires #}
-		{% if comments|length == 0 %}
-			<p class="text-center fs-4">
-				Cette figure n'a pas encore de commentaire.
-				<br>
-				À ton clavier !😄
-			</p>
-		{% elseif commentsIsValid == 0 %}
-			<p class="text-center fs-4">
-				Cette figure n'a pas encore de commentaire validé !
-				<br>
-			</p>
-		{% endif %}
 		{% for comment in comments|slice(0, 4) %}
 			{% if comment.status == 1 %}
-				<section class="d-flex flex-row justify-content-center mt-3">
+				<section class="d-flex flex-row justify-content-center">
 					<div class="mx-3 p-3">
-						{{ comment.users }}
+						{% if comment.users.avatar is empty %}
+							<img src="{{ asset('image/avatar.png') }}" alt="user-avatar">
+						{% else %}
+							<img src="{{ asset('upload/avatar/' ~ comment.users.avatar) }}" height="60px"  alt="user-avatar">
+						{% endif %}
 					</div>
-					<div class="mx-3 my-2 p-3 border border-1 border-dark rounded w-75">
-						{{ comment.content }}
+
+					<div class="mx-3 my-2 p-3">
+						<ul class="list-group list-group-horizontal">
+							<li class="list-group-item">{{ comment.content }}</li>
+							<li class="list-group-item">Auteur
+								<span class="fw-semibold">{{ comment.users }} </span>
+							</li>
+							<li class="list-group-item">Créé le
+								<span class="fw-semibold">
+									{{ comment.createdAt|format_datetime('short', 'none', locale='fr') }}
+								</span>
+							</li>
+						</ul>
 					</div>
 				</section>
 			{% endif %}
 		{% endfor %}
 
-		{# Block voir plus de commentaires #}
-		{% if comments|length > 4 %}
-			<div class="text-center my-4">
-				<a data-bs-toggle="collapse" href="#display" aria-expanded="false" aria-controls="display"></a>
-				<button class="btn" type="button" data-bs-toggle="collapse" href="#display" aria-expanded="false" aria-controls="display">Voir plus</button>
-			</div>
-
-			<div class="collapse" id="display">
-			{# TODO: revoir comment obtenir la longueur du tab des commentaires #}
+		{# Block commentaires ++ #}
+		<div class="collapse" id="comment">
+			{% if comments|length > 4 %}
+				<div class="text-center mb-3">
+					<a data-bs-toggle="collapse" href="#comment" aria-expanded="false" aria-controls="comment"></a>
+					<button class="btn" type="button" data-bs-toggle="collapse" href="#comment" aria-expanded="false" aria-controls="comment">Plus de commentaire{% if comments|length > 1 %}s{% endif %}</button>
+				</div>
 				{% for comment in comments|slice(5, comments|length) %}
 					{% if comment.status == 1 %}
-						<section class="d-flex flex-row justify-content-center mt-4">
+						<section class="d-flex flex-row justify-content-center">
 							<div class="mx-3 p-3">
-								{{ comment.users }}
+								{% if comment.users.avatar is empty %}
+									<img src="{{ asset('image/avatar.png') }}" alt="user-avatar">
+								{% else %}
+									<img src="{{ asset('upload/avatar/' ~ comment.users.avatar) }}" height="60px" alt="user-avatar">
+								{% endif %}
 							</div>
-							<div class="mx-3 my-2 p-3 border border-1 border-dark rounded w-75">
-								{{ comment.content }}
-							</div>
-						</section>
-					{% endif %}
-				{% endfor %}
-			</div>
-		{% endif %}
-</article>
 
+							<div class="mx-3 my-2 p-3">
+								<ul class="list-group list-group-horizontal">
+									<li class="list-group-item">{{ comment.content }}</li>
+									<li class="list-group-item">Auteur
+										<span class="fw-semibold">{{ comment.users }} </span>
+									</li>
+									<li class="list-group-item">Créé le
+										<span class="fw-semibold">
+											{{ comment.createdAt|format_datetime('short', 'none', locale='fr') }}
+										</span>
+									</li>
+								</ul>
+							</div>
+				{% endif %}
+			{% endfor %}
+		{% endif %}
+		</div>
+	</article>
 {% endblock %}
