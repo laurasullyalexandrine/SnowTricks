@@ -32,14 +32,25 @@
 				<div class="col-sm-4 mb-3">
 					<div class="card shadow-sm bg-body rounded" style="max-width: 18rem; max-height: 16rem;">
                         <div class="d-flex mx-2 mt-2 p-1 rounded" style="background-color: #000;">
-							<a class="card-link ps-2" href="{{ path('trick_slug', { slug: trick.slug } )}}">{{ trick.name }}</a>
+                            <a class="card-link ps-2" href="{{ path('trick_slug', { slug: trick.slug } )}}">{{ trick.name }}</a>
+                            {% if app.user and app.user.isverified == true %}
+                                <div class="d-flex justify-content-around">
+                                    <div class="d-flex">
+                                        <a class="me-2" href="{{ path('trick_edit', { slug: trick.slug } )}}">
+                                            <i class="fa-solid fa-pen fa-sm" style="color:#bdc3c7;"></i>
+                                        </a>
+                                        {{ include('front/trick/_delete_form.html.twig') }}
+                                    </div>
+                                </div>
+                            {% endif %}
 						</div>
 						<div class="card-body flex-wrap">
                             {% if trick.mainImage == "snowboard-home.png" %}
-                                <a href="{{ path('trick_slug', { slug: trick.slug }) }}"><img src="{{ asset('image/snowboard-home.png') }}" alt="trick-picture" style="max-width: 16rem; max-height: 16rem;"></a>
+                                <a href="{{ path('trick_slug', { slug: trick.slug }) }}"><img src="{{ asset('image/snowboard-home.png') }}" alt="trick-media" style="max-width: 16rem; max-height: 16rem;"></a>
                             {% else %}
-                                <a href="{{ path('trick_slug', { slug: trick.slug } )}}"><img src="{{ asset('upload/image/' ~ trick.mainImage ) }}" alt="trick-image" style="max-width: 16rem; max-height: 16rem;"></a>
+                                <a href="{{ path('trick_slug', { slug: trick.slug } )}}"><img src="{{ asset('upload/image/' ~ trick.mainImage ) }}" alt="trick-media" style="max-width: 16rem; max-height: 16rem;"></a>
                             {% endif %}
+         
                         </div>
 					</div>
 				</div>
