@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Comment;
 use App\Entity\Trick;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -22,16 +23,50 @@ class CommentRepository extends ServiceEntityRepository
         parent::__construct($registry, Comment::class);
     }
 
-    public function findCommentsByTrick(Trick $trick)
+    /**
+     * Undocumented function
+     *
+     * @param Trick $trick
+     * @param integer $page
+     * @param integer $maxResult
+     * @return array
+     */
+    public function findCommentsPaginated(Trick $trick, int $page, int $maxResult = 10): array
     {
-        return $this->createQueryBuilder('c')
+        $maxResult = abs($maxResult);
+
+        $result = [];
+
+        $query = $this->createQueryBuilder('c')
             ->addSelect('t')
             ->leftJoin('c.trick', 't')
-            ->andWhere('t.id = :id')
-            ->setParameter('id', $trick->getId())
+            ->andWhere('t.slug = :slug')
+            ->setParameter('slug', $trick->getSlug())
             ->orderBy('c.createdAt', 'DESC')
-            ->getQuery()
-            ->getResult();
+            ->setMaxResults($maxResult)
+            ->setFirstResult(($page * $maxResult) - $maxResult);
+
+        $query->getQuery()->getResult();
+
+
+        $paginator = new Paginator($query);
+        $data = $paginator->getQuery()->getResult();
+
+        // Vérifier qu'il y des données
+        if (empty($data)) {
+            return $result;
+        }
+
+        // Calculer le nombre de pages
+        $pages =  ceil($paginator->count() / $maxResult);
+
+        // Remplir le tableau $result
+        $result['data'] = $data;
+        $result['pages'] = $pages;
+        $result['firstResult'] = $page;
+        $result['limit'] = $maxResult;
+
+        return $result;
     }
 
     //    /**
