@@ -37,7 +37,7 @@ class TrickController extends AbstractController
         $page =  $request->query->getInt('page', 1);
         // Récupérer les commentaires de la figure
         $comments = $this->commentRepository->findCommentsPaginated($trick, $page);
-   
+
         $comment = new Comment();
 
         $form = $this->createForm(CommentType::class, $comment);
@@ -71,11 +71,15 @@ class TrickController extends AbstractController
             }
         }
 
+        // Récupérer le total des commentaires valides liés à la figure
+        $commentsIsValid = $this->commentRepository->findCommentIsValid($trick);
+
         return $this->render('front/trick/trick.html.twig', [
             'trick' => $trick,
             'slug' => $trick->getSlug(),
             'form' => $form->createView(),
             'comments' => $comments,
+            'commentsIsValid' => $commentsIsValid[0]['total_is_valid'],
         ]);
     }
 
@@ -141,14 +145,14 @@ class TrickController extends AbstractController
                 $this->addFlash('error', 'Une erreur est survenue lors de la création de la figure erreur : ' . $e->getMessage());
             }
         }
-        return $this->render('front/trick/edit.html.twig', [
+        return $this->render('front/trick/edit-new.html.twig', [
             'form' => $form->createView(),
             'trick' => $trick,
         ]);
     }
 
-    
-    #[Route('/edition-figure-de-snowboard/{slug}', name: 'trick_edit', methods: ['GET', 'POST'])]
+
+    #[Route('/modification-figure-de-snowboard/{slug}', name: 'trick_edit', methods: ['GET', 'POST'])]
     public function edit(
         Request $request,
         Trick $trick
@@ -163,11 +167,17 @@ class TrickController extends AbstractController
         $form = $this->createForm(TrickType::class, $trick);
 
         $form->handleRequest($request);
-        return $this->render('front/trick/edit.html.twig', [
+        return $this->render('front/trick/edit-new.html.twig', [
             'form' => $form->createView(),
             'trick' => $trick,
         ]);
     }
+
+
+    // public function TricksUser(): Response
+    // {
+
+    // }
 
     #[Route('/supprimer-la-figure-de-snowboard/{slug}', name: 'trick_delete', methods: ['POST', 'DELETE'])]
     public function delete(

@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg bg-black d-none d-sm-none d-md-block d-lg-block">
+<nav class="navbar navbar-expand-lg bg-black bg-dark d-none d-sm-none d-md-block d-lg-block">
 	<div class="container">
 		<div class="d-flex flex-wrap mt-4">
 			<a class="navbar-brand text-center" href="{{path('home')}}">
@@ -33,12 +33,15 @@
 					</div>
 				{% endif %}
 			</ul>
-				{# se déconnecter #}
+				{# user logged in #}
 				{% if app.user %}
 					<ul class="navbar-nav d-flex ms-2">
+						<li class="nav-item me-4">
+							<a class="nav-link text-light fs-4" href="{{ path('logout') }}">Tricks</a>
+						</li>
 						<li class="nav-item text-center mb-lg-0 mb-3">
 							<a class="logout" href="{{ path('logout') }}">Déconnexion</a>
-						</li> 
+						</li>
 					</ul>
 				{% endif %}
 		</div>

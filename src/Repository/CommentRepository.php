@@ -69,6 +69,19 @@ class CommentRepository extends ServiceEntityRepository
         return $result;
     }
 
+    public function findCommentIsValid(Trick $trick): array
+    {
+        return $this->createQueryBuilder('c')
+            ->select('COUNT(c.id) as total_is_valid')
+            ->andWhere('c.status = :status')
+            ->setParameter('status', true)
+            ->leftJoin('c.trick', 't')
+            ->andWhere('t.id = :id')
+            ->setParameter('id', $trick->getId())
+            ->getQuery()
+            ->getResult();
+    }
+
     //    /**
     //     * @return Comment[] Returns an array of Comment objects
     //     */
