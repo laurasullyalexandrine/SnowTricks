@@ -26,7 +26,7 @@ class AppFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create('fr_FR');
-
+        // TODO: ajout de commentaires pour test de la pagination
         $finder = new Finder();
         $tempImage = iterator_to_array($finder->in(__DIR__ . '/resources'));
 

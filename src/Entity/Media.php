@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use App\Entity\Trait\MediaTrait;
 use App\Repository\MediaRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -11,6 +10,10 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 #[ORM\HasLifecycleCallbacks]
 class Media
 {
+    const BASE_PATH = 'upload/media';
+    const TYPE_IMAGE = 1;
+    const TYPE_VIDEO = 2;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -37,7 +40,7 @@ class Media
 
     public function __toString()
     {
-        return $this->name;
+        return self::BASE_PATH . '/' . $this->name;
     }
 
     public function getId(): ?int
@@ -109,6 +112,25 @@ class Media
     #[ORM\PostPersist]
     public function saveFile(): void
     {
-        $this->uploadedFile->move(__DIR__ . '/../../public/upload/image', $this->name);
+        $this->uploadedFile->move(__DIR__ . '/../../public/' . self::BASE_PATH, $this->name);
+    }
+
+    public function getType(): ?int
+    {
+        if (!file_exists("$this")) {
+            return null;
+        }
+
+        $mimeType = mime_content_type("$this");
+        [$type, $extension] = explode('/', $mimeType);
+        
+        switch ($type) {
+            case "image": 
+                return self::TYPE_IMAGE;
+            case "video":
+                return self::TYPE_VIDEO;
+            default:
+                return null;
+        }
     }
 }

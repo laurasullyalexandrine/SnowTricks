@@ -17,15 +17,22 @@
 			<span class="trick-name fs-1 mt-lg-3 position-absolute top-0 start-50 translate-middle badge">{{ trick.name }}</span>
 		</h1>
 		<div>
-			<img id="main-image" class="mw-100" src="{{ asset('upload/image/' ~ trick.mainImage ) }}" healt="image-snowboard-{{ trick.name }}"/>
+			<img id="main-image" class="mw-100" src="{{ asset( trick.mainImage ) }}" healt="image-snowboard-{{ trick.name }}"/>
 		</div>
 
 		{# Block medias #}
 		<section class="mb-3 py-3 bg-dark d-none d-sm-none d-md-block d-lg-block">
 			{% for media in trick.medias %}
-				<div class="d-flex flex-wrap justify-content-center me-2">
-					<img class="mw-100 rounded" src="{{ asset('upload/image/' ~ media.name ) }}" width="250px" alt="image-snowboard-{{ trick.name }}"/>
-				</div>
+				{% if media.type == constant('App\\Entity\\Media::TYPE_IMAGE') %}
+					<div class="d-flex flex-wrap justify-content-center me-2">
+						{# TODO: mettre les tailles dans le css #}
+						<img class="mw-100 rounded" src="{{ asset( media ) }}" width="250px" alt="image-snowboard-{{ trick.name }}"/>
+					</div>
+				{% elseif media.type == constant('App\\Entity\\Media::TYPE_VIDEO') %}
+					<div class="d-flex flex-wrap justify-content-center me-2">
+						<video controls src="{{ asset( media ) }}" style="width: 250px"></video>
+					</div>
+				{% endif %}
 			{% endfor %}
 		</section>
 

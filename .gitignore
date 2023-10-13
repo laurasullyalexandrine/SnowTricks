@@ -19,6 +19,5 @@
 /phpunit.xml
 ###< symfony/phpunit-bridge ###
 
-/public/upload/image
-/public/upload/video
+/public/upload/media
 /public/upload/avatar

@@ -48,7 +48,7 @@
                             {% if trick.mainImage == "snowboard-home.png" %}
                                 <a href="{{ path('trick_slug', { slug: trick.slug }) }}"><img src="{{ asset('image/snowboard-home.png') }}" alt="trick-media" style="max-width: 16rem; max-height: 16rem;"></a>
                             {% else %}
-                                <a href="{{ path('trick_slug', { slug: trick.slug } )}}"><img src="{{ asset('upload/image/' ~ trick.mainImage ) }}" alt="trick-media" style="max-width: 16rem; max-height: 16rem;"></a>
+                                <a href="{{ path('trick_slug', { slug: trick.slug } )}}"><img src="{{ asset( trick.mainImage ) }}" alt="trick-media" style="max-width: 16rem; max-height: 16rem;"></a>
                             {% endif %}
          
                         </div>

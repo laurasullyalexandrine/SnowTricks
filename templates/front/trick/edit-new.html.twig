@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}	
 
 {% block body %}
+{# TODO refactorser cette page #}
     <article class="row d-flex">
 		{% if app.request.attributes.get("_route") == "trick_edit" %}
 			<h1 class="position-absolute top-25 end-0 py-2" style="background-color:#38ada9;">Modifies ta figure {{ trick.name }}</h1>

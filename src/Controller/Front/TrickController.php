@@ -32,7 +32,6 @@ class TrickController extends AbstractController
         Trick $trick,
         Request $request
     ): Response {
-
         // Trouver le numéro de page depuis l'url
         $page =  $request->query->getInt('page', 1);
         // Récupérer les commentaires de la figure
@@ -162,7 +161,7 @@ class TrickController extends AbstractController
             return $this->redirectToRoute('login');
         }
 
-        $this->denyAccessUnlessGranted(TrickVoter::EDIT, $trick);
+        // $this->denyAccessUnlessGranted(TrickVoter::EDIT, $trick);
 
         $form = $this->createForm(TrickType::class, $trick);
 
