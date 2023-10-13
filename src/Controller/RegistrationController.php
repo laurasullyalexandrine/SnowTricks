@@ -48,7 +48,8 @@ class RegistrationController extends AbstractController
                     $user,
                     $form->get('plainPassword')->getData()
                 )
-            );
+            )
+                ->setRoles(['ROLE_USER']);
 
             $token = $this->tokenGenerator->generateToken();
       

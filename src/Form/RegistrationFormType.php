@@ -24,7 +24,7 @@ class RegistrationFormType extends AbstractType
             ->add('name', TextType::class, [
                 'label' => false,
                 'attr' => [
-                    'placeholder' => 'Saisis ton prénom ou pseudo'
+                    'placeholder' => 'Prénom ou pseudo'
                 ],
                 'constraints' => [
                     new NotBlank([
@@ -35,7 +35,7 @@ class RegistrationFormType extends AbstractType
             ->add('email', EmailType::class, [
                 'label' => false,
                 'attr' => [
-                    'placeholder' => 'Saisis ton email'
+                    'placeholder' => 'Email'
                 ],
                 'constraints' => [
                     new NotBlank([
@@ -44,7 +44,7 @@ class RegistrationFormType extends AbstractType
                 ]
             ])
             ->add('avatar', FileType::class, [
-                'label' => 'Avatar',
+                'label' => 'Ajoutes ton avatar',
                 'mapped' => False,
                 'required' => False,
                 'constraints' => [
@@ -56,7 +56,7 @@ class RegistrationFormType extends AbstractType
                 'mapped' => false,
                 'constraints' => [
                     new IsTrue([
-                        'message' => 'You should agree to our terms.',
+                        'message' => 'Tu dois accepter nos conditions.',
                     ]),
                 ],
             ])
@@ -66,7 +66,7 @@ class RegistrationFormType extends AbstractType
                 'label' => false,
                 'mapped' => false,
                 'attr' => [
-                    'placeholder' => 'Saisis ton mot de passe',
+                    'placeholder' => 'Mot de passe',
                     'autocomplete' => 'new-password'],
                 'constraints' => [
                     new NotBlank([
