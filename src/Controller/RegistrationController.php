@@ -7,6 +7,7 @@ use DateTimeImmutable;
 use App\Service\SendMailService;
 use App\Form\RegistrationFormType;
 use App\Security\LoginFormAuthenticator;
+use App\Service\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,7 +30,8 @@ class RegistrationController extends AbstractController
     #[Route('/inscription', name: 'register')]
     public function register(
         Request $request, 
-        UserPasswordHasherInterface $userPasswordHasher): Response
+        UserPasswordHasherInterface $userPasswordHasher,
+        FileUploader $fileUploader): Response
     {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
@@ -37,12 +39,17 @@ class RegistrationController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             // encode the plain password
+            $avatar = $form->get('avatar')->getData();
+    
+            $fileUploader->getTargetDirectoryAvatar($avatar, $user);
+            
             $user->setPassword(
                 $userPasswordHasher->hashPassword(
                     $user,
                     $form->get('plainPassword')->getData()
                 )
-            );
+            )
+                ->setRoles(['ROLE_USER']);
 
             $token = $this->tokenGenerator->generateToken();
       
@@ -51,12 +58,6 @@ class RegistrationController extends AbstractController
 
             $this->manager->persist($user);
             $this->manager->flush();
-
-            // TODO: utiliser le generateur d'url
-            // Create email confirmation url
-            // $host = $request->server->get("HTTP_HOST");
-            // $scheme = array_key_exists("HTTPS", $_SERVER) ? "https" : "http";
-            // $verifyUrl = "$scheme://$host/verification-email/$token";
 
            $verifyUrl = $this->generateUrl('verify_email', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
        
