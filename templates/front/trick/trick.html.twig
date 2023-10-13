@@ -137,12 +137,12 @@
 		{% endfor %}
 
 		{# Block commentaires ++ #}
-		<div class="text-center mb-3">
-			<a data-bs-toggle="collapse" href="#comment" aria-expanded="false" aria-controls="comment"></a>
-			<button class="btn" type="button" data-bs-toggle="collapse" href="#comment" aria-expanded="false" aria-controls="comment">Plus de commentaire{% if comments|length > 1 %}s{% endif %}</button>
-		</div>
 		<div class="collapse" id="comment">
 			{% if comments|length > 4 %}
+				<div class="text-center mb-3">
+					<a data-bs-toggle="collapse" href="#comment" aria-expanded="false" aria-controls="comment"></a>
+					<button class="btn" type="button" data-bs-toggle="collapse" href="#comment" aria-expanded="false" aria-controls="comment">Plus de commentaire{% if comments|length > 1 %}s{% endif %}</button>
+				</div>
 				{% for comment in comments|slice(5, comments|length) %}
 					{% if comment.status == 1 %}
 						<section class="d-flex flex-row justify-content-center">
