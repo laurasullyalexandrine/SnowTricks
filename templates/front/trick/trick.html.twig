@@ -115,34 +115,45 @@
 			{% endif %}
 
 		{# Block commentaires #}
-		{% if comments is not empty %}
-		{% for comment in comments.data %}
+		{% if comments is empty %}
+			<p class="text-center fs-4 my-5">
+				Cette figure de snowboard n'a pas encore de commentaire. <br>
+				A ton clavier.
+			</p>
+		{% else %}
+			{% for comment in comments.data %}
+				{% if comment.status != 1 %}
+					<p class="text-center fs-4 my-5">
+						Patience... Tu pourras bientôt lire tous les commentaires validés de nos abonnés.<br>
+					</p>
+				{% else %}
+					<section class="d-flex flex-row justify-content-center">
+						<div class="mx-3 p-3">
+							{% if comment.users.avatar is empty %}
+								<img src="{{ asset('image/avatar.png') }}" alt="user-avatar">
+							{% else %}
+								<img src="{{ asset('upload/avatar/' ~ comment.users.avatar) }}" height="60px"  alt="user-avatar">
+							{% endif %}
+						</div>
+						<div class="mx-3 my-2 p-3">
+							<ul class="list-group list-group-horizontal">
+								<li class="list-group-item">{{ comment.content }}</li>
+								<li class="list-group-item">Auteur
+									<span class="fw-semibold">{{ comment.users }} </span>
+								</li>
+								<li class="list-group-item">Créé le
+									<span class="fw-semibold">
+										{{ comment.createdAt|format_datetime('short', 'none', locale='fr') }}
+									</span>
+								</li>
+							</ul>
+						</div>
+					</section>
+				{% endif %}
+			{% endfor %}
+		{% endif %}
 		
-			{% if comment.status == 1 %}
-				<section class="d-flex flex-row justify-content-center">
-					<div class="mx-3 p-3">
-						{% if comment.users.avatar is empty %}
-							<img src="{{ asset('image/avatar.png') }}" alt="user-avatar">
-						{% else %}
-							<img src="{{ asset('upload/avatar/' ~ comment.users.avatar) }}" height="60px"  alt="user-avatar">
-						{% endif %}
-					</div>
-					<div class="mx-3 my-2 p-3">
-						<ul class="list-group list-group-horizontal">
-							<li class="list-group-item">{{ comment.content }}</li>
-							<li class="list-group-item">Auteur
-								<span class="fw-semibold">{{ comment.users }} </span>
-							</li>
-							<li class="list-group-item">Créé le
-								<span class="fw-semibold">
-									{{ comment.createdAt|format_datetime('short', 'none', locale='fr') }}
-								</span>
-							</li>
-						</ul>
-					</div>
-				</section>
-			{% endif %}
-		{% endfor %}
+		{# Initiaser les variables pour la pagination #}
 		{% set path = 'trick_slug' %}
 		{% set slug = trick.slug %}
 		{% set pages = comments.pages %}
@@ -150,11 +161,6 @@
 		<div class="d-flex justify-content-center">
 			{% include "_partial/_paging.html.twig" %}
 		</div>
-		{% else %}
-			<p class="text-center fs-5 mt-3">Cette figure de snowboard n'a pas encore de commentaire. <br>
-				A ton clavier.
-			</p>
-		{% endif %}
 		{# Block commentaires ++ #}
 		<div class="collapse" id="comment">
 			{% if comments|length > 10 %}
