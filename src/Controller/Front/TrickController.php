@@ -28,15 +28,15 @@ class TrickController extends AbstractController
     }
 
     #[Route('/figure-de-snowboard/{slug}', name: 'trick_slug', methods: ['GET', 'POST'])]
-    public function trickNewComment(
+    public function trick(
         Trick $trick,
         Request $request
     ): Response {
         // Trouver le numéro de page depuis l'url
-        $page =  $request->query->getInt('page', 1);
+        $page = $request->query->getInt('page', 1);
         // Récupérer les commentaires de la figure
         $comments = $this->commentRepository->findCommentsPaginated($trick, $page);
-
+        // dd($comments);
         $comment = new Comment();
 
         $form = $this->createForm(CommentType::class, $comment);
@@ -57,7 +57,7 @@ class TrickController extends AbstractController
                 ->setCreatedAt(new \DateTimeImmutable())
                 ->setUsers($this->getUser())
                 ->setTrick($trick);
-
+            
             $this->manager->persist($comment);
             $this->manager->flush();
 
@@ -70,15 +70,11 @@ class TrickController extends AbstractController
             }
         }
 
-        // Récupérer le total des commentaires valides liés à la figure
-        $commentsIsValid = $this->commentRepository->findCommentIsValid($trick);
-
         return $this->render('front/trick/trick.html.twig', [
             'trick' => $trick,
             'slug' => $trick->getSlug(),
             'form' => $form->createView(),
             'comments' => $comments,
-            'commentsIsValid' => $commentsIsValid[0]['total_is_valid'],
         ]);
     }
 
@@ -127,12 +123,6 @@ class TrickController extends AbstractController
                     $media->setTrick($trick);
                     $this->manager->persist($media);
                 }
-
-                // Ajouter les images
-                // foreach ($videos as $video) {
-                //     $video->setTrick($trick);
-                //     $this->manager->persist($video);
-                // }
 
                 $this->manager->persist($trick);
 

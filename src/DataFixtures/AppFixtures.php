@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Comment;
 use Faker\Factory;
 use App\Entity\User;
 use App\Entity\Media;
@@ -98,6 +99,18 @@ class AppFixtures extends Fixture
             'joseph@gmail.com',
         ];
 
+        $comments = [];
+        for ($c = 0; $c < 35; $c++) {
+            $comment = new Comment();
+            $comment->setContent($faker->realText(100))
+                ->setStatus(true)
+                ->setCreatedAt(new \DateTimeImmutable());
+            
+            $manager->persist($comment);
+            
+            $comments[] = $comment;
+        }
+
         // Tricks Group
         $trickGroupsToAdd = [];
         foreach ($tricksGroupsArray as $trickGroupRow) {
@@ -110,13 +123,14 @@ class AppFixtures extends Fixture
         }
 
         $tricksToAdd = [];
-        for ($t = 0; $t < 10; $t++) {
 
+        $usersToAdd = [];
+        for ($t = 0; $t < 10; $t++) {
+      
             $nameData = explode('@', $emailData[$t]);
 
             $user = new User();
             $user->setName($nameData[0])
-                ->setSlug($user->getName())
                 ->setEmail($emailData[$t])
                 ->setRoles(['ROLE_USER'])
                 ->setIsVerified(true)
@@ -127,19 +141,24 @@ class AppFixtures extends Fixture
                         $user,
                         'userdatafixtures'
                     )
-                );
-            $manager->persist($user);
-            shuffle($trickGroupsToAdd);
+                )
+                ->addComment($comments[$t]);
 
-            $trickArray = $tricksArray[$t + 1]; // Adjust the index to start from 1
+            $usersToAdd[] = $user;
+            
+            $manager->persist($user);
+
+            shuffle($trickGroupsToAdd);
+     
+            $trickArray = $tricksArray[$t + 1];
 
             $trick = new Trick();
             $trick->setName($trickArray['name'])
                 ->setDescription($trickArray['description'])
                 ->setUser($user);
 
-            $nbGroupsToAdd = rand(0, count($trickGroupsToAdd)); // Random number of groups to add
-
+            // Ajout du groupe de figure
+            $nbGroupsToAdd = rand(0, count($trickGroupsToAdd));
             $groupsAdded = [];
             for ($g = 0; $g < $nbGroupsToAdd; $g++) {
                 do {
@@ -148,6 +167,19 @@ class AppFixtures extends Fixture
 
                 $groupsAdded[] = $trickGroup->getName();
                 $trick->setTrickGroup($trickGroup);
+            }
+
+            // Ajout de commentaires
+            $nbCommentToAdd = rand(0, 30);
+            $commentsAdded = [];
+            for ($ct = 0; $ct < $nbCommentToAdd; $ct++) {
+                do {
+                    $trickComment = $comments[rand(0, count($comments) - 1)];;
+                } while (in_array($trickComment->getContent(), $commentsAdded));
+
+                $commentsAdded[] = $trickComment->getContent();
+                $user->addComment($trickComment);
+                $trick->addComment($trickComment);
             }
 
             $manager->persist($trick);

@@ -31,7 +31,7 @@ class CommentRepository extends ServiceEntityRepository
      * @param integer $maxResult
      * @return array
      */
-    public function findCommentsPaginated(Trick $trick, int $page, int $maxResult = 10): array
+    public function findCommentsPaginated(Trick $trick, int $page, int $maxResult = 5): array
     {
         $maxResult = abs($maxResult);
 

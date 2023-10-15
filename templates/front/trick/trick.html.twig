@@ -118,18 +118,19 @@
 		{% if comments is empty %}
 			<p class="text-center fs-4 my-5">
 				Cette figure de snowboard n'a pas encore de commentaire. <br>
-				A ton clavier.
+				A ton clavier ⌨️.
 			</p>
 		{% else %}
 			{% for comment in comments.data %}
 				{% if comment.status != 1 %}
 					<p class="text-center fs-4 my-5">
 						Patience... Tu pourras bientôt lire tous les commentaires validés de nos abonnés.<br>
+						Laisses nous aussi un commentaire 😃.
 					</p>
 				{% else %}
 					<section class="d-flex flex-row justify-content-center">
 						<div class="mx-3 p-3">
-							{% if comment.users.avatar is empty %}
+							{% if comment.users.avatar == null %}
 								<img src="{{ asset('image/avatar.png') }}" alt="user-avatar">
 							{% else %}
 								<img src="{{ asset('upload/avatar/' ~ comment.users.avatar) }}" height="60px"  alt="user-avatar">
@@ -152,15 +153,17 @@
 				{% endif %}
 			{% endfor %}
 		{% endif %}
-		
+
 		{# Initiaser les variables pour la pagination #}
-		{% set path = 'trick_slug' %}
-		{% set slug = trick.slug %}
-		{% set pages = comments.pages %}
-		{% set currentPage = comments.firstResult %}
-		<div class="d-flex justify-content-center">
-			{% include "_partial/_paging.html.twig" %}
-		</div>
+		{% if comments is not empty %}
+			{% set path = 'trick_slug' %}
+			{% set slug = trick.slug %}
+			{% set pages = comments.pages %}
+			{% set currentPage = comments.firstResult %}
+			<div class="d-flex justify-content-center">
+				{% include "_partial/_paging.html.twig" %}
+			</div>
+		{% endif %}
 		{# Block commentaires ++ #}
 		<div class="collapse" id="comment">
 			{% if comments|length > 10 %}
