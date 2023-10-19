@@ -28,7 +28,7 @@ class Media
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updated_at = null;
 
-    #[ORM\ManyToOne(inversedBy: 'images', cascade: ['persist'])]
+    #[ORM\ManyToOne(inversedBy: 'medias', cascade: ['persist'])]
     private ?Trick $trick = null;
 
     private ?UploadedFile $uploadedFile = null;

@@ -35,7 +35,9 @@
 				{% endif %}
 			{% endfor %}
 		</section>
+{% if app.request.attributes.get("_route") == "trick_edit" %}
 
+{% endif %}
 		{# Block medias responsive #}
 		<section class="d-flex justify-content-center bg-dark d-block d-sm-block d-md-none d-lg-none">
 			<div class="text-center my-3">
@@ -86,8 +88,8 @@
 		</section>
 
 		{# Block ajout de commentaire #}
-			{% if app.user and app.user.isverified == true %}
-		<section class="d-flex flex-column justify-content-center mt-4 p-3 bg-dark">
+		{% if app.user and app.user.isverified == true %}
+			<section class="d-flex flex-column justify-content-center mt-4 p-3 bg-dark">
 				{{ form_start(form) }}
 
 				{% set errors = form_errors(form) %}
