@@ -2,13 +2,15 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\TrickRepository;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: TrickRepository::class)]
 #[UniqueEntity(fields: ['name'], message:"il existe déjà une figure avec ce nom.")]
@@ -19,6 +21,9 @@ class Trick
     #[ORM\Column]
     private ?int $id = null;
 
+    /**
+     * @Assert\NotBlank(message="Ce champ ne peut pas être vide.")
+     */
     #[ORM\Column(length: 64, unique: true)]
     private ?string $name = null;
 
@@ -30,6 +35,9 @@ class Trick
     #[ORM\Column(length: 128)]
     private ?string $slug = null;
 
+    /**
+     * @Assert\NotBlank(message="Ce champ ne peut pas être vide.")
+     */
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
@@ -141,7 +149,7 @@ class Trick
         return $this->medias;
     }
 
-    public function addImage(Media $media): static
+    public function addMedia(Media $media): static
     {
         if (!$this->medias->contains($media)) {
             $this->medias->add($media);
@@ -151,7 +159,7 @@ class Trick
         return $this;
     }
 
-    public function removeImage(Media $media): static
+    public function removeMedia(Media $media): static
     {
         if ($this->medias->removeElement($media)) {
             // set the owning side to null (unless already changed)

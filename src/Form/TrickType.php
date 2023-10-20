@@ -73,6 +73,7 @@ class TrickType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Trick::class,
+            'attr' => ['novalidate' => 'novalidate'],
         ]);
     }
 }
