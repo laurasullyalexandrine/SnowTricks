@@ -13,6 +13,7 @@ class Media
     const BASE_PATH = 'upload/media';
     const TYPE_IMAGE = 1;
     const TYPE_VIDEO = 2;
+    const DEFAULT_IMAGE = 'default.png';
 
     #[ORM\Id]
     #[ORM\GeneratedValue]

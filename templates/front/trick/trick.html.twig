@@ -2,11 +2,10 @@
 
 {% block body %}
 	{% if app.user and app.user.isverified == true %}
-		<div class="d-flex block-edit-delete text-center">
+		<div class="block-edit-delete d-flex justify-content-center position-absolute top-25 end-0 text-center">
 			<a class="btn-edit me-3" href="{{ path('trick_edit', { slug: trick.slug } )}}">
-				<i class="fa-solid fa-pen fa-xl" style="color: #030303;"></i>
-			</i>
-		</a>
+				<i class="fa-solid fa-pen fa-lg" style="color: #34495e;"></i>
+			</a>
 		{{ include('front/trick/_delete_form.html.twig') }}
 		</div>
 	{% endif %}
@@ -16,8 +15,15 @@
 		<h1 class="position-absolute top-25 end-0">
 			<span class="trick-name fs-1 mt-lg-3 position-absolute top-0 start-50 translate-middle badge">{{ trick.name }}</span>
 		</h1>
-		<div>
-			<img id="main-image" class="mw-100" src="{{ asset( trick.mainImage ) }}" healt="image-snowboard-{{ trick.name }}"/>
+		<div class="text-center">
+		{% for media in trick.medias %}
+			{% if media.type == constant('App\\Entity\\Media::TYPE_VIDEO') %}
+				<img id="main-image" class="mw-100" src="{{ asset('image/snowboard-home.png') }}" alt="trick-media">
+			{% else %}
+{# <img id="main-image" class="mw-100" src="{{ asset( trick.mainImage ) }}" healt="image-snowboard-{{ trick.name }}"/> #}
+			{% endif %}
+		{% endfor %}
+			
 		</div>
 
 		{# Block medias #}
@@ -25,7 +31,6 @@
 			{% for media in trick.medias %}
 				{% if media.type == constant('App\\Entity\\Media::TYPE_IMAGE') %}
 					<div class="d-flex flex-wrap justify-content-center me-2">
-						{# TODO: mettre les tailles dans le css #}
 						<img class="mw-100 rounded" src="{{ asset( media ) }}" width="250px" alt="image-snowboard-{{ trick.name }}"/>
 					</div>
 				{% elseif media.type == constant('App\\Entity\\Media::TYPE_VIDEO') %}

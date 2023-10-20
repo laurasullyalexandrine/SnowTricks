@@ -174,15 +174,22 @@ class Trick
     /**
      * Permet d'afficher qu'une seule image
      *
-     * @return Media|null
+     * @return Media
      */
-    public function getMainImage(): ?Media
+    public function getMainImage(): Media
     {
+        $defaultMedia = new Media();
+        $defaultMedia->setName(Media::DEFAULT_IMAGE);
         if (!$this->medias) {
-            return null;
-        } 
-
-        return $this->medias[0] ?? null;
+            return $defaultMedia;
+        }
+        
+        foreach ($this->medias as $media) {
+            if ($media->getType() === Media::TYPE_IMAGE) {
+                return $media;
+            }
+        }
+        return $defaultMedia;
     }
 
     public function getTags(): array
