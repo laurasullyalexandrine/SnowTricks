@@ -172,7 +172,7 @@ class Trick
     }
 
     /**
-     * Permet d'afficher qu'une seule image
+     * Permet d'afficher qu'une seule image ou l'image par défaut
      *
      * @return Media
      */
