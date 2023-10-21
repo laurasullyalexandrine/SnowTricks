@@ -92,6 +92,10 @@ li {
     background-color: #000;
 }
 
+.image-tag {
+    max-width: 250px;
+}
+
 /* NAV FOOTER */
 .nav-link {
     font-size: 1.3rem !important;
