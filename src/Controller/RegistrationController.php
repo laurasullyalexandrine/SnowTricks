@@ -27,7 +27,7 @@ class RegistrationController extends AbstractController
         private EntityManagerInterface $manager)
     {}
 
-    #[Route('/inscription', name: 'register')]
+    #[Route('/inscription', name: 'register', methods:['GET', 'POST'])]
     public function register(
         Request $request, 
         UserPasswordHasherInterface $userPasswordHasher,
@@ -79,7 +79,7 @@ class RegistrationController extends AbstractController
     }
 
 
-    #[Route('/mail-de-confirmation-envoye', name: 'confirmation_mail_sent')]
+    #[Route('/mail-de-confirmation-envoye', name: 'confirmation_mail_sent', methods:['GET'])]
     public function mailSent(): Response 
     {
         $this->addFlash('primary', "Ton compte n'est pas encore activé. Vérifies tes mails et utilise le lien pour validé ton email.");
@@ -87,7 +87,7 @@ class RegistrationController extends AbstractController
     }
 
 
-    #[Route('/verification-email/{token}', name: 'verify_email')]
+    #[Route('/verification-email/{token}', name: 'verify_email', methods:['GET'])]
     public function verifyEmail(
         string $token,
         Request $request,
@@ -141,10 +141,10 @@ class RegistrationController extends AbstractController
         ]);
     }
 
-    #[Route('renvoyer-mail-validation/{user_name}', name: 'resend_mail')]
+    #[Route('renvoyer-mail-validation/{user_name}', name: 'resend_mail', methods:['GET'])]
     public function resendMail(
         #[MapEntity(mapping: ['user_name' => 'name'])] User $user,
-        Request $request)
+        Request $request): Response
     {
         $token = $this->tokenGenerator->generateToken();
       

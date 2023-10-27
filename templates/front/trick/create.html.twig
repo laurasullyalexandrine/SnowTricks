@@ -2,39 +2,41 @@
 
 {% block body %}
     <article class="row d-flex">
-		<h1 class="position-absolute top-25 end-0 py-2" style="background-color:#38ada9;">Nouvelle figure</h1>
-		<section class="d-flex ms-4 mt-5 py-5">
-			{{ form_start(form) }}
-
-			{% set errors = form_errors(form) %}
-			{% if errors is empty %}
-				<div>
-					{{form_errors(form)  }}
-				</div>
-			{% else %}
-				<div class="alert alert-danger">
-					{{form_errors(form)  }}
-				</div>
-			{% endif %}
+		<h1 class="text-center py-2" style="background-color:#38ada9;">Nouvelle figure</h1>
+		<section class="d-flex justify-content-center ms-4 mt-3 py-5">
+			{% block errosform %}
+				{{ form_start(form) }}
+				{% set errors = form_errors(form) %}
+				{% if errors is empty %}
+					<div>
+						{{form_errors(form)  }}
+					</div>
+				{% else %}
+					<div class="alert alert-danger">
+						{{form_errors(form)  }}
+					</div>
+				{% endif %}
+			{% endblock %}
 			<p class="text-danger">Les champs marqués d'un * sont obligatoires.</p>
-			
-				<div class="mt-5 mb-2">
+				<div class="mt-3 mb-2">
 					{{ form_row(form.name, {'label': 'Nom *'}) }}
 				</div>
 				<div class="mb-2">
 					{{ form_row(form.description, {'label': 'Description *'}) }}
 				</div>
-		
-			{{ form_row(form.trick_group, {'label': 'Groupe de figure *'}) }}
-				<ul class="images"
+	            <div class="mb-2">
+			     {{ form_row(form.trick_group, {'label': 'Groupe de figure *'}) }}
+                </div>
+
+				<ul class="medias"
 					data-index="{{ form.medias|length > 0 ? form.medias|last.vars.name + 1 : 0 }}"
 					data-prototype="{{ form_widget(form.medias.vars.prototype)|e('html_attr') }}"
 				></ul>
-				<button type="button" class="add_item_link btn" data-collection-holder-class="images">Ajouter une image</button>
-			<div class="d-flex">
-				<button type="submit" class="btn my-3">Enregistrer</button>
-				{{ form_end(form) }}
-			</div>
+					<div class="d-flex flex-column justify-content-center">
+					<button type="button" class="add_item_link btn" data-collection-holder-class="medias">Ajoutes ton media</button>
+					<button type="submit" class="btn my-3">Créer</button>
+					{{ form_end(form) }}
+				</div>
 	    </section>
     </article>
 {% endblock %}
@@ -53,13 +55,13 @@
 			
 			// Balise li
 			const item = document.createElement('li');
-				item.classList.add('image-item');
+				item.classList.add('media-item');
 
 			// Créer un button de suppression
 			const btnDelete = document.createElement('button');
 				btnDelete.classList.add('btn-red-cross');
 				btnDelete.type = 'button';
-				btnDelete.innerText = "Supprimes ton image";
+				btnDelete.innerText = "Supprimes ton media";
 				btnDelete.style.color = '#f7021b';
 
 			// Créer la croix rouge 
@@ -96,8 +98,22 @@
 		};
 
 		function deleteFormToCollection(indexItem) {
-			const image = document.getElementById('trick_images_' + indexItem);
-			image.parentElement.remove();
+			const media = document.getElementById('trick_medias_' + indexItem);
+			media.parentElement.remove();
 		};
+
+				document.querySelectorAll('.delete-media').forEach(bnt => {
+		btn.addEventListener("click", deleteMedia);
+		});
+
+		function deleteMedia(e) {
+		const mediaId = e.currentTarget.dataset.mediaId;
+		console.log(mediaId);
+		const media = document.getElementById('trick_media_' + mediaId);
+
+		if (media) {
+		media.remove();
+		}
+		}
 	</script>
 {% endblock %}

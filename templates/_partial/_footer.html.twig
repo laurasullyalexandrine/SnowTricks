@@ -1,48 +1,41 @@
-<!-- Footer -->
-<footer class="d-flex flex-column justify-content-center text-light bg-black d-none d-sm-none d-md-block d-lg-block">
+<!-- Footer desktop -->
+<footer class="d-none d-sm-none d-md-block d-lg-block bg-black">
 	<p
-		class="text-center p-4">
-		<!-- Facebook -->
-		<a class="btn text-white btn-floating m-1" style="background-color: #3b5998;" href="#!" role="button">
-			<i class="fab fa-facebook-f"></i>
-		</a>
-		<!-- Twitter -->
-		<a class="btn text-white btn-floating m-1" style="background-color: #55acee;" href="#!" role="button">
-			<i class="fab fa-twitter"></i>
-		</a>
-		<!-- Instagram -->
-		<a class="btn text-white btn-floating m-1" style="background-color: #ac2bac;" href="#!" role="button">
-			<i class="fab fa-instagram"></i>
-		</a>
+		class="d-flex flex-column justify-content-center text-light p-4">
+		<!-- Copyright -->
+		<div class="text-light text-center fs-5 p-4" style="background-color: rgba(0, 0, 0, 0.05);">
+			© 2023 Copyright: SnowTricks
+		</div>
+		<!-- Copyright -->
 	</p>
-
-	<!-- Copyright -->
-	<div class="text-center fs-5 p-4" style="background-color: rgba(0, 0, 0, 0.05);">
-		© 2023 Copyright: SnowTricks
-	</div>
-	<!-- Copyright -->
 </footer>
 
-<footer class="d-flex flex-column justify-content-center text-light bg-black d-block d-sm-block d-md-none d-lg-none">
+
+<!-- Footer responsive -->
+<footer class="d-block d-sm-block d-md-none d-lg-none bg-black">
 	<p
-		class="text-center p-4">
+		class="d-flex justify-content-center text-light p-4">
 		<!-- Home -->
 		<a class="mx-3" href="{{ path('home')}}">
-			<i class="fa-solid fa-house fa-xl" style="color:#3b5998;"></i>
+			<i class="fa-solid fa-house fa-xl" style="color: #2c3e50;"></i>
 		</a>
-		<!-- Bookmark -->
-		<a class="mx-3" href="#!">
-			<i class="fa-solid fa-bookmark fa-xl" style="color#55acee;"></i>
-		</a>
+		{% if app.request.attributes.get("_route") == "trick_slug" or  app.request.attributes.get("_route") == "trick_edit" %}
+			{% set trick = one_trick() %}
+			<!-- Bookmark -->
+			<a class="mx-3" href="{{ path('trick_slug', { slug: trick.slug } )}}">
+				<i class="fa-solid fa-bookmark fa-xl" style="color: #34495e;"></i>
+			</a>
+		{% endif %}
 		{% if app.user %}
+
 			<!-- Logout -->
-			<a href="{{ path('logout')}}">
-				<i class="fa-solid fa-arrow-right-from-bracket fa-xl" style="color:#c0392b;"></i>
+			<a class="mx-3" href="{{ path('logout')}}">
+				<i class="fa-solid fa-arrow-right-from-bracket fa-xl" style="color: #95a5a6;"></i>
 			</a>
 		{% else %}
 			<!-- Login -->
-			<a href="{{ path('login')}}">
-				<i class="fa-solid fa-arrow-right-to-bracket fa-xl" style="color:#ac2bac;"></i>
+			<a class="mx-3" href="{{ path('login')}}">
+				<i class="fa-solid fa-arrow-right-to-bracket fa-xl" style="color: #95a5a6;"></i>
 			</a>
 		{% endif %}
 	</p>

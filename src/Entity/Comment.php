@@ -6,6 +6,7 @@ use App\Repository\CommentRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: CommentRepository::class)]
 class Comment
 {
@@ -18,6 +19,9 @@ class Comment
     #[ORM\Column]
     private ?int $id = null;
 
+    /**
+     * @Assert\NotBlank(message="Ce champ ne peut pas être vide.")
+     */
     #[ORM\Column(length: 255)]
     private ?string $content = null;
 
@@ -30,8 +34,8 @@ class Comment
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updatedAt = null;
 
-    #[ORM\ManyToOne(inversedBy: 'Comments')]
-    private ?User $users = null;
+    #[ORM\ManyToOne(inversedBy: 'comments')]
+    private ?User $user = null;
 
     #[ORM\ManyToOne(inversedBy: 'comments')]
     private ?Trick $trick = null;
@@ -89,14 +93,14 @@ class Comment
         return $this;
     }
 
-    public function getUsers(): ?User
+    public function getUser(): ?User
     {
-        return $this->users;
+        return $this->user;
     }
 
-    public function setUsers(?User $users): static
+    public function setUser(?User $users): static
     {
-        $this->users = $users;
+        $this->user = $users;
 
         return $this;
     }

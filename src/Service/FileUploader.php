@@ -15,7 +15,7 @@ class FileUploader
     ) {
     }
 
-    public function upload(?UploadedFile $file, string $targetFolder, $prefix = ''): ?string
+    public function upload(?UploadedFile $file, string $targetFolder, string $prefix = ''): ?string
     {
         $fileName = null;
 

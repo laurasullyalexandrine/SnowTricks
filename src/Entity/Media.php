@@ -13,6 +13,7 @@ class Media
     const BASE_PATH = 'upload/media';
     const TYPE_IMAGE = 1;
     const TYPE_VIDEO = 2;
+    const DEFAULT_IMAGE = 'default.png';
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -28,7 +29,7 @@ class Media
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updated_at = null;
 
-    #[ORM\ManyToOne(inversedBy: 'images', cascade: ['persist'])]
+    #[ORM\ManyToOne(inversedBy: 'medias', cascade: ['persist'])]
     private ?Trick $trick = null;
 
     private ?UploadedFile $uploadedFile = null;

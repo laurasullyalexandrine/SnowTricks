@@ -36,9 +36,11 @@
 				{# user logged in #}
 				{% if app.user %}
 					<ul class="navbar-nav d-flex ms-2">
+					{% if app.request.attributes.get("_route") == "trick_edit" %}
 						<li class="nav-item me-4">
-							<a class="nav-link text-light fs-4" href="{{ path('logout') }}">Tricks</a>
+							<a class="nav-link text-light fs-4" href="{{ path('trick_slug', { slug: trick.slug } )}}">Figure {{ trick.name }}</a>
 						</li>
+					{% endif %}
 						<li class="nav-item text-center mb-lg-0 mb-3">
 							<a class="logout" href="{{ path('logout') }}">Déconnexion</a>
 						</li>

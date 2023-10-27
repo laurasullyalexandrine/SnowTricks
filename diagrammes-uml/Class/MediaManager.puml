@@ -1,0 +1,9 @@
+@startuml MediaManager
+
+Class MediaManager {
+
+    + addMedia(Media Media, Trick user)
+    + updateMedia(Media Media, Trick user)
+    + deleteMedia(Media Media, Trick user)
+
+}

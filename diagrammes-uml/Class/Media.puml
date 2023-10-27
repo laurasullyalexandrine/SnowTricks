@@ -1,0 +1,12 @@
+@startuml Media
+
+Class Media {
+
+    - name : string
+    - date : string
+
+    + uploadedFile()
+
+}
+
+@enduml

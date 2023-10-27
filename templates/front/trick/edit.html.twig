@@ -1,0 +1,58 @@
+{% extends 'front/trick/trick.html.twig' %}
+
+{% block title %}
+	Modifies ta figure
+	{{ trick.name }}
+{% endblock %}
+
+
+{% block body %}
+	<article class="row d-flex flex-column">
+		{{ form_start(form) }}
+		{% set errors = form_errors(form) %}
+		{% if errors is empty %}
+			<div>
+				{{form_errors(form)  }}
+			</div>
+		{% else %}
+			<div class="alert alert-danger">
+				{{form_errors(form)  }}
+			</div>
+		{% endif %}
+
+		<div class="block-edit-delete d-flex justify-content-center position-absolute top-25 end-0 text-center">
+			{% include "_partial/_edit-delete-main-image.html.twig" %}
+		</div>
+
+		{% block maintrick %}
+			{{ parent() }}
+		{% endblock %}
+
+		{% block medias %}
+			{{ parent() }}
+		{% endblock %}
+
+		{% block mediasresponsive %}
+			{{ parent() }}
+		{% endblock %}
+
+		{% block trickedit %}
+
+				{{ parent() }}
+				<p class="align-self-center text-danger">Les champs marqués d'un * sont obligatoires.</p>
+				<div class="align-self-center mt-3 mb-2">
+					{{ form_row(form.name, {'label': 'Nom *'}) }}
+				</div>
+				<div class="align-self-center mb-2">
+					{{ form_row(form.description, {'label': 'Description *'}) }}
+				</div>
+				<div class="align-self-center mb-2">
+					{{ form_row(form.trick_group, {'label': 'Groupe de figure *'}) }}
+				</div>
+				<div class="">
+					<button type="submit" class="btn my-3">Modifier</button>
+				</div>
+
+		{% endblock %}
+				{{ form_end(form) }}
+	{% endblock %}

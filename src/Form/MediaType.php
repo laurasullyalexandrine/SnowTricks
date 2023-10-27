@@ -16,7 +16,6 @@ class MediaType extends AbstractType
         $builder->add('name', FileType::class, [
             'label' => 'Ajoutes ton fichier image ou vidéo',
             'required' => false,
-            // 'mapped' => false,
             'constraints' => [
                 new File (['maxSize' => '20M'
                 ])

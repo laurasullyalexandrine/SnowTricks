@@ -82,16 +82,26 @@ li {
 }
 
 .block-edit-delete {
-    width: 100px;
+    width: 110px;
+    margin: 30px;
     position: absolute;
+    border: 1px solid #95afc0;
     border-radius: 3px;
     padding: 8px;
     z-index: 10;
-    background-color: #fff;
+    background-color: #000;
 }
 
-/* NAV FOOTER */
+.image-tag {
+    max-width: 250px;
+}
 
+.alert {
+    font-size: 1.5rem !important;
+    margin-bottom: 0 !important;
+    border-radius: 0 !important;
+}
+/* NAV FOOTER */
 .nav-link {
     font-size: 1.3rem !important;
     color: #fff;
