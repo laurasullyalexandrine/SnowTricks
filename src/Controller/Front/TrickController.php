@@ -150,9 +150,7 @@ class TrickController extends AbstractController
                     'slug' => $trick->getSlug(),
                 ]);
             } catch (\Exception $e) {
-                dd($e);
                 $this->addFlash('warning', 'Une erreur s\'est produite lors de la modification de ta figure de snowboard ' . $trick->getName() . ' ' . $e->getMessage());
-                // return $this->redirect($request->headers->get('referer'));
             }
         }
 
@@ -168,7 +166,7 @@ class TrickController extends AbstractController
         #[MapEntity(mapping: ['media_id' => 'id'])] Media $media,
         Trick $trick,
         Request $request
-    ) {
+    ): Response {
         try {
             $trick->removeMedia($media);
     
