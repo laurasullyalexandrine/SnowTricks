@@ -1,9 +1,8 @@
 		{# display every flash message available #}
-
 		{% for label, messages in app.flashes %}
 			{% for message in messages %}
 				<div class="alert alert-{{ label }}">
-					{{ message|raw }}
+					{{ message }}
 				</div>
 			{% endfor %}
 		{% endfor %}
