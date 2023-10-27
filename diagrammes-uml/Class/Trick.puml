@@ -1,30 +1,33 @@
 @startuml Trick
 
-!include Comment.puml 
+!include Comment.puml
 !include User.puml 
+!include Media.puml 
 !include Trickgroup.puml
 !include TrickManager.puml
 !include CommentManager.puml
 !include UserManager.puml
+!include MediaManager.puml
 
 Class Trick {
     
     - name : string
     - slug : string
     - description : string
-    - picture : string
-    - video : string
     - date : Datetime
     
 }
 
+Media *--"1" Trick: have <
 Trickgroup "1"-* Trick: have <
 Trick *--"1" User: create <
 Trick "1"-* Comment: have <>
+
 Comment *--"1" User: create <
 TrickManager -- Trick: exec
+MediaManager -- Media: exec
 CommentManager -- Comment: manage
-User - CommentManager: moderate
+User - CommentManager: add
 UserManager - User: exec
 
 @enduml
