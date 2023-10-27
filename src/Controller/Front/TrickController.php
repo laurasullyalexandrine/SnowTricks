@@ -45,7 +45,7 @@ class TrickController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             try {
-                // Contrôler si utilisateur connecté ...
+                // Contrôler si utilisateur est connecté ...
                 if (!$this->getUser()) {
                     // ... Rediriger vers la page de connexion
                     throw $this->createNotFoundException('Merci de te connecter.');
@@ -56,13 +56,14 @@ class TrickController extends AbstractController
                 $comment->setContent($content)
                     ->setStatus(Comment::STATUS_WAITING)
                     ->setCreatedAt(new \DateTimeImmutable())
-                    ->setUsers($this->getUser())
+                    ->setUser($this->getUser())
                     ->setTrick($trick);
 
                 $this->manager->persist($comment);
                 $this->manager->flush();
 
                 $this->addFlash('success', 'Ton commentaire est enregistré. Il est en cours de validation.');
+                return $this->redirectToRoute('home');
             } catch (\Exception $e) {
                 $this->addFlash('warning', 'Ta commentaire n\'a pas pu être enregistré. <br>' . $e->getMessage());
             }
@@ -139,17 +140,19 @@ class TrickController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             try {
                 $trick = $form->getData();
-
+                $trick->setUpdatedAt(new \DateTimeImmutable());
+                
                 $this->manager->persist($trick);
                 $this->manager->flush();
 
                 $this->addFlash('success', 'Ta figure ' . $trick->getName() . ' a été modifiée.');
-                $this->redirectToRoute('trick_slug', [
+                return $this->redirectToRoute('trick_slug', [
                     'slug' => $trick->getSlug(),
                 ]);
             } catch (\Exception $e) {
+                dd($e);
                 $this->addFlash('warning', 'Une erreur s\'est produite lors de la modification de ta figure de snowboard ' . $trick->getName() . ' ' . $e->getMessage());
-                return $this->redirect($request->headers->get('referer'));
+                // return $this->redirect($request->headers->get('referer'));
             }
         }
 
