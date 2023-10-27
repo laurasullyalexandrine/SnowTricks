@@ -21,7 +21,7 @@ class TrickVoter extends Voter
     {
         $user = $token->getUser();
 
-        // si l'utilisateur est anonyme, ne pas accorder l'accès
+        // If the user is anonymous, do not grant access
         if (!$user instanceof UserInterface) {
             return false;
         }

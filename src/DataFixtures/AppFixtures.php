@@ -157,7 +157,7 @@ class AppFixtures extends Fixture
                 ->setDescription($trickArray['description'])
                 ->setUser($user);
 
-            // Ajout du groupe de figure
+            // Adding the figure group
             $nbGroupsToAdd = rand(0, count($trickGroupsToAdd));
             $groupsAdded = [];
             for ($g = 0; $g < $nbGroupsToAdd; $g++) {
@@ -169,7 +169,7 @@ class AppFixtures extends Fixture
                 $trick->setTrickGroup($trickGroup);
             }
 
-            // Ajout de commentaires
+            // Adding comments
             $nbCommentToAdd = rand(0, 30);
             $commentsAdded = [];
             for ($ct = 0; $ct < $nbCommentToAdd; $ct++) {
@@ -189,13 +189,13 @@ class AppFixtures extends Fixture
         // Media
         for ($i = 0; $i < 10; $i++) {
 
-            // Créer le nom du fichier
+            // Create file name
             $tempFile = __DIR__ . '/../../var/temp' .  uniqid() . '.jpg';
 
-            // Choisir un fichier aléatoirement
+            // Choose a file randomly
             $file = array_rand($tempImage);
 
-            // Copier ce fichier avant de la déplacer dans le dossier upload
+            // Copy this file before moving it to the upload folder
             copy($file, $tempFile);
             $media = new Media();
             $media->setName($tempFile)

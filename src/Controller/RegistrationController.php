@@ -95,22 +95,22 @@ class RegistrationController extends AbstractController
         LoginFormAuthenticator $authenticator): Response
     {
         try {
-            // Stocker la date du jour et l'heure de l'activation de l'url de vérification
+            // Store the current date and time of activation of the verification URL
             $now = date_create();
-            // Retrouver le user depuis le token générer lors de l'inscription
+            // Find the user from the token generated during registration
             $user = $this->manager->getRepository(User::class)->findOneByToken($token);
     
             if (!$user) {
                 throw new \Exception('Aucun utilisateur associè à ce token! Essayes de te connecter.');
             }
     
-            // Récupérer la date de création du token
+            // Retrieve the token creation date
             $tokenDate = $user->getTokenCreatedAt();
     
-            // Créer la date d'expiration du token
+            // Create token expiration date
             $tokenExpirationDate = $tokenDate->modify('+3 hour');
           
-            // Si la date de création du token est suppérieur à la date de validité
+            // If the token creation date is greater than the validity date
             if ($now > $tokenExpirationDate) {
                 throw new \Exception('Ce token a expiré! Cliques sur lien pour recevoir un nouvel email de validation.');
                 $this->resendMail(

@@ -1,6 +1,5 @@
 <?php
 
-// src/Service/FileUploader.php
 namespace App\Service;
 
 use App\Entity\User;
@@ -20,7 +19,7 @@ class FileUploader
         $fileName = null;
 
         if (null !== $file) {
-            // Créer le nom du fichier
+            // Create file name
             $fileName = $prefix . '-' . uniqid() . '.' . $file->guessExtension();
             
             $file->move(
