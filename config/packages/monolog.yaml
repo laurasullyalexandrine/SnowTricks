@@ -50,7 +50,7 @@ when@prod:
             nested:
                 type: rotating_file
                 path: "%kernel.logs_dir%/%kernel.environment%.log"
-                level: info
+                level: error
                 channels: ["!event"]
                 max_files: 30
             console:
@@ -61,4 +61,4 @@ when@prod:
                 type: stream
                 channels: [deprecation]
                 path: php://stderr
-                level: warning
+                level: error

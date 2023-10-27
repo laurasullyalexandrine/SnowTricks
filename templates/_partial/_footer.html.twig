@@ -17,25 +17,25 @@
 		class="d-flex justify-content-center text-light p-4">
 		<!-- Home -->
 		<a class="mx-3" href="{{ path('home')}}">
-			<i class="fa-solid fa-house fa-xl" style="color: #2c3e50;"></i>
+			<i class="fa-solid fa-house fa-xl" style="color: #13607c;"></i>
 		</a>
 		{% if app.request.attributes.get("_route") == "trick_slug" or  app.request.attributes.get("_route") == "trick_edit" %}
 			{% set trick = one_trick() %}
 			<!-- Bookmark -->
 			<a class="mx-3" href="{{ path('trick_slug', { slug: trick.slug } )}}">
-				<i class="fa-solid fa-bookmark fa-xl" style="color: #34495e;"></i>
+				<i class="fa-solid fa-bookmark fa-xl" style="color: #438cac;"></i>
 			</a>
 		{% endif %}
 		{% if app.user %}
 
 			<!-- Logout -->
 			<a class="mx-3" href="{{ path('logout')}}">
-				<i class="fa-solid fa-arrow-right-from-bracket fa-xl" style="color: #95a5a6;"></i>
+				<i class="fa-solid fa-right-from-bracket fa-xl" style="color: #823255;"></i>
 			</a>
 		{% else %}
 			<!-- Login -->
 			<a class="mx-3" href="{{ path('login')}}">
-				<i class="fa-solid fa-arrow-right-to-bracket fa-xl" style="color: #95a5a6;"></i>
+				<i class="fa-solid fa-arrow-right-to-bracket fa-xl" style="color: #823255;"></i>
 			</a>
 		{% endif %}
 	</p>
