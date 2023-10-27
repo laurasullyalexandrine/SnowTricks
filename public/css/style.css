@@ -18,7 +18,9 @@ main {
 .main-title img {
     max-width: 100%;
 }
-
+.hook {
+    left: 40%;
+}
 .hook,
 h1,
 #welcome {
@@ -130,22 +132,24 @@ li {
     color:  #c4c2c2;
     border:  none; 
 }
+
 /* MEDIA QUERIES */
 /* sm */
 @media (min-width: 576px) {
     .main-title .hook {
-        font-size: 20px;
+        font-size: 22px;
         position: absolute;
+        max-width: 400px;
         top: 55%;
         right: 10px;
-        left: 56.1%;
+        left: 42%;
     }
     
 }
 
 /* md */
 @media (min-width: 768px) {
-    
+
 }
 
 /* lg */
@@ -155,5 +159,5 @@ li {
 
 /* xl */
 @media (min-width: 1200px) {
-    
+
 }
