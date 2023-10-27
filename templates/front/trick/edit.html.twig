@@ -1,160 +1,58 @@
-{% extends 'base.html.twig' %}
+{% extends 'front/trick/trick.html.twig' %}
+
+{% block title %}
+	Modifies ta figure
+	{{ trick.name }}
+{% endblock %}
+
 
 {% block body %}
-	{% if app.user and app.user.isverified == true %}
-		<div class="block-edit-delete d-flex justify-content-center position-absolute top-25 end-0 text-center">
-			<a class="btn-edit me-3" href="{{ path('trick_edit', { slug: trick.slug } )}}">
-				<i class="fa-solid fa-pen fa-lg" style="color: #95afc0;"></i>
-			</a>
-			<form method="post" action="{{ path('trick_media_delete', { slug: trick.slug, media_id: trick.mainImage.id } ) }}"
-				onsubmit="return confirm('Es-tu sûr de vouloir supprimer cette image ' + {{trick.mainImage.id }} + ' ?');">
-				<input type="hidden" name="_method" value="DELETE">
-				<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ trick.mainImage.id) }}">
-				<button class="btn-delete">
-					<i class="fa-solid fa-trash-can fa-lg" style="color: #95afc0;"></i>
-				</button>
-			</form>
-		</div>
-	{% endif %}
-
 	<article class="row d-flex flex-column">
-		{# Block main title and image #}
-		<h1 class="position-absolute top-25 end-0 d-none d-sm-none d-md-block d-lg-block">
-			<span class="trick-name fs-1 mt-lg-3 position-absolute top-0 start-50 translate-middle badge">{{ trick.name }}</span>
-		</h1>
-		<h1 class="position-absolute top-50 start-0 d-block d-sm-block d-md-none d-lg-none">
-			<span class="trick-name fs-1 mt-lg-3 position-absolute top-0 start-50 translate-middle badge">{{ trick.name }}</span>
-		</h1>
-		<div>
-			<img id="main-image" class="mw-100" src="{{ asset( trick.mainImage ) }}" healt="image-snowboard-{{ trick.name }}"/>
+		{{ form_start(form) }}
+		{% set errors = form_errors(form) %}
+		{% if errors is empty %}
+			<div>
+				{{form_errors(form)  }}
+			</div>
+		{% else %}
+			<div class="alert alert-danger">
+				{{form_errors(form)  }}
+			</div>
+		{% endif %}
+
+		<div class="block-edit-delete d-flex justify-content-center position-absolute top-25 end-0 text-center">
+			{% include "_partial/_edit-delete-main-image.html.twig" %}
 		</div>
 
-		{# Block medias #}
-		<section class="mb-3 py-3 bg-dark d-none d-sm-none d-md-block d-lg-block">
-			<div class="d-flex flex-wrap justify-content-center">		
-				{% for media in trick.medias %}
-				<div class="d-flex flex-column">
-					<div>
-						{% if media.type == constant('App\\Entity\\Media::TYPE_IMAGE') %}
-							<img class="me-3 rounded" src="{{ asset( media ) }}" width="250px" alt="image-snowboard-{{ trick.name }}"/>
-						{% elseif media.type == constant('App\\Entity\\Media::TYPE_VIDEO') %}
- 							<video controls src="{{ asset( media ) }}" style="width: 250px"></video>
-						{% endif %}
-					</div>
-					<div class="d-flex justify-content-end me-3 my-2">
-						<a class="btn-edit me-3" href="">
-							<i class="fa-solid fa-pen fa-lg" style="color: #95afc0;"></i>
-						</a>
- 						<form method="post" action="{{ path('trick_media_delete', { slug: trick.slug, media_id: media.id } ) }}"
-                            onsubmit="return confirm('Es-tu sûr de vouloir supprimer cette image ' + {{ media.id }} + ' ?');">
-                            <input type="hidden" name="_method" value="DELETE">
-                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ media.id) }}">
-                            <button class="btn-delete">
-                                <i class="fa-solid fa-trash-can fa-lg" style="color: #95afc0;"></i>
-                            </button>
-                        </form>
-					</div>
-				</div>
-				{% endfor %}
-			</div>
-		</section>
+		{% block maintrick %}
+			{{ parent() }}
+		{% endblock %}
 
-		{# Block medias responsive #}
-		<section class="d-flex justify-content-center bg-dark d-block d-sm-block d-md-none d-lg-none">
-			<div class="text-center my-3">
-				<a data-bs-toggle="collapse" href="#media" aria-expanded="false" aria-controls="media"></a>
-				<button class="btn" type="button" data-bs-toggle="collapse" href="#media" aria-expanded="false" aria-controls="media">Média{% if trick.medias|length > 1 %}s{% endif %}</button>
-			</div>
-		</section>
-		<section class="d-flex justify-content-center mb-3 py-3 bg-dark d-block d-sm-block d-md-none d-lg-none">
-			<div class="collapse" id="media">
-				{% for media in trick.medias %}
-					<div class="d-flex flex-column">
-						<div>
-							{% if media.type == constant('App\\Entity\\Media::TYPE_IMAGE') %}
-								<img class="me-3 rounded" src="{{ asset( media ) }}" width="250px" alt="image-snowboard-{{ trick.name }}"/>
-							{% elseif media.type == constant('App\\Entity\\Media::TYPE_VIDEO') %}
- 								<video controls src="{{ asset( media ) }}" style="width: 250px"></video>
-							{% endif %}
-						</div>
-						<div class="d-flex justify-content-end me-3 my-2">
-							<a class="btn-edit me-3" href="{{ path('trick_edit', { slug: trick.slug } )}}">
-								<i class="fa-solid fa-pen fa-lg" style="color: #95afc0;"></i>
-							</a>
-							<form method="post" action="{{ path('trick_media_delete', { slug: trick.slug, media_id: media.id } ) }}"
-								onsubmit="return confirm('Es-tu sûr de vouloir supprimer cette image ' + {{ media.id }} + ' ?');">
-								<input type="hidden" name="_method" value="DELETE">
-								<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ media.id) }}">
-								<button class="btn-delete">
-									<i class="fa-solid fa-trash-can fa-lg" style="color: #95afc0;"></i>
-								</button>
-							</form>
-						</div>
-					</div>
-				{% endfor %}
-			</div>
-		</section>
+		{% block medias %}
+			{{ parent() }}
+		{% endblock %}
 
+		{% block mediasresponsive %}
+			{{ parent() }}
+		{% endblock %}
 
+		{% block trickedit %}
 
-
-		{# Block tags #}
-		<section class="d-flex justify-content-center">
-			<ul class="d-flex flex-row">
-				<li class="text-center fs-5 me-3 p-2 text-light bg-dark rounded">
-					Auteur
-					{{ trick.tags.author|capitalize }}
-				</li>
-				<li class="text-center fs-5 me-3 p-2 text-light bg-dark rounded">
-					Date de création
-					{{ trick.tags.createdAt|format_datetime('short', 'none', locale='fr') }}
-				</li>
-				{% if trick.tags.updatedAt is not empty %}
-					<li class="text-center fs-5 me-3 p-2 text-light bg-dark rounded">
-						Date de mise à jour
-						{{ trick.tags.updatedAt|format_datetime('short', 'none', locale='fr') }}
-					</li>
-				{% endif %}
-				<li class="text-center fs-5 me-3 p-2 text-light bg-dark rounded">
-					Groupe de figure
-					{{ trick.tags.trickGroup }}
-				</li>
-			</ul>
-		</section>
-
-	{# Block description #}
-		<section class="d-flex justify-content-center mb-3">
-				{{ form_start(form) }}
-			{% set errors = form_errors(form) %}
-			{% if errors is empty %}
-				<div>
-					{{form_errors(form)  }}
-				</div>
-			{% else %}
-				<div class="alert alert-danger">
-					{{form_errors(form)  }}
-				</div>
-			{% endif %}
-			<p class="text-danger">Les champs marqués d'un * sont obligatoires.</p>
-				<div class="mt-3 mb-2">
+				{{ parent() }}
+				<p class="align-self-center text-danger">Les champs marqués d'un * sont obligatoires.</p>
+				<div class="align-self-center mt-3 mb-2">
 					{{ form_row(form.name, {'label': 'Nom *'}) }}
 				</div>
-				<div class="mb-2">
+				<div class="align-self-center mb-2">
 					{{ form_row(form.description, {'label': 'Description *'}) }}
 				</div>
-	            <div class="mb-2">
-			     {{ form_row(form.trick_group, {'label': 'Groupe de figure *'}) }}
-                </div>
-
-				<ul class="medias"
-					data-index="{{ form.medias|length > 0 ? form.medias|last.vars.name + 1 : 0 }}"
-					data-prototype="{{ form_widget(form.medias.vars.prototype)|e('html_attr') }}"
-				></ul>
-					<div class="d-flex flex-column justify-content-center">
-					<button type="button" class="add_item_link btn" data-collection-holder-class="medias">Ajoutes ton media</button>
-					<button type="submit" class="btn my-3">Modifier</button>
-					{{ form_end(form) }}
+				<div class="align-self-center mb-2">
+					{{ form_row(form.trick_group, {'label': 'Groupe de figure *'}) }}
 				</div>
-	    </section>
-	</article>
-{% endblock %}
+				<div class="">
+					<button type="submit" class="btn my-3">Modifier</button>
+				</div>
+
+		{% endblock %}
+				{{ form_end(form) }}
+	{% endblock %}

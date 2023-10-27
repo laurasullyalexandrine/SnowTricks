@@ -4,17 +4,19 @@
     <article class="row d-flex">
 		<h1 class="text-center py-2" style="background-color:#38ada9;">Nouvelle figure</h1>
 		<section class="d-flex justify-content-center ms-4 mt-3 py-5">
-			{{ form_start(form) }}
-			{% set errors = form_errors(form) %}
-			{% if errors is empty %}
-				<div>
-					{{form_errors(form)  }}
-				</div>
-			{% else %}
-				<div class="alert alert-danger">
-					{{form_errors(form)  }}
-				</div>
-			{% endif %}
+			{% block errosform %}
+				{{ form_start(form) }}
+				{% set errors = form_errors(form) %}
+				{% if errors is empty %}
+					<div>
+						{{form_errors(form)  }}
+					</div>
+				{% else %}
+					<div class="alert alert-danger">
+						{{form_errors(form)  }}
+					</div>
+				{% endif %}
+			{% endblock %}
 			<p class="text-danger">Les champs marqués d'un * sont obligatoires.</p>
 				<div class="mt-3 mb-2">
 					{{ form_row(form.name, {'label': 'Nom *'}) }}
