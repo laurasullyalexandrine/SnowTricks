@@ -207,6 +207,5 @@ class TrickController extends AbstractController
             $this->addFlash('warning', 'Une erreur s\'est produite lors de la suppression de ta figure de snowboard ' . $trick->getName() . ' ' . $e->getMessage());
             return $this->redirect($request->headers->get('referer'));
         }
-
     }
 }
