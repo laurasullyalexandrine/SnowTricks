@@ -87,7 +87,6 @@ li {
     width: 110px;
     margin: 30px;
     position: absolute;
-    border: 1px solid #95afc0;
     border-radius: 3px;
     padding: 8px;
     z-index: 10;
@@ -105,10 +104,11 @@ li {
     border-radius: 0 !important;
 }
 
-.thumbnail {
+#thumbnail {
     max-width: 16rem;
     max-height: 16rem;
 }
+
 
 /* NAV FOOTER */
 .nav-link {

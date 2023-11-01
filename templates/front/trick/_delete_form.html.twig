@@ -1,8 +1,8 @@
 <form method="post" action="{{ path('trick_delete', {
-    slug: trick.slug}) }}" onsubmit="return confirm('Es-tu sûr de vouloir supprimer cette figure ?');">
+    slug: trick.slug }) }}" onsubmit="return confirm('Es-tu sûr de vouloir supprimer cette figure ?');">
     <input type="hidden" name="_method" value="DELETE">
     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ trick.slug) }}">
     <button class="btn-delete">
-       <i class="fa-solid fa-trash-can fa-lg" style="color: #95afc0;"></i>
+       <i class="fa-solid fa-trash-can fa-lg" style="color: #c0392b;"></i>
     </button>
 </form>

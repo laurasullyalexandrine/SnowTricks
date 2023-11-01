@@ -28,29 +28,35 @@
 
       {# Block display trick #}
         <section class="d-flex flex-wrap justify-content-center">
-        {# TODO: à refaire  #}
 			{% for trick in tricks %}
-				<div class="col-sm-4 mb-3">
-					<div class="card shadow-sm bg-body rounded" style="max-width: 18rem; max-height: 16rem;">
-                        <div class="d-flex mx-2 mt-2 p-1 rounded" style="background-color: #000;">
-                            <a class="card-link ps-2" href="{{ path('trick_slug', { slug: trick.slug } )}}">{{ trick.name }}</a>
-                            {% if app.user and app.user.isverified == true %}
-                                <div class="d-flex justify-content-around">
-                                    <div class="d-flex">
-                                        <a class="me-2" href="{{ path('trick_edit', { slug: trick.slug } )}}">
-                                            <i class="fa-solid fa-pen fa-sm" style="color:#bdc3c7;"></i>
-                                        </a>
-                                        {{ include('front/trick/_delete_form.html.twig') }}
+				<div class="col-sm-4 d-flex justify-content-center mb-3">
+                    <div>
+             
+                        <div>
+                            <div>
+                                <a href="{{ path('trick_slug', { slug: trick.slug } )}}">
+                                    <img id="thumbnail" class="rounded-top" src="{{ asset( trick.mainImage ) }}" alt="trick-media-test-2">
+                                </a>
+                            </div>
+                           
+                                <div class="p-2 rounded-bottom" style="min-width: 16rem; background-color: #000;">
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <a class="card-link" href="{{ path('trick_slug', { slug: trick.slug } )}}">{{ trick.name }}</a>
+                                        </div>
+                                        <div class="d-flex">
+                                            <a class="me-2" href="{{ path('trick_edit', { slug: trick.slug } )}}">
+                                                <i class="fa-solid fa-pen fa-lg" style="color: #95a5a6;"></i>
+                                            </a>
+                                            <div>
+                                                {{ include('front/trick/_delete_form.html.twig') }}
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            {% endif %}
-						</div>
-                        {# lors de l'enregistrement d'un media video seul je n'ai plus la mainImage  #}
-						<div class="card-body flex-wrap">
-                            <a href="{{ path('trick_slug', { slug: trick.slug } )}}"><img class="thumbnail" src="{{ asset( trick.mainImage ) }}" alt="trick-media-test-2" style="max-width: 16rem; max-height: 16rem;"></a>
                         </div>
-					</div>
-				</div>
+                    </div>
+                </div>
 			{% endfor %}
 	    </section>
 
