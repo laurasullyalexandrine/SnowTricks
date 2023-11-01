@@ -105,6 +105,11 @@ li {
     border-radius: 0 !important;
 }
 
+.thumbnail {
+    max-width: 16rem;
+    max-height: 16rem;
+}
+
 /* NAV FOOTER */
 .nav-link {
     font-size: 1.3rem !important;
