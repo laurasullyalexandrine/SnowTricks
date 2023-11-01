@@ -33,9 +33,9 @@ class TrickController extends AbstractController
         Trick $trick,
         Request $request
     ): Response {
-        // Trouver le numéro de page depuis l'url
+        // Find page number from url
         $page = $request->query->getInt('page', 1);
-        // Récupérer les commentaires de la figure
+        // Retrieve figure comments
         $comments = $this->commentRepository->findCommentsPaginated($trick, $page);
 
         $comment = new Comment();
@@ -45,9 +45,9 @@ class TrickController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             try {
-                // Contrôler si utilisateur est connecté ...
+                // Check if user is logged in ...
                 if (!$this->getUser()) {
-                    // ... Rediriger vers la page de connexion
+                    // ... Redirect to login page
                     throw $this->createNotFoundException('Merci de te connecter.');
                     return $this->redirectToRoute('login');
                 }
@@ -91,13 +91,13 @@ class TrickController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             try {
-                // Enregistrer le user connecter à la figure en cours de création
+                // Save the user connected to the figure being created
                 $trick->setUser($this->getUser());
 
-                // Récupérer les images soumises depuis le formulaire
+                // Retrieve images submitted from the form
                 $medias = $form->get('medias')->getData();
 
-                // Ajouter les images
+                // Add the images
                 foreach ($medias as $media) {
                     $media->setTrick($trick);
                     $this->manager->persist($media);
@@ -138,6 +138,7 @@ class TrickController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            dd($_FILES);
             try {
                 $trick = $form->getData();
                 $trick->setUpdatedAt(new \DateTimeImmutable());
@@ -196,7 +197,7 @@ class TrickController extends AbstractController
         $this->denyAccessUnlessGranted(TrickVoter::DELETE, $trick);
 
         try {
-            if ($this->isCsrfTokenValid('delete' . $trick->getSlug(), $request->request->get('_token'))) {
+            if ($this->isCsrfTokenValid('delete', $request->request->get('_token'))) {
                 $this->manager->remove($trick);
                 $this->manager->flush();
 

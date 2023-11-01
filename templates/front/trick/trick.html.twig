@@ -2,25 +2,6 @@
 
 {% block body %}
 
-	{% macro mediaLoop(trick) %}
-		{% for media in trick.medias %}
-			{% if media.type == constant('App\\Entity\\Media::TYPE_IMAGE') %}
-				<div class="d-flex flex-column">
-					<div class="me-3 mb-3">
-						<img class="image-tag rounded" src="{{ asset(media) }}" alt="image-snowboard-{{ trick.name }}"/>
-					</div>
-				{% elseif media.type == constant('App\\Entity\\Media::TYPE_VIDEO') %}
-					<div class="me-3 mb-3">
-						<video controls src="{{ asset(media) }}" style="width: 250px"></video>
-					</div>
-				{% endif %}
-				{% if app.request.attributes.get('_route') == "trick_edit" %}
-					{% include "_partial/_edit-delete-image.html.twig" %}
-				{% endif %}
-			</div>
-		{% endfor %}
-	{% endmacro %}
-
 	<article class="row d-flex flex-column">
 		{% if app.user and app.user.isverified == true %}
 			<div class="block-edit-delete d-flex justify-content-center position-absolute top-25 end-0 text-center">
@@ -45,19 +26,34 @@
 			</section>
 		{% endblock %}
 
+
+	{% macro mediaLoop(trick) %}
+		{% for media in trick.medias(true) %}
+			{% if media.type == constant('App\\Entity\\Media::TYPE_IMAGE') %}
+				<div class="me-3 mb-3">
+					<img class="media-tag rounded" src="{{ asset(media) }}" alt="image-snowboard-{{ trick.name }}"/>
+				</div>
+			{% elseif media.type == constant('App\\Entity\\Media::TYPE_VIDEO') %}
+				<div class="me-3 mb-3">
+					<video class="media-tag rounded" controls src="{{ asset(media) }}"></video>
+				</div>
+			{% endif %}
+				{% if app.request.attributes.get('_route') == "trick_edit" %}
+					{% include "_partial/_edit-delete-image.html.twig" %}
+				{% endif %}
+		{% endfor %}
+	{% endmacro %}
+
 		{# Block medias #}
 		{% block medias %}
-			<section class="d-none d-sm-none d-md-block d-lg-block">
+			<section id="desktop">
 				<div class="d-flex flex-wrap justify-content-center py-3 bg-dark ">
 					{{ _self.mediaLoop(trick) }}
 				</div>
 			</section>
-		{% endblock %}
 
-		{# Block medias responsive #}
-		{% block mediasresponsive %}
-			<section class="d-block d-sm-block d-md-none d-lg-none bg-black">
-				<div class="text-center py-3">
+			<section id="responsive">
+				<div class="text-center py-3 bg-black">
 					<a data-bs-toggle="collapse" href="#media" aria-expanded="false" aria-controls="media"></a>
 					<button class="btn" type="button" data-bs-toggle="collapse" href="#media" aria-expanded="false" aria-controls="media">Média{% if trick.medias|length > 1 %}s
 						{% endif %}
@@ -71,7 +67,7 @@
 			</section>
 		{% endblock %}
 
-		{# Block du formulaire d'édition #}
+		{# Block edit form #}
 		{% block trickedit %}
 		{% endblock %}	
 
@@ -110,56 +106,104 @@
 			</section>
 		{% endblock %}
 
-			{# Block ajout de commentaire #}
-			{% block comments %}
-				{% if app.user and app.user.isverified == true %}
-					<section class="d-flex flex-column justify-content-center mt-4 p-3 bg-dark">
-						{{ form_start(form) }}
-
-						{% set errors = form_errors(form) %}
-						{% if errors is empty %}
-							<div>
-								{{form_errors(form)  }}
-							</div>
-						{% else %}
-							<div class="alert alert-danger">
-								{{form_errors(form)  }}
-							</div>
-						{% endif %}
-						<div class="d-flex flex-wrap justify-content-center my-3">
-							<div class="w-50 mx-5">
-								{{ form_row(form.content, {label: ' '}) }}
-							</div>
-
-							<div class="m-4 align-self-end">
-								<button type="submit" class="btn my-3">
-									{% trans %}Laisses un commentaire{% endtrans %}</button>
-								{{ form_end(form) }}
-							</div>
+		{# Block add comment  #}
+		{% block comments %}
+			{% if app.user and app.user.isverified == true %}
+				<section class="d-flex flex-column justify-content-center mt-4 p-3 bg-dark">
+					{{ form_start(form) }}
+					{% set errors = form_errors(form) %}
+					{% if errors is empty %}
+						<div>
+							{{form_errors(form)  }}
 						</div>
-					</section>
-				{% endif %}
-			{% endblock %}
+					{% else %}
+						<div class="alert alert-danger">
+							{{form_errors(form)  }}
+						</div>
+					{% endif %}
+					<div class="d-flex flex-wrap justify-content-center my-3">
+						<div class="w-50 mx-5">
+							{{ form_row(form.content, {label: ' '}) }}
+						</div>
+						<div class="m-4 align-self-end">
+							<button type="submit" class="btn my-3">
+								{% trans %}Laisses un commentaire{% endtrans %}</button>
+							{{ form_end(form) }}
+						</div>
+					</div>
+				</section>
+			{% endif %}
+		{% endblock %}
 
-			{# Block  commentaires if empty or not #}
-			{% block commentsif %}
-				{% if comments is empty %}
-					<p class="text-center fs-4 my-5">
-						Cette figure de snowboard n'a pas encore de commentaire.
-						<br>
-						À ton clavier ⌨️.
-					</p>
-				{% else %}
-					{% for comment in comments.data %}
-						{% if comment.status != 1 %}
-							<p class="text-center fs-4 my-5">
-								Patience... Tu pourras bientôt lire tous les commentaires validés de nos abonnés.<br>
-								Laisses nous aussi un commentaire 😃.
-							</p>
-						{% else %}
+		{# Block comments if they are empty or not #}
+		{% block commentsif %}
+			{% if comments is empty %}
+				<p class="text-center fs-4 my-5">
+					Cette figure de snowboard n'a pas encore de commentaire.
+					<br>
+					À ton clavier ⌨️.
+				</p>
+			{% else %}
+				{% for comment in comments.data %}
+					{% if comment.status != 1 %}
+						<p class="text-center fs-4 my-5">
+							Patience... Tu pourras bientôt lire tous les commentaires validés de nos abonnés.<br>
+							Laisses nous aussi un commentaire 😃.
+						</p>
+					{% else %}
+						<section class="d-flex flex-row justify-content-center">
+							<div class="mx-3 p-3">
+								{% if comment.user.avatar == null %}
+									<img src="{{ asset('image/avatar.png') }}" alt="user-avatar">
+								{% else %}
+									<img src="{{ asset('upload/avatar/' ~ comment.user.avatar) }}" height="60px" alt="user-avatar">
+								{% endif %}
+							</div>
+							<div class="mx-3 my-2 p-3">
+								<ul class="list-group list-group-horizontal">
+									<li class="list-group-item">{{ comment.content }}</li>
+									<li class="list-group-item">Auteur
+										<span class="fw-semibold">{{ comment.user }}
+										</span>
+									</li>
+									<li class="list-group-item">Créé le
+										<span class="fw-semibold">
+											{{ comment.createdAt|format_datetime('short', 'none', locale='fr') }}
+										</span>
+									</li>
+								</ul>
+							</div>
+						</section>
+					{% endif %}
+				{% endfor %}
+			{% endif %}
+		{% endblock %}
+		{% block commentsmore %}
+			{# Initialize variables for paging #}
+			{% if comments is not empty %}
+				{% set path = 'trick_slug' %}
+				{% set slug = trick.slug %}
+				{% set pages = comments.pages %}
+				{% set currentPage = comments.firstResult %}
+				<div class="d-flex justify-content-center">
+					{% include "_partial/_paging.html.twig" %}
+				</div>
+			{% endif %}
+			{# Block comments ++ #}
+			<div class="collapse" id="comment">
+				{% if comments|length > 10 %}
+					<div class="text-center mb-3">
+						<a data-bs-toggle="collapse" href="#comment" aria-expanded="false" aria-controls="comment"></a>
+						<button class="btn" type="button" data-bs-toggle="collapse" href="#comment" aria-expanded="false" aria-controls="comment">Plus de commentaire
+							{% if comments|length > 1 %}s
+							{% endif %}
+						</button>
+					</div>
+					{% for comment in comments|slice(11, comments|length) %}
+						{% if comment.status == 1 %}
 							<section class="d-flex flex-row justify-content-center">
 								<div class="mx-3 p-3">
-									{% if comment.user.avatar == null %}
+									{% if comment.user.avatar is empty %}
 										<img src="{{ asset('image/avatar.png') }}" alt="user-avatar">
 									{% else %}
 										<img src="{{ asset('upload/avatar/' ~ comment.user.avatar) }}" height="60px" alt="user-avatar">
@@ -179,63 +223,67 @@
 										</li>
 									</ul>
 								</div>
-							</section>
-						{% endif %}
-					{% endfor %}
-				{% endif %}
-			{% endblock %}
-
-			{% block commentsmore %}
-				{# Initiaser les variables pour la pagination #}
-				{% if comments is not empty %}
-					{% set path = 'trick_slug' %}
-					{% set slug = trick.slug %}
-					{% set pages = comments.pages %}
-					{% set currentPage = comments.firstResult %}
-					<div class="d-flex justify-content-center">
-						{% include "_partial/_paging.html.twig" %}
-					</div>
-				{% endif %}
-				{# Block commentaires ++ #}
-				<div class="collapse" id="comment">
-					{% if comments|length > 10 %}
-						<div class="text-center mb-3">
-							<a data-bs-toggle="collapse" href="#comment" aria-expanded="false" aria-controls="comment"></a>
-							<button class="btn" type="button" data-bs-toggle="collapse" href="#comment" aria-expanded="false" aria-controls="comment">Plus de commentaire
-								{% if comments|length > 1 %}s
-								{% endif %}
-							</button>
-						</div>
-						{% for comment in comments|slice(11, comments|length) %}
-
-							{% if comment.status == 1 %}
-								<section class="d-flex flex-row justify-content-center">
-									<div class="mx-3 p-3">
-										{% if comment.user.avatar is empty %}
-											<img src="{{ asset('image/avatar.png') }}" alt="user-avatar">
-										{% else %}
-											<img src="{{ asset('upload/avatar/' ~ comment.user.avatar) }}" height="60px" alt="user-avatar">
-										{% endif %}
-									</div>
-
-									<div class="mx-3 my-2 p-3">
-										<ul class="list-group list-group-horizontal">
-											<li class="list-group-item">{{ comment.content }}</li>
-											<li class="list-group-item">Auteur
-												<span class="fw-semibold">{{ comment.user }}
-												</span>
-											</li>
-											<li class="list-group-item">Créé le
-												<span class="fw-semibold">
-													{{ comment.createdAt|format_datetime('short', 'none', locale='fr') }}
-												</span>
-											</li>
-										</ul>
-									</div>
-								{% endif %}
-							{% endfor %}
-						{% endif %}
-					</div>
-			{% endblock %}
-			</article>
+							{% endif %}
+						{% endfor %}
+					{% endif %}
+				</div>
 		{% endblock %}
+			{% macro mediaLoop(trick) %}
+		{% for media in trick.medias(true) %}
+			{% if media.type == constant('App\\Entity\\Media::TYPE_IMAGE') %}
+				<div class="me-3 mb-3">
+					<img class="media-tag rounded" src="{{ asset(media) }}" alt="image-snowboard-{{ trick.name }}"/>
+				</div>
+			{% elseif media.type == constant('App\\Entity\\Media::TYPE_VIDEO') %}
+				<div class="me-3 mb-3">
+					<video class="media-tag rounded" controls src="{{ asset(media) }}"></video>
+				</div>
+			{% endif %}
+				{% if app.request.attributes.get('_route') == "trick_edit" %}
+					{% include "_partial/_edit-delete-image.html.twig" %}
+				{% endif %}
+		{% endfor %}
+	{% endmacro %}
+
+		{# Block medias #}
+		{% block medias %}
+			<section id="desktop">
+				<div class="d-flex flex-wrap justify-content-center py-3 bg-dark ">
+					{{ _self.mediaLoop(trick) }}
+				</div>
+			</section>
+
+			<section id="responsive">
+				<div class="text-center py-3 bg-black">
+					<a data-bs-toggle="collapse" href="#media" aria-expanded="false" aria-controls="media"></a>
+					<button class="btn" type="button" data-bs-toggle="collapse" href="#media" aria-expanded="false" aria-controls="media">Média{% if trick.medias|length > 1 %}s
+						{% endif %}
+					</button>
+				</div>
+				<div class="d-flex flex-wrap justify-content-center py-3 bg-dark">
+					<div class="collapse" id="media">
+						{{ _self.mediaLoop(trick) }}
+					</div>
+				</div>
+			</section>
+		{% endblock %}
+	</article>
+{% endblock %}
+
+{% block javascripts %}
+	<script>
+		console.log(window.innerWidth);
+		let desktop = document.getElementById("desktop");
+		let responsive = document.getElementById("responsive");
+		function handleResize() {
+			if (window.innerWidth >= 768) {
+				desktop.parentNode.removeChild(responsive)
+			} else {
+				responsive.parentNode.removeChild(desktop)
+			}
+		}
+		handleResize();
+		window.addEventListener("resize", handleResize);
+
+	</script>
+{% endblock %}

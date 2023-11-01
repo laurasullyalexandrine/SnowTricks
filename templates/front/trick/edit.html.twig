@@ -32,27 +32,21 @@
 			{{ parent() }}
 		{% endblock %}
 
-		{% block mediasresponsive %}
-			{{ parent() }}
-		{% endblock %}
-
 		{% block trickedit %}
-
-				{{ parent() }}
-				<p class="align-self-center text-danger">Les champs marqués d'un * sont obligatoires.</p>
-				<div class="align-self-center mt-3 mb-2">
-					{{ form_row(form.name, {'label': 'Nom *'}) }}
-				</div>
-				<div class="align-self-center mb-2">
-					{{ form_row(form.description, {'label': 'Description *'}) }}
-				</div>
-				<div class="align-self-center mb-2">
-					{{ form_row(form.trick_group, {'label': 'Groupe de figure *'}) }}
-				</div>
-				<div class="">
-					<button type="submit" class="btn my-3">Modifier</button>
-				</div>
-
+			{{ parent() }}
+			<p class="align-self-center text-danger">Les champs marqués d'un * sont obligatoires.</p>
+			<div class="align-self-center mt-3 mb-2">
+				{{ form_row(form.name, {'label': 'Nom *'}) }}
+			</div>
+			<div class="align-self-center mb-2">
+				{{ form_row(form.description, {'label': 'Description *'}) }}
+			</div>
+			<div class="align-self-center mb-2">
+				{{ form_row(form.trick_group, {'label': 'Groupe de figure *'}) }}
+			</div>
+			<div class="">
+				<button type="submit" class="btn my-3">Modifier</button>
+			</div>
 		{% endblock %}
-				{{ form_end(form) }}
+			{{ form_end(form) }}
 	{% endblock %}

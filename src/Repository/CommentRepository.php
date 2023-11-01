@@ -52,15 +52,15 @@ class CommentRepository extends ServiceEntityRepository
         $paginator = new Paginator($query);
         $data = $paginator->getQuery()->getResult();
 
-        // Vérifier qu'il y des données
+        // Check that there is data
         if (empty($data)) {
             return $result;
         }
 
-        // Calculer le nombre de pages
+        // Calculate the number of pages
         $pages =  ceil($paginator->count() / $maxResult);
 
-        // Remplir le tableau $result
+        // Fill array $result
         $result['data'] = $data;
         $result['pages'] = $pages;
         $result['firstResult'] = $page;

@@ -11,6 +11,7 @@ class MainController extends AbstractController
 {
     public function __construct(private TrickRepository $trickRepository)
     {}
+    
     #[Route('/', name: 'home', methods:['GET'])]
     public function home(): Response
     {

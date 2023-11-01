@@ -34,10 +34,10 @@ class ResetPasswordController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Vérifier qu'il existe des utilisateurs en bdd
+            // Check that there are users in database
             $name = $form->get('name')->getData();
 
-            // Vérifier le nom de l'utilisateur existe en bdd
+            // Check user name exists in database
             $user = $this->userRepository->findOneByName($name);
 
             try {
@@ -45,7 +45,7 @@ class ResetPasswordController extends AbstractController
                     throw new \Exception("Cet utilisateur n'existe pas!");
                 }
 
-                // Créer le token 
+                // Create the token
                 $token = $this->tokenGenerator->generateToken();
        
                 $user->setToken($token)
@@ -54,11 +54,10 @@ class ResetPasswordController extends AbstractController
                 $this->manager->persist($user);
                 $this->manager->flush();
 
-                // Générer l'url de réinitialisation
+                // Generate reset url
                 $url = $this->generateUrl('reset_password', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
 
-                // Si il existe envoyer l'email
-                // Ajouter le service pour envoyer l'email de réinitialisation.
+                // If it exists send the email. Add the service to send the reset email.
                 $this->mail->send(
                     'no-reply@snowtricks.fr',
                     $user->getEmail(),
@@ -86,7 +85,7 @@ class ResetPasswordController extends AbstractController
         string $token,
         Request $request,
     ): Response {
-        // On vérifie si le token existe en base de données
+        // Check if the token exists in the database
         $user = $this->userRepository->findOneByToken($token);
 
         if ($user) {
@@ -113,7 +112,7 @@ class ResetPasswordController extends AbstractController
             ]);
         }
 
-        // Si le token n'existe pas informer et renvoyer à la page de connexion
+        // If the token does not exist, inform and return to the login page
         $this->addFlash('danger', 'Token invalide');
         return $this->redirectToRoute('login');
     }

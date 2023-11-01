@@ -144,9 +144,16 @@ class Trick
     /**
      * @return Collection<int, Media>
      */
-    public function getMedias(): Collection
+    public function getMedias(bool $excludeMainImage = false): Collection
     {
-        return $this->medias;
+        $medias = clone $this->medias;
+        if ($excludeMainImage) {
+            $mainImage = $this->getMainImage();
+            if ($mainImage) {
+                $medias->removeElement($mainImage);
+            }
+        }
+        return $medias;
     }
 
     public function addMedia(Media $media): static
@@ -172,7 +179,7 @@ class Trick
     }
 
     /**
-     * Permet d'afficher qu'une seule image ou l'image par défaut
+     * Allows you to display only one image or the default image
      *
      * @return Media
      */
