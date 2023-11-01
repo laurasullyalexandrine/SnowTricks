@@ -14,7 +14,7 @@
 			</div>
 		{% endif %}
 
-		{# Block main title and image #}
+		{# main title and image #}
 		{% block maintrick %}
 			<section class="py-5 bg-black">
 				<h1 class="position-absolute top-25 start-50">
@@ -44,7 +44,7 @@
 		{% endfor %}
 	{% endmacro %}
 
-		{# Block medias #}
+		{# medias #}
 		{% block medias %}
 			<section id="desktop">
 				<div class="d-flex flex-wrap justify-content-center py-3 bg-dark ">
@@ -67,11 +67,11 @@
 			</section>
 		{% endblock %}
 
-		{# Block edit form #}
+		{# edit form #}
 		{% block trickedit %}
 		{% endblock %}	
 
-		{# Block description #}
+		{# description #}
 		{% block desciption %}
 			<section class="d-flex justify-content-center mb-3">
 				<div class="text-center fs-4 w-75 p-3">
@@ -80,7 +80,7 @@
 			</section>
 		{% endblock %}
 
-		{# Block tags #}
+		{# tags #}
 		{% block tags %}
 			<section class="d-flex justify-content-center">
 				<ul class="d-flex flex-row">
@@ -106,7 +106,7 @@
 			</section>
 		{% endblock %}
 
-		{# Block add comment  #}
+		{# add comment  #}
 		{% block comments %}
 			{% if app.user and app.user.isverified == true %}
 				<section class="d-flex flex-column justify-content-center mt-4 p-3 bg-dark">
@@ -135,7 +135,7 @@
 			{% endif %}
 		{% endblock %}
 
-		{# Block comments if they are empty or not #}
+		{# comments if they are empty or not #}
 		{% block commentsif %}
 			{% if comments is empty %}
 				<p class="text-center fs-4 my-5">
@@ -189,7 +189,7 @@
 					{% include "_partial/_paging.html.twig" %}
 				</div>
 			{% endif %}
-			{# Block comments ++ #}
+			{# comments ++ #}
 			<div class="collapse" id="comment">
 				{% if comments|length > 10 %}
 					<div class="text-center mb-3">
@@ -245,7 +245,7 @@
 		{% endfor %}
 	{% endmacro %}
 
-		{# Block medias #}
+		{# medias #}
 		{% block medias %}
 			<section id="desktop">
 				<div class="d-flex flex-wrap justify-content-center py-3 bg-dark ">

@@ -138,7 +138,6 @@ class TrickController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            dd($_FILES);
             try {
                 $trick = $form->getData();
                 $trick->setUpdatedAt(new \DateTimeImmutable());
