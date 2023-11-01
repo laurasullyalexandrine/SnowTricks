@@ -197,7 +197,7 @@ class TrickController extends AbstractController
         $this->denyAccessUnlessGranted(TrickVoter::DELETE, $trick);
 
         try {
-            if ($this->isCsrfTokenValid('delete' . $trick->getId(), $request->request->get('_token'))) {
+            if ($this->isCsrfTokenValid('delete', $request->request->get('_token'))) {
                 $this->manager->remove($trick);
                 $this->manager->flush();
 
