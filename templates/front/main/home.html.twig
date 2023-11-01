@@ -30,9 +30,9 @@
         <section class="d-flex flex-wrap justify-content-center">
 			{% for trick in tricks %}
 				<div class="col-sm-4 d-flex justify-content-center mb-3">
-                    <div>
+                    <div class="card" style="max-width: 18rem; max-height: 16rem;">
              
-                        <div>
+                        <div class="shadow-sm p-3 mb-5 bg-body rounded">
                             <div>
                                 <a href="{{ path('trick_slug', { slug: trick.slug } )}}">
                                     <img id="thumbnail" class="rounded-top" src="{{ asset( trick.mainImage ) }}" alt="trick-media-test-2">

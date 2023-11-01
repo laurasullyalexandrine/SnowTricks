@@ -18,9 +18,7 @@ main {
 .main-title img {
     max-width: 100%;
 }
-.hook {
-    left: 40%;
-}
+
 .hook,
 h1,
 #welcome {
@@ -155,11 +153,12 @@ li {
 
 /* md */
 @media (min-width: 768px) {
+   
 }
 
 /* lg */
 @media (min-width: 992px) {
-    
+   
 }
 
 /* xl */
