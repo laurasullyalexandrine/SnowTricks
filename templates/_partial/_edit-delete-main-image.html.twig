@@ -1,7 +1,7 @@
 
     <label class="btn-edit me-3">
         <i class="fa-solid fa-pen fa-lg" style="color: #95afc0;"></i>
-        <input type="file" name="" id="" style="display: none">
+        <input type="file" name="media_edit_{{ trick.mainImage.id }}" id="media_edit_{{ trick.mainImage.id }}" style="display: none">
     </label>
     <a class="btn-delete" href="#" onclick="return confirm('Es-tu sûr de vouloir supprimer le media ' + {{ trick.mainImage.id }} + ' ?');">
         <i class="fa-solid fa-trash-can fa-lg" style="color: #95afc0;"></i>
