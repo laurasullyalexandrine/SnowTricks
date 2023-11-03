@@ -7,7 +7,7 @@
 			<div class="block-edit-delete d-flex justify-content-center position-absolute top-25 end-0 text-center">
 				{% if app.request.attributes.get('_route') == "trick_slug" %}
 					<a class="btn-edit me-3" href="{{ path('trick_edit', { slug: trick.slug } )}}">
-						<i class="fa-solid fa-pen fa-lg" style="color: #95afc0;"></i>
+						<i class="fa-solid fa-pen fa-lg" style="color: #95a5a6;"></i>
 					</a>
 					{{ include('front/trick/_delete_form.html.twig') }}
 				{% endif %}
@@ -16,38 +16,40 @@
 
 		{# main title and image #}
 		{% block maintrick %}
-			<section class="py-5 bg-black">
+			<section class="py-5 {% if trick.mainImage.name == "default.png" %} bg-body {% else %} bg-black {% endif %}">
 				<h1 class="position-absolute top-25 start-50">
 					<span class="trick-name fs-1 mt-lg-3 position-absolute top-0 start-50 translate-middle badge">{{ trick.name }}</span>
 				</h1>
 				<div class="text-center">
-					<img id="main-image" class="mw-100" src="{{ asset( trick.mainImage ) }}" healt="image-snowboard-{{ trick.name }}"/>
+					<img id="main-image" class="mw-100" src="{{ asset( trick.mainImage ) }}" alt="image-snowboard-{{ trick.name }}"/>
 				</div>
 			</section>
 		{% endblock %}
 
 
 	{% macro mediaLoop(trick) %}
-		{% for media in trick.medias(true) %}
-			{% if media.type == constant('App\\Entity\\Media::TYPE_IMAGE') %}
-				<div class="me-3 mb-3">
-					<img class="media-tag rounded" src="{{ asset(media) }}" alt="image-snowboard-{{ trick.name }}"/>
-				</div>
-			{% elseif media.type == constant('App\\Entity\\Media::TYPE_VIDEO') %}
-				<div class="me-3 mb-3">
-					<video class="media-tag rounded" controls src="{{ asset(media) }}"></video>
-				</div>
-			{% endif %}
-				{% if app.request.attributes.get('_route') == "trick_edit" %}
-					{% include "_partial/_edit-delete-image.html.twig" %}
+		<div class="d-flex flex-column">
+			{% for media in trick.medias(true) %}
+				{% if media.type == constant('App\\Entity\\Media::TYPE_IMAGE') %}
+					<div class="me-3 mb-3">
+						<img class="media-tag rounded" src="{{ asset(media) }}" alt="image-snowboard-{{ trick.name }}"/>
+					</div>
+				{% elseif media.type == constant('App\\Entity\\Media::TYPE_VIDEO') %}
+					<div class="me-3 mb-3">
+						<video class="media-tag rounded" controls src="{{ asset(media) }}"></video>
+					</div>
 				{% endif %}
-		{% endfor %}
+					{% if app.request.attributes.get('_route') == "trick_edit" %}
+						{% include "_partial/_edit-delete-image.html.twig" %}
+					{% endif %}
+			{% endfor %}
+		</div>
 	{% endmacro %}
 
 		{# medias #}
 		{% block medias %}
 			<section id="desktop">
-				<div class="d-flex flex-wrap justify-content-center py-3 bg-dark ">
+				<div class="d-flex flex-wrap justify-content-center py-3 bg-dark">
 					{{ _self.mediaLoop(trick) }}
 				</div>
 			</section>
@@ -59,11 +61,11 @@
 						{% endif %}
 					</button>
 				</div>
-				<div class="d-flex flex-wrap justify-content-center py-3 bg-dark">
 					<div class="collapse" id="media">
-						{{ _self.mediaLoop(trick) }}
+						<div class="d-flex flex-wrap justify-content-center py-3 bg-black">
+							{{ _self.mediaLoop(trick) }}
+						</div>
 					</div>
-				</div>
 			</section>
 		{% endblock %}
 

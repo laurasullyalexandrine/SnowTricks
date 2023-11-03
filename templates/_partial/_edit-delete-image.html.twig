@@ -1,9 +1,10 @@
 <div class="mt-2 me-4 align-self-end">
     <label for="media_edit_{{ media.id }}" class="btn-edit me-3">
-        <i class="fa-solid fa-pen fa-sm" style="color: #95afc0;"></i>
+        <i class="fa-solid fa-pen fa-sm" style="color: #95a5a6;"></i>
     </label>
-        <input type="file" name="media_edit_{{ media.id }}" id="media_edit_{{media.id}}" style="display: none">
+
+    <input type="file" name="media_edit_{{ media.id }}" id="media_edit_{{media.id}}" style="display: none">
     <a class="btn-delete" href="#" onclick="return confirm('Es-tu sûr de vouloir supprimer le media ' + {{ media.id }} + ' ?');">
-        <i class="fa-solid fa-trash-can fa-sm" style="color: #95afc0;"></i>
+        <i class="fa-solid fa-trash-can fa-sm" style="color: #0984e3;"></i>
     </a>
 </div>
