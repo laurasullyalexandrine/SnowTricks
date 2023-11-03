@@ -31,7 +31,7 @@ class CommentRepository extends ServiceEntityRepository
      * @param integer $maxResult
      * @return array
      */
-    public function findCommentsPaginated(Trick $trick, int $page, int $maxResult = 5): array
+    public function findCommentsPaginated(Trick $trick, int $page, int $maxResult = 10): array
     {
         $maxResult = abs($maxResult);
 
@@ -67,18 +67,5 @@ class CommentRepository extends ServiceEntityRepository
         $result['limit'] = $maxResult;
 
         return $result;
-    }
-
-    public function findCommentIsValid(Trick $trick): array
-    {
-        return $this->createQueryBuilder('c')
-            ->select('COUNT(c.id) as total_is_valid')
-            ->andWhere('c.status = :status')
-            ->setParameter('status', true)
-            ->leftJoin('c.trick', 't')
-            ->andWhere('t.id = :id')
-            ->setParameter('id', $trick->getId())
-            ->getQuery()
-            ->getResult();
     }
 }

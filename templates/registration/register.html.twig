@@ -3,10 +3,9 @@
 {% block title %}Inscription{% endblock %}
 
 {% block body %}
-    <article class="row">
+    <article class="container">
         <section class="my-5">
             <h1 class="h3 mb-3 font-weight-normal">Inscription</h1>
-
             {{ form_errors(registrationForm) }}
 
             {{ form_start(registrationForm) }}
@@ -20,7 +19,7 @@
                     label: 'En cochant cette case , j\'accepte que mes données soient colléctés et utilisés.'
                 }) }}
 
-                <button type="submit" class="btn">M'inscrire</button>
+                <button type="submit" class="btn mt-3">M'inscrire</button>
             {{ form_end(registrationForm) }}
         </section>
     </article>

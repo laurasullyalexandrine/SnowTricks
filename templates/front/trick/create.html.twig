@@ -1,9 +1,10 @@
 {% extends 'base.html.twig' %}	
 
 {% block body %}
-    <article class="row d-flex">
+    <article>
 		<h1 class="text-center py-2" style="background-color:#38ada9;">Nouvelle figure</h1>
-		<section class="d-flex justify-content-center ms-4 mt-3 py-5">
+		<p class="text-center py-2">Renseignes le formulaire pour créer ta figure.</p>
+		<section class="container">
 			{% block errosform %}
 				{{ form_start(form) }}
 				{% set errors = form_errors(form) %}
@@ -32,9 +33,9 @@
 					data-index="{{ form.medias|length > 0 ? form.medias|last.vars.name + 1 : 0 }}"
 					data-prototype="{{ form_widget(form.medias.vars.prototype)|e('html_attr') }}"
 				></ul>
-					<div class="d-flex flex-column justify-content-center">
-					<button type="button" class="add_item_link btn" data-collection-holder-class="medias">Ajoutes ton media</button>
-					<button type="submit" class="btn my-3">Créer</button>
+				<div>
+					<button type="button" class="add_item_link btn-add" data-collection-holder-class="medias">Ajoutes ton media</button>
+					<button type="submit" class="btn">Créer ta figure</button>
 					{{ form_end(form) }}
 				</div>
 	    </section>
@@ -50,28 +51,28 @@
 			});
 
 		function addFormToCollection(e) {
-			// Balise ul
+			// ul Tag
 			const collectionHolder = document.querySelector('.' + e.currentTarget.dataset.collectionHolderClass);
 			
-			// Balise li
+			// li Tag
 			const item = document.createElement('li');
 				item.classList.add('media-item');
 
-			// Créer un button de suppression
+			// Create a delete button
 			const btnDelete = document.createElement('button');
 				btnDelete.classList.add('btn-red-cross');
 				btnDelete.type = 'button';
 				btnDelete.innerText = "Supprimes ton media";
 				btnDelete.style.color = '#f7021b';
 
-			// Créer la croix rouge 
+			// Create the delete cross
 			const redCross = document.createElement('i');
 				redCross.classList.add('fa-solid');
 				redCross.classList.add('fa-xmark');
 				redCross.classList.add('fa-lg');
 				redCross.style.color = '#f7021b';
 	
-				// Ajouter la croix au button btnDelete
+				// Add the cross to the btnDelete button
 				btnDelete.appendChild(redCross);
 
 				item.innerHTML += collectionHolder
@@ -84,36 +85,38 @@
 
 			collectionHolder.appendChild(item);
 
-			// Ajouter le button btnDelete et la croix redCross à la balise li
+			// Add the btnDelete button and the redCross to the li tag
 			item.appendChild(btnDelete);
 			item.appendChild(redCross);
 
-			// Stocker l'index de la balise div créer dans le prototype
+			// Store index of div tag created in prototype
 			let indexItem = collectionHolder.dataset.index++;
 	
-			// Ecouter l'event click sur le sur le btn btnDelete pour actionner la suppression
+			// Listen to the event click on the btn btnDelete to activate the deletion
 			btnDelete.addEventListener("click", function() {
 				deleteFormToCollection(indexItem);
 			});
 		};
 
 		function deleteFormToCollection(indexItem) {
+			// Recover media and delete it
 			const media = document.getElementById('trick_medias_' + indexItem);
 			media.parentElement.remove();
 		};
 
-				document.querySelectorAll('.delete-media').forEach(bnt => {
+			document.querySelectorAll('.delete-media').forEach(bnt => {
 		btn.addEventListener("click", deleteMedia);
 		});
 
+		// Allows you to delete the media based on the click event
 		function deleteMedia(e) {
 		const mediaId = e.currentTarget.dataset.mediaId;
 		console.log(mediaId);
 		const media = document.getElementById('trick_media_' + mediaId);
 
 		if (media) {
-		media.remove();
-		}
+			media.remove();
+			}
 		}
 	</script>
 {% endblock %}

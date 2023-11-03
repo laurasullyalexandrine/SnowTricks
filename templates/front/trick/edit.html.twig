@@ -34,7 +34,8 @@
 
 		{% block trickedit %}
 			{{ parent() }}
-			<p class="align-self-center text-danger">Les champs marqués d'un * sont obligatoires.</p>
+		<section class="container">
+			<p class="align-self-center text-danger mt-3">Les champs marqués d'un * sont obligatoires.</p>
 			<div class="align-self-center mt-3 mb-2">
 				{{ form_row(form.name, {'label': 'Nom *'}) }}
 			</div>
@@ -44,9 +45,10 @@
 			<div class="align-self-center mb-2">
 				{{ form_row(form.trick_group, {'label': 'Groupe de figure *'}) }}
 			</div>
-			<div class="">
+			<div class="d-flex">
 				<button type="submit" class="btn my-3">Modifier</button>
 			</div>
+		</section>
 		{% endblock %}
 			{{ form_end(form) }}
 	{% endblock %}
