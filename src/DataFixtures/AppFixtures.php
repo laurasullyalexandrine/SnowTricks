@@ -99,6 +99,25 @@ class AppFixtures extends Fixture
             'joseph@gmail.com',
         ];
 
+        $administration = [
+            'pseudo-name' => 'jimmy',
+            'email' => 'jimmysweat@snowtricks.com'
+        ];
+        $admin = new User();
+        $admin->setName($administration["pseudo-name"])
+            ->setEmail($administration["email"])
+            ->setRoles(["ROLE_ADMIN"])
+            ->setIsVerified(true)
+            ->setToken($this->tokenGenerator->generateToken())
+            ->setTokenCreatedAt(new \DateTimeImmutable())
+            ->setPassword(
+                $this->hasher->hashPassword(
+                    $admin,
+                    'admindatafixtures'
+                )
+            );
+        $manager->persist($admin);
+
         $comments = [];
         for ($c = 0; $c < 35; $c++) {
             $comment = new Comment();

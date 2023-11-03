@@ -146,40 +146,48 @@
 					À ton clavier ⌨️.
 				</p>
 			{% else %}
-				{% for comment in comments.data %}
-					{% if comment.status != 1 %}
-						<p class="text-center fs-4 lh-sm my-5 px-5">
-							Patience... Tu pourras bientôt lire tous les commentaires validés de nos abonnés.
-							Laisses nous aussi un commentaire 😃.
-						</p>
-					{% else %}
-						<section class="d-flex flex-row justify-content-center">
-							<div class="mx-3 p-3">
-								{% if comment.user.avatar == null %}
-									<img src="{{ asset('image/avatar.png') }}" alt="user-avatar">
-								{% else %}
-									<img src="{{ asset('upload/avatar/' ~ comment.user.avatar) }}" height="60px" alt="user-avatar">
-								{% endif %}
-							</div>
-							<div class="mx-3 my-2 p-3">
-								<ul class="list-group list-group-horizontal">
-									<li class="list-group-item">{{ comment.content }}</li>
-									<li class="list-group-item">Auteur
-										<span class="fw-semibold">{{ comment.user }}
-										</span>
-									</li>
-									<li class="list-group-item">Créé le
-										<span class="fw-semibold">
-											{{ comment.createdAt|format_datetime('short', 'none', locale='fr') }}
-										</span>
-									</li>
-								</ul>
-							</div>
-						</section>
-					{% endif %}
-				{% endfor %}
+				<section class="container d-flex flex-column justify-content-center my-4">
+					{% for comment in comments.data %}
+						{% if comment.status != 1 %}
+							<p class="text-center fs-4 lh-sm my-5 px-5">
+								Patience... Tu pourras bientôt lire tous les commentaires validés de nos abonnés.
+								Laisses nous aussi un commentaire 😃.
+							</p>
+						{% else %}
+								<div class="row align-items-center">
+									<div class="col-2 d-flex justify-content-center">
+										{% if comment.user.avatar == null %}
+										<div class="align-self-center mb-2">
+											<img src="{{ asset('image/avatar.png') }}" alt="user-avatar">
+										</div>
+										{% else %}
+										<div class="align-self-center">
+											<img src="{{ asset('upload/avatar/' ~ comment.user.avatar) }}" height="60px" alt="user-avatar">
+										</div>
+										{% endif %}
+									</div>
+								
+									<div class="col-10">
+										<ul class="list-group list-group-horizontal">
+											<li class="list-group-item">{{ comment.content }}</li>
+											<li class="list-group-item">Auteur
+												<span class="fw-semibold">{{ comment.user }}
+												</span>
+											</li>
+											<li class="list-group-item">Créé le
+												<span class="fw-semibold">
+													{{ comment.createdAt|format_datetime('short', 'none', locale='fr') }}
+												</span>
+											</li>
+										</ul>
+									</div>
+								</div>
+						{% endif %}
+					{% endfor %}
+				</section>
 			{% endif %}
 		{% endblock %}
+
 		{% block commentsmore %}
 			{# Initialize variables for paging #}
 			{% if comments is not empty %}
@@ -191,6 +199,7 @@
 					{% include "_partial/_paging.html.twig" %}
 				</div>
 			{% endif %}
+
 			{# comments ++ #}
 			<div class="collapse" id="comment">
 				{% if comments|length > 10 %}
