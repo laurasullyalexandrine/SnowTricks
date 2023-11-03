@@ -2,8 +2,8 @@
 
 Class MediaManager {
 
-    + addMedia(Media Media, Trick user)
-    + updateMedia(Media Media, Trick user)
-    + deleteMedia(Media Media, Trick user)
+    + uploadMedia(Media Media, Trick trick)
+    + updateMedia(Media Media, Trick trick)
+    + deleteMedia(Media Media, Trick trick)
 
 }

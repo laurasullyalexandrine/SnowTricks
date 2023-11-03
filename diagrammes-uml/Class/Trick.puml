@@ -23,11 +23,10 @@ Trickgroup "1"-* Trick: have <
 Trick *--"1" User: create <
 Trick "1"-* Comment: have <>
 
-Comment *--"1" User: create <
+Comment *--"1" User: add <
 TrickManager -- Trick: exec
 MediaManager -- Media: exec
-CommentManager -- Comment: manage
-User - CommentManager: add
+CommentManager -- Comment: exec
 UserManager - User: exec
 
 @enduml
