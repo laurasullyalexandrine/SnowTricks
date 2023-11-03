@@ -31,9 +31,15 @@ class TrickVoter extends Voter
                 if ($user == $subject->getUser()) {
                     return true;
                 }
+                if(in_array("ROLE_ADMIN", $user->getRoles())) {
+                    return true;
+                }
                 break;
             case self::DELETE:
                 if ($user == $subject->getUser()) {
+                    return true;
+                }
+                if(in_array("ROLE_ADMIN", $user->getRoles())) {
                     return true;
                 }
                 break;
