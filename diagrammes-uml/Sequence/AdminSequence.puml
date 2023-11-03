@@ -1,4 +1,4 @@
-@startuml UserAdminSequence
+@startuml AdminSequence
 
 skinparam responseCommentBelowArrow true
 skinparam SequenceCommentAlignment center
