@@ -108,9 +108,11 @@ class Media
     }
 
     /**
-     * Function to save the recorded file
+     * Function to save and to update the recorded file
+     *
+     * @return void
      */
-    #[ORM\PostPersist]
+    #[ORM\PostPersist, ORM\PostUpdate]
     public function saveFile(): void
     {
         $this->uploadedFile->move(__DIR__ . '/../../public/' . self::BASE_PATH, $this->name);
@@ -134,4 +136,17 @@ class Media
                 return null;
         }
     }
+
+    /**
+     * Function that allows you to update uploaded files
+     *
+     * @param UploadedFile $uploadedFile
+     * @return void
+     */
+    public function update(UploadedFile $uploadedFile): void
+    {
+        $this->uploadedFile = $uploadedFile;
+        $this->name = uniqid() . '.' . $this->uploadedFile->guessExtension();
+    }
+
 }

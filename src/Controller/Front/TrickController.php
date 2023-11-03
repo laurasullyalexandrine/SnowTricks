@@ -12,6 +12,7 @@ use App\Repository\MediaRepository;
 use App\Repository\TrickRepository;
 use App\Repository\CommentRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -139,9 +140,32 @@ class TrickController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             try {
+                // Retrieve the form's uploadeFile object
+                $files = $request->files;
+
+                // Retrieve submitted files
+                $uploadedFiles = array_filter($files->all());
+
+                /** @var Trick $trick */
                 $trick = $form->getData();
                 $trick->setUpdatedAt(new \DateTimeImmutable());
-                
+
+                // Compare the id of the uploaded media and that in the database
+                foreach ($uploadedFiles as $key => $uploadedFile) {
+                    $mediaId = (int) str_replace('media_edit_', '', $key);
+                    $mediaFound = false;
+                    foreach ($trick->getMedias() as $media) {
+                        if ($mediaId === $media->getId()) {
+                            $mediaFound = true;
+                            $media->update($uploadedFile);
+                            break;
+                        }
+                    }
+                    if (!$mediaFound) {
+                        throw new \Exception('Media introuvable.');
+                    }
+                }
+
                 $this->manager->persist($trick);
                 $this->manager->flush();
 
@@ -169,10 +193,10 @@ class TrickController extends AbstractController
     ): Response {
         try {
             $trick->removeMedia($media);
-    
+
             $this->manager->persist($trick);
             $this->manager->flush();
-    
+
             $this->addFlash('success', 'Ton media ' . $media->getId() . ' été supprimé.');
         } catch (\Exception $e) {
             $this->addFlash('warning', 'Une erreur s\'est produite lors de la suppression du media de ta figure de snowboard ' . $trick->getName() . ' ' . $e->getMessage());

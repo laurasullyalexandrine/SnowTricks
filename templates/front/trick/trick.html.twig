@@ -27,7 +27,7 @@
 		{% endblock %}
 
 
-	{% macro mediaLoop(trick) %}
+	{% macro mediaLoop(trick, withInput) %}
 		<div class="d-flex flex-column">
 			{% for media in trick.medias(true) %}
 				{% if media.type == constant('App\\Entity\\Media::TYPE_IMAGE') %}
@@ -40,7 +40,7 @@
 					</div>
 				{% endif %}
 					{% if app.request.attributes.get('_route') == "trick_edit" %}
-						{% include "_partial/_edit-delete-image.html.twig" %}
+						{% include "_partial/_edit-delete-image.html.twig" with {withInput: withInput } %}
 					{% endif %}
 			{% endfor %}
 		</div>
@@ -50,7 +50,7 @@
 		{% block medias %}
 			<section id="desktop">
 				<div class="d-flex flex-wrap justify-content-center py-3 bg-black">
-					{{ _self.mediaLoop(trick) }}
+					{{ _self.mediaLoop(trick, 1) }}
 				</div>
 			</section>
 
@@ -63,7 +63,7 @@
 				</div>
 					<div class="collapse" id="media">
 						<div class="d-flex flex-wrap justify-content-center py-3 bg-black">
-							{{ _self.mediaLoop(trick) }}
+							{{ _self.mediaLoop(trick, 0) }}
 						</div>
 					</div>
 			</section>
@@ -242,20 +242,3 @@
 	</article>
 {% endblock %}
 
-{% block javascripts %}
-	<script>
-		console.log(window.innerWidth);
-		let desktop = document.getElementById("desktop");
-		let responsive = document.getElementById("responsive");
-		function handleResize() {
-			if (window.innerWidth >= 768) {
-				desktop.parentNode.removeChild(responsive)
-			} else {
-				responsive.parentNode.removeChild(desktop)
-			}
-		}
-		handleResize();
-		window.addEventListener("resize", handleResize);
-
-	</script>
-{% endblock %}
