@@ -148,5 +148,4 @@ class Media
         $this->uploadedFile = $uploadedFile;
         $this->name = uniqid() . '.' . $this->uploadedFile->guessExtension();
     }
-
 }
