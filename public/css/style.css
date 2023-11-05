@@ -56,11 +56,6 @@ h1,
     background-color: #05a1b7;
 }
 
-.btn-delete,
-.btn-edit {
-    border: none;
-    background-color: transparent;
-}
 
 .btn-red-cross {
     border: none;
@@ -84,6 +79,7 @@ h1,
 .btn-red {
     cursor: pointer;
     color: #c0392b;
+    text-decoration: none;
     font-size: 1em;
     padding: 5px 15px;
     border: 1px solid #c0392b;

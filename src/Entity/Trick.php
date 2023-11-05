@@ -56,7 +56,7 @@ class Trick
     #[ORM\ManyToOne(inversedBy: 'tricks', cascade: ['persist'])]
     private ?User $user = null;
 
-    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Comment::class)]
+    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Comment::class, cascade: ['remove'])]
     private Collection $comments;
 
     public function __construct()

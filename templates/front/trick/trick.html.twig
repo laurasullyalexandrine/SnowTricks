@@ -8,14 +8,16 @@
 					<a class="btn-edit me-3" href="{{ path('trick_edit', { slug: trick.slug } )}}">
 						<i class="fa-solid fa-pen fa-lg" style="color: #95a5a6;"></i>
 					</a>
-					{{ include('front/trick/_delete_form.html.twig') }}
+					<a href="{{ path('trick_delete', { slug: trick.slug }) }}" onclick="return confirm('Es-tu sûr de vouloir supprimer cette figure et tous ses commentaires ?');">
+						<i class="fa-solid fa-trash-can fa-lg" style="color: #2980b9;"></i>
+					</a>
 				{% endif %}
 			</div>
 		{% endif %}
 
 		{# main title and image #}
 		{% block maintrick %}
-			<section class="py-5 {% if trick.mainImage.name == "default.png" %} bg-body {% else %} bg-black {% endif %}">
+			<section class="py-5 {% if trick.mainImage.name == " default.png" %} bg-body {% else %} bg-black {% endif %}">
 				<h1 class="position-absolute top-25 start-50">
 					<span class="trick-name fs-1 mt-lg-3 position-absolute top-0 start-50 translate-middle badge">{{ trick.name }}</span>
 				</h1>
@@ -25,27 +27,29 @@
 			</section>
 		{% endblock %}
 
-	{#  #}
-	{% macro mediaLoop(trick, withInput) %}
-		<div class="d-flex flex-column">
-			{% for media in trick.medias(true) %}
-				{% if media.type == constant('App\\Entity\\Media::TYPE_IMAGE') %}
-					<div class="me-3 mb-3">
-						<img class="media-tag rounded" src="{{ asset(media) }}" alt="image-snowboard-{{ trick.name }}"/>
-					</div>
-				{% elseif media.type == constant('App\\Entity\\Media::TYPE_VIDEO') %}
-					<div class="me-3 mb-3">
-						<video class="media-tag rounded" controls src="{{ asset(media) }}"></video>
-					</div>
-				{% endif %}
+		{#  #}
+		
+		{% macro mediaLoop(trick, withInput) %}
+		{% set responsive = "d-sm-block d-md-none d-lg-none" %}
+			<div class="d-flex {% if responsive %} flex-column {% else %} {% endif %}">
+				{% for media in trick.medias(true) %}
+					{% if media.type == constant('App\\Entity\\Media::TYPE_IMAGE') %}
+						<div class="me-3 mb-3">
+							<img class="media-tag rounded" src="{{ asset(media) }}" alt="image-snowboard-{{ trick.name }}"/>
+						</div>
+					{% elseif media.type == constant('App\\Entity\\Media::TYPE_VIDEO') %}
+						<div class="me-3 mb-3">
+							<video class="media-tag rounded" controls src="{{ asset(media) }}"></video>
+						</div>
+					{% endif %}
 					{% if app.request.attributes.get('_route') == "trick_edit" %}
 						{% include "_partial/_edit-delete-image.html.twig" with {withInput: withInput } %}
 					{% endif %}
-			{% endfor %}
-		</div>
-	{% endmacro %}
+				{% endfor %}
+			</div>
+		{% endmacro %}
 
-		{# medias TODO: remettre les medias reponsive tout en observant le changement sur l'édtion des médias sur les outils dev #}
+
 		{% block medias %}
 			<section class="d-none d-sm-none d-md-block d-lg-block">
 				<div class="d-flex flex-wrap justify-content-center py-3 bg-black">
@@ -56,21 +60,21 @@
 			<section class="d-block d-sm-block d-md-none d-lg-none">
 				<div class="text-center py-3 bg-black">
 					<a data-bs-toggle="collapse" href="#media" aria-expanded="false" aria-controls="media"></a>
-					<button class="btn" type="button" data-bs-toggle="collapse" href="#media" aria-expanded="false" aria-controls="media">Média{% if trick.medias|length > 1 %}s
+					<button class="btn" type="button" data-bs-toggle="collapse" href="#media" aria-expanded="false" aria-controls="media">Média
+						{% if trick.medias|length > 1 %}s
 						{% endif %}
 					</button>
 				</div>
-					<div class="collapse" id="media">
-						<div class="d-flex flex-wrap justify-content-center py-3 bg-black">
-							{{ _self.mediaLoop(trick, 0) }}
-						</div>
+				<div class="collapse" id="media">
+					<div class="d-flex flex-wrap justify-content-center py-3 bg-black">
+						{{ _self.mediaLoop(trick, 0) }}
 					</div>
+				</div>
 			</section>
 		{% endblock %}
 
 		{# edit form #}
-		{% block trickedit %}
-		{% endblock %}	
+		{% block trickedit %}{% endblock %}
 
 		{# description #}
 		{% block desciption %}
@@ -150,37 +154,37 @@
 						{% if comment.status != 1 %}
 							<p class="text-center fs-4 lh-sm my-5 px-5">
 								Patience... Tu pourras bientôt lire tous les commentaires validés de nos abonnés.
-								Laisses nous aussi un commentaire 😃.
+																Laisses nous aussi un commentaire 😃.
 							</p>
 						{% else %}
-								<div class="row align-items-center">
-									<div class="col-2 d-flex justify-content-center">
-										{% if comment.user.avatar == null %}
+							<div class="row align-items-center">
+								<div class="col-2 d-flex justify-content-center">
+									{% if comment.user.avatar == null %}
 										<div class="align-self-center mb-2">
 											<img src="{{ asset('image/avatar.png') }}" alt="user-avatar">
 										</div>
-										{% else %}
+									{% else %}
 										<div class="align-self-center">
 											<img src="{{ asset('upload/avatar/' ~ comment.user.avatar) }}" height="60px" alt="user-avatar">
 										</div>
-										{% endif %}
-									</div>
-								
-									<div class="col-10">
-										<ul class="list-group list-group-horizontal">
-											<li class="list-group-item">{{ comment.content }}</li>
-											<li class="list-group-item">Auteur
-												<span class="fw-semibold">{{ comment.user }}
-												</span>
-											</li>
-											<li class="list-group-item">Créé le
-												<span class="fw-semibold">
-													{{ comment.createdAt|format_datetime('short', 'none', locale='fr') }}
-												</span>
-											</li>
-										</ul>
-									</div>
+									{% endif %}
 								</div>
+
+								<div class="col-10">
+									<ul class="list-group list-group-horizontal">
+										<li class="list-group-item">{{ comment.content }}</li>
+										<li class="list-group-item">Auteur
+											<span class="fw-semibold">{{ comment.user }}
+											</span>
+										</li>
+										<li class="list-group-item">Créé le
+											<span class="fw-semibold">
+												{{ comment.createdAt|format_datetime('short', 'none', locale='fr') }}
+											</span>
+										</li>
+									</ul>
+								</div>
+							</div>
 						{% endif %}
 					{% endfor %}
 				</section>
@@ -237,7 +241,6 @@
 						{% endfor %}
 					{% endif %}
 				</div>
-		{% endblock %}
-	</article>
-{% endblock %}
-
+			{% endblock %}
+		</article>
+	{% endblock %}

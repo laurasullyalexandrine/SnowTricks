@@ -34,6 +34,7 @@
 
 		{% block trickedit %}
 			{{ parent() }}
+			<h1 class="text-center py-2" style="background-color:#38ada9;">Modifies la figure {{ trick.name }}</h1>
 			<section class="container">
 				<p class="align-self-center text-danger mt-3">Les champs marqués d'un * sont obligatoires.</p>
 				<div class="align-self-center mt-3 mb-2">
@@ -48,9 +49,12 @@
 		
 					<div>
 						<button type="submit" class="btn my-3 me-3">Modifier</button>
+						<a class="btn-red" href="{{ path('trick_delete', { slug: trick.slug }) }}" onclick="return confirm('Es-tu sûr de vouloir supprimer cette figure et tous ses commentaires ?');">
+							Supprimer
+						</a>
 					</div>
 			</section>
 		{% endblock %}
 		{{ form_end(form) }}
-{{ include('front/trick/_delete_form.html.twig') }}
+
 	{% endblock %}
