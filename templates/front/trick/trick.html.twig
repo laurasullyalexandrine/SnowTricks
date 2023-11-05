@@ -9,8 +9,8 @@
 						<i class="fa-solid fa-pen fa-lg" style="color: #95a5a6;"></i>
 					</a>
 					<div>
-                    	{{ include('front/trick/_delete.html.twig') }}
-                     </div>
+						{{ include('front/trick/_delete.html.twig') }}
+					</div>
 				{% endif %}
 			</div>
 		{% endif %}
@@ -27,28 +27,21 @@
 			</section>
 		{% endblock %}
 
-		{#  #}
-		
-		{% macro mediaLoop(trick, withInput) %}
-		{% set responsive = "d-sm-block d-md-none d-lg-none" %}
-			<div class="d-flex {% if responsive %} flex-column {% else %} {% endif %}">
-				{% for media in trick.medias(true) %}
-					{% if media.type == constant('App\\Entity\\Media::TYPE_IMAGE') %}
-						<div class="me-3 mb-3">
-							<img class="media-tag rounded" src="{{ asset(media) }}" alt="image-snowboard-{{ trick.name }}"/>
-						</div>
-					{% elseif media.type == constant('App\\Entity\\Media::TYPE_VIDEO') %}
-						<div class="me-3 mb-3">
-							<video class="media-tag rounded" controls src="{{ asset(media) }}"></video>
-						</div>
-					{% endif %}
-					{% if app.request.attributes.get('_route') == "trick_edit" %}
-						{% include "_partial/_edit-delete-image.html.twig" with {withInput: withInput } %}
-					{% endif %}
-				{% endfor %}
-			</div>
-		{% endmacro %}
 
+		{% macro mediaLoop(trick, withInput) %}
+			{% for media in trick.medias(true) %}
+				{% if media.type == constant('App\\Entity\\Media::TYPE_IMAGE') %}
+					<img class="media-tag rounded me-3" src="{{ asset(media) }}" alt="image-snowboard-{{ trick.name }}"/>
+				{% elseif media.type == constant('App\\Entity\\Media::TYPE_VIDEO') %}
+					<video class="media-tag rounded me-3" controls src="{{ asset(media) }}"></video>
+				{% endif %}
+				<div>
+					{% if app.request.attributes.get('_route') == "trick_edit" %}
+						{% include "_partial/_edit-delete-image.html.twig" with { withInput: withInput } %}
+					{% endif %}
+				</div>
+			{% endfor %}
+		{% endmacro %}
 
 		{% block medias %}
 			<section class="d-none d-sm-none d-md-block d-lg-block">
@@ -56,17 +49,14 @@
 					{{ _self.mediaLoop(trick, 1) }}
 				</div>
 			</section>
-
 			<section class="d-block d-sm-block d-md-none d-lg-none">
 				<div class="text-center py-3 bg-black">
 					<a data-bs-toggle="collapse" href="#media" aria-expanded="false" aria-controls="media"></a>
-					<button class="btn" type="button" data-bs-toggle="collapse" href="#media" aria-expanded="false" aria-controls="media">Média
-						{% if trick.medias|length > 1 %}s
-						{% endif %}
+					<button class="btn" type="button" data-bs-toggle="collapse" href="#media" aria-expanded="false" aria-controls="media">Média{% if trick.medias|length > 1 %}s{% endif %}
 					</button>
 				</div>
 				<div class="collapse" id="media">
-					<div class="d-flex flex-wrap justify-content-center py-3 bg-black">
+					<div class="d-flex flex-column align-self-center py-3 bg-black">
 						{{ _self.mediaLoop(trick, 0) }}
 					</div>
 				</div>
@@ -84,7 +74,6 @@
 				</div>
 			</section>
 		{% endblock %}
-
 		{# tags #}
 		{% block tags %}
 			<section class="d-flex justify-content-center">
@@ -154,7 +143,7 @@
 						{% if comment.status != 1 %}
 							<p class="text-center fs-4 lh-sm my-5 px-5">
 								Patience... Tu pourras bientôt lire tous les commentaires validés de nos abonnés.
-																Laisses nous aussi un commentaire 😃.
+																																									Laisses nous aussi un commentaire 😃.
 							</p>
 						{% else %}
 							<div class="row align-items-center">
@@ -169,7 +158,6 @@
 										</div>
 									{% endif %}
 								</div>
-
 								<div class="col-10">
 									<ul class="list-group list-group-horizontal">
 										<li class="list-group-item">{{ comment.content }}</li>
@@ -202,7 +190,6 @@
 					{% include "_partial/_paging.html.twig" %}
 				</div>
 			{% endif %}
-
 			{# comments ++ #}
 			<div class="collapse" id="comment">
 				{% if comments|length > 10 %}
