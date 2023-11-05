@@ -76,6 +76,11 @@ h1,
     background-color: #fff;
 }
 
+.btn-delete {
+    border: 0;
+    background-color: transparent;
+}
+
 .btn-red {
     cursor: pointer;
     color: #c0392b;

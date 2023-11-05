@@ -207,7 +207,7 @@ class TrickController extends AbstractController
     }
 
     #[IsGranted('ROLE_USER')]
-    #[Route('/supprimer-la-figure-de-snowboard/{slug}', name: 'trick_delete')]
+    #[Route('/supprimer-la-figure-de-snowboard/{slug}', name: 'trick_delete', methods: ['POST', 'DELETE'])]
     public function delete(
         Request $request,
         Trick $trick
