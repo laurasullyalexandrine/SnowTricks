@@ -45,7 +45,7 @@ h1,
 
 .btn:not(.btn-floating) {
     cursor: pointer;
-    color: #05a1b7;;
+    color: #05a1b7;
     font-size: 1em;
     padding: 5px 15px;
     border: 1px solid #05a1b7;
@@ -69,7 +69,7 @@ h1,
 
 .btn-add {
     cursor: pointer;
-    color: #fff;;
+    color: #fff;
     font-size: 1em;
     padding: 5px 15px;
     border: 1px solid #05a1b7;
@@ -77,8 +77,22 @@ h1,
     background-color: #05a1b7;
 }
 .btn-add:hover {
-    color: #05a1b7;;
+    color: #05a1b7;
     background-color: #fff;
+}
+
+.btn-red {
+    cursor: pointer;
+    color: #c0392b;
+    font-size: 1em;
+    padding: 5px 15px;
+    border: 1px solid #c0392b;
+    border-radius: 3px;
+    background-color: #fff;
+}
+.btn-red:hover {
+    color: #fff;
+    background-color: #c0392b;
 }
 
 #welcome {

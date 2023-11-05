@@ -12,13 +12,14 @@ use App\Repository\MediaRepository;
 use App\Repository\TrickRepository;
 use App\Repository\CommentRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+#[IsGranted('ROLE_USER')]
 class TrickController extends AbstractController
 {
     public function __construct(
@@ -129,7 +130,7 @@ class TrickController extends AbstractController
     ): Response {
 
         if (!$this->getUser()) {
-            throw $this->createNotFoundException('Cet utilisateur n\'existe pas.');
+            throw $this->createNotFoundException('Aucun utilisateur connecté..');
             return $this->redirectToRoute('login');
         }
 
@@ -207,20 +208,21 @@ class TrickController extends AbstractController
     }
 
 
-    #[Route('/supprimer-la-figure-de-snowboard/{slug}', name: 'trick_delete', methods: ['POST', 'DELETE'])]
+    #[Route('/supprimer-la-figure-de-snowboard/{id}', name: 'trick_delete', methods: ['POST', 'DELETE'])]
     public function delete(
         Request $request,
         Trick $trick
     ): Response {
         if (!$this->getUser()) {
-            throw $this->createNotFoundException('Cet utilisateur n\'existe pas.');
+            throw $this->createNotFoundException('Aucun utilisateur connecté..');
             return $this->redirectToRoute('login');
         }
-
+        
         $this->denyAccessUnlessGranted(TrickVoter::DELETE, $trick);
 
         try {
-            if ($this->isCsrfTokenValid('delete', $request->request->get('_token'))) {
+            if ($this->isCsrfTokenValid('delete' . $trick->getId(), $request->request->get('_token'))) {
+         
                 $this->manager->remove($trick);
                 $this->manager->flush();
 
@@ -231,5 +233,6 @@ class TrickController extends AbstractController
             $this->addFlash('warning', 'Une erreur s\'est produite lors de la suppression de ta figure de snowboard ' . $trick->getName() . ' ' . $e->getMessage());
             return $this->redirect($request->headers->get('referer'));
         }
+        
     }
 }
