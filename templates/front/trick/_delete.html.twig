@@ -1,0 +1,13 @@
+<form method="post" action="{{ path('trick_delete', {
+    slug: trick.slug }) }}" onsubmit="return confirm('Es-tu sûr de vouloir supprimer cette figure et tous ses commentaires ?');">
+    <input type="hidden" name="_method" value="DELETE">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ trick.slug) }}">
+        {% if app.request.attributes.get("_route") == "trick_edit" %}
+            <button class="btn-red">
+                Supprimer
+        {% else %}
+            <button class="btn-delete">
+                <i class="fa-solid fa-trash-can fa-lg" style="color: #2980b9;"></i>
+        {% endif %}
+            </button>
+</form>

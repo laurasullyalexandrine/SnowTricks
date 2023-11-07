@@ -40,8 +40,6 @@ Comment -> Admin: accepter Comment
 Admin  -> Comment: refuser Comment
 Comment -> Admin: supprimer Comment
 
-Admin -> User: modifier utilisateurs
-User -> Admin: valider modification
 
 end
 @enduml

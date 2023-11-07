@@ -12,12 +12,12 @@ use App\Repository\MediaRepository;
 use App\Repository\TrickRepository;
 use App\Repository\CommentRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class TrickController extends AbstractController
 {
@@ -79,7 +79,7 @@ class TrickController extends AbstractController
         ]);
     }
 
-
+    #[IsGranted('ROLE_USER')]
     #[Route('/nouvelle-figure-de-snowboard', name: 'trick_create', methods: ['GET', 'POST'])]
     public function create(Request $request): Response
     {
@@ -121,7 +121,7 @@ class TrickController extends AbstractController
         ]);
     }
 
-
+    #[IsGranted('ROLE_USER')]
     #[Route('/modification-figure-de-snowboard/{slug}', name: 'trick_edit', methods: ['GET', 'POST'])]
     public function edit(
         Request $request,
@@ -129,7 +129,7 @@ class TrickController extends AbstractController
     ): Response {
 
         if (!$this->getUser()) {
-            throw $this->createNotFoundException('Cet utilisateur n\'existe pas.');
+            throw $this->createNotFoundException('Aucun utilisateur connecté.');
             return $this->redirectToRoute('login');
         }
 
@@ -184,7 +184,7 @@ class TrickController extends AbstractController
         ]);
     }
 
-
+    #[IsGranted('ROLE_USER')]
     #[Route('/suppression-media/{slug}/{media_id}', name: 'trick_media_delete', methods: ['GET', 'POST'])]
     public function deleteMedia(
         #[MapEntity(mapping: ['media_id' => 'id'])] Media $media,
@@ -206,27 +206,30 @@ class TrickController extends AbstractController
         return $this->redirect($request->headers->get('referer'));
     }
 
-
+    #[IsGranted('ROLE_USER')]
     #[Route('/supprimer-la-figure-de-snowboard/{slug}', name: 'trick_delete', methods: ['POST', 'DELETE'])]
     public function delete(
         Request $request,
         Trick $trick
     ): Response {
         if (!$this->getUser()) {
-            throw $this->createNotFoundException('Cet utilisateur n\'existe pas.');
+            throw $this->createNotFoundException('Aucun utilisateur connecté.');
             return $this->redirectToRoute('login');
         }
-
+        
         $this->denyAccessUnlessGranted(TrickVoter::DELETE, $trick);
 
         try {
-            if ($this->isCsrfTokenValid('delete', $request->request->get('_token'))) {
-                $this->manager->remove($trick);
-                $this->manager->flush();
-
-                $this->addFlash('success', 'Ta figure de snowboard ' . $trick->getName() . ' a été supprimée.');
-                return $this->redirectToRoute('home');
+            if (!$trick) {
+                throw $this->createNotFoundException('Figure non trouvée.');
             }
+         
+            $this->manager->remove($trick);
+            $this->manager->flush();
+
+            $this->addFlash('success', 'Ta figure de snowboard ' . $trick->getName() . ' a été supprimée.');
+            return $this->redirectToRoute('home');
+            
         } catch (\Exception $e) {
             $this->addFlash('warning', 'Une erreur s\'est produite lors de la suppression de ta figure de snowboard ' . $trick->getName() . ' ' . $e->getMessage());
             return $this->redirect($request->headers->get('referer'));

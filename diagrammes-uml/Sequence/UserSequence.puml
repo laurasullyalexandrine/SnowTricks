@@ -32,11 +32,6 @@ Trick-> User: Trick ajouter
 else cette Trick existe déjà
 SnowTricks-> User: échec de l'ajout
 
-User  -> Comment: éditer Comment
-Comment -> User: valider édition
-else 404
-Comment -> User: ce Comment n'existe pas
-
 User -> Comment: ajouter Comment
 Comment -> User: Comment en attente de validation
 else 403
