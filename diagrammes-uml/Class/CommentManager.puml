@@ -2,10 +2,7 @@
 
 class CommentManager{
 
-    + addComment(Comment Comment, User user)
-    + updateComment(Comment Comment, User user)
-    + deleteComment(Comment Comment, User user)
-    + createListingComment(Comment Comment)
-    + moderateComment(Comment Comment User user)
+    + addComment(Comment Comment, User user, Trick Trick)
+    + createListingComment(Comment Comment, Trick Trick)
 
 }
