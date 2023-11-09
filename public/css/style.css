@@ -5,7 +5,9 @@ body {
     min-height: 100vh;
     flex-direction: column;
 }
-
+.row {
+    --bs-gutter-x: 0 !important;
+}
 main {
     flex: 1;
 }
