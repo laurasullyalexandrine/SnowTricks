@@ -7,16 +7,17 @@ actor "User" as User #Plum
 rectangle SnowTricks{
   usecase "S'inscrire" as UC1
   usecase "Se connecter" as UC2
-  usecase "Consulter les Tricks" as UC3
-  usecase "Consulter une Trick" as UC4
-  usecase "Ajouter une Trick" as UC5
-  usecase "Modifier sa Trick" as UC6
-  usecase "Supprimer sa Trick" as UC7
-  usecase "Ajouter ses commentaires" as UC8
-  usecase "Modifier ses commentaires" as UC9
-  usecase "Supprimer ses commentaires" as UC10
-  usecase "Réinitialiser son mot de passe" as UC11
-  usecase "Consutler d'autre ressource du site" as UC12
+  usecase "Valider son email" as UC3
+  usecase "Consulter les Tricks" as UC4
+  usecase "Consulter une Trick" as UC5
+  usecase "Ajouter une Trick" as UC6
+  usecase "Modifier sa Trick" as UC7
+  usecase "Supprimer sa Trick" as UC8
+  usecase "Ajouter ses commentaires" as UC9
+  usecase "Modifier ses commentaires" as UC10
+  usecase "Supprimer ses commentaires" as UC11
+  usecase "Réinitialiser son mot de passe" as UC12
+  usecase "Consutler d'autre ressource du site" as UC13
 }
 
 User --> UC1
@@ -31,5 +32,6 @@ User --> UC9
 User --> UC10
 User --> UC11
 User --> UC12
+User --> UC13
 
 @enduml
