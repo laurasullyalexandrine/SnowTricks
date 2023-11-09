@@ -22,13 +22,13 @@ class ResetPasswordType extends AbstractType
                 'invalid_message' => 'Les mots de passe ne correspondent pas.',
                 'first_options' => [
                     'attr' => [
-                        'placeholder' => 'Nouveau mot de passe',
+                        'placeholder' => 'Nouveau mot de passe *',
                         'class' => 'form-control'
                     ],
                 ],
                 'second_options' => [
                     'attr' => [
-                        'placeholder' => 'Confirmes ton nouveau mot de passe',
+                        'placeholder' => 'Confirmes ton nouveau mot de passe *',
                         'class' => 'form-control'
                     ]
                 ],

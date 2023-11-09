@@ -104,7 +104,7 @@ class ResetPasswordController extends AbstractController
                 $this->manager->flush();
 
                 $this->addFlash('success', "Ton mot de passe a été modifié");
-                return $this->redirectToRoute('login');
+                return $this->redirectToRoute('home');
             }
 
             return $this->render('front/password/password_reset.html.twig', [
