@@ -22,6 +22,9 @@ SnowTricks-> User: valider authentification
 else identification invalides
 SnowTricks-> User: échec de l'authentification
 
+User -> SnowTricks: demander réinitialisation mot de passe
+SnowTricks-> User: mail de réinitialisation
+
 User -> SnowTricks: réinitialiser mot de passe 
 SnowTricks-> User: valider réinitialisation 
 else nom invalide
@@ -38,10 +41,8 @@ Trick -> User: Vous n'avez pas accès à cette ressource
 
 User -> Comment: ajouter Comment
 Comment -> User: Comment en attente de validation
-
-
 User -> Comment: consulter tous ses Comments
-Comment -> User: afficher liste de ses Comments
+
 
 end
 @enduml
