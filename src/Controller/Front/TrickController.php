@@ -170,9 +170,7 @@ class TrickController extends AbstractController
                 $this->manager->flush();
 
                 $this->addFlash('success', 'Ta figure ' . $trick->getName() . ' a été modifiée.');
-                return $this->redirectToRoute('trick_slug', [
-                    'slug' => $trick->getSlug(),
-                ]);
+                return $this->redirect($request->headers->get('referer'));
             } catch (\Exception $e) {
                 $this->addFlash('warning', 'Une erreur s\'est produite lors de la modification de ta figure de snowboard ' . $trick->getName() . ' ' . $e->getMessage());
             }

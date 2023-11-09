@@ -119,7 +119,7 @@ class AppFixtures extends Fixture
         $manager->persist($admin);
 
         $comments = [];
-        for ($c = 0; $c < 35; $c++) {
+        for ($c = 0; $c < 10; $c++) {
             $comment = new Comment();
             $comment->setContent($faker->realText(100))
                 ->setStatus(true)
