@@ -41,7 +41,7 @@ Trick -> User: Vous n'avez pas accès à cette ressource
 
 User -> Comment: ajouter Comment
 Comment -> User: Comment en attente de validation
-User -> Comment: consulter tous ses Comments
+User -> Comment: consulter tous les Comments
 
 
 end
