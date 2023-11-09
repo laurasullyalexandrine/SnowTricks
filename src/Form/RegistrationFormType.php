@@ -24,7 +24,7 @@ class RegistrationFormType extends AbstractType
             ->add('name', TextType::class, [
                 'label' => false,
                 'attr' => [
-                    'placeholder' => 'Prénom ou pseudo'
+                    'placeholder' => 'Prénom ou pseudo *'
                 ],
                 'constraints' => [
                     new NotBlank([
@@ -35,7 +35,7 @@ class RegistrationFormType extends AbstractType
             ->add('email', EmailType::class, [
                 'label' => false,
                 'attr' => [
-                    'placeholder' => 'Email'
+                    'placeholder' => 'Email *'
                 ],
                 'constraints' => [
                     new NotBlank([
@@ -66,7 +66,7 @@ class RegistrationFormType extends AbstractType
                 'label' => false,
                 'mapped' => false,
                 'attr' => [
-                    'placeholder' => 'Mot de passe',
+                    'placeholder' => 'Mot de passe *',
                     'autocomplete' => 'new-password'],
                 'constraints' => [
                     new NotBlank([

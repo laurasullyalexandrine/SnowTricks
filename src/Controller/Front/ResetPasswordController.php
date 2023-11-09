@@ -103,8 +103,8 @@ class ResetPasswordController extends AbstractController
                 $this->manager->persist($user);
                 $this->manager->flush();
 
-                $this->addFlash('success', "Ton mot de passe a été modifié");
-                return $this->redirectToRoute('home');
+                $this->addFlash('success', "Ton mot de passe a été modifié.");
+                return $this->redirectToRoute('login');
             }
 
             return $this->render('front/password/password_reset.html.twig', [
@@ -113,7 +113,7 @@ class ResetPasswordController extends AbstractController
         }
 
         // If the token does not exist, inform and return to the login page
-        $this->addFlash('danger', 'Token invalide');
+        $this->addFlash('danger', 'Token invalide.');
         return $this->redirectToRoute('login');
     }
 }
