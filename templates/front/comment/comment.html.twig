@@ -1,129 +1,91 @@
 {# add comment  #}
-		{% block comments %}
-			{% if app.user and app.user.isverified == true %}
-				<section class="container d-flex flex-column justify-content-center mt-4 p-3 bg-dark">
-					{{ form_start(form) }}
-					{% set errors = form_errors(form) %}
-					{% if errors is empty %}
-						<div>
-							{{form_errors(form)  }}
-						</div>
-					{% else %}
-						<div class="alert alert-danger">
-							{{form_errors(form)  }}
-						</div>
-					{% endif %}
-					<div class="d-flex flex-wrap justify-content-center my-3">
-						<div class="w-50 mx-5">
-							{{ form_row(form.content, {label: ' '}) }}
-						</div>
-						<div class="m-4 align-self-end">
-							<button type="submit" class="btn my-3">
-								{% trans %}Laisses un commentaire{% endtrans %}</button>
-							{{ form_end(form) }}
-						</div>
-					</div>
-				</section>
-			{% endif %}
-		{% endblock %}
-
-		{# comments if they are empty or not #}
-		{% block commentsif %}
-			{% if comments is empty %}
-				<p class="text-center fs-4 my-5 px-5">
-					Cette figure de snowboard n'a pas encore de commentaire.
-					<br>
-					À ton clavier ⌨️.
-				</p>
+{% block comments %}
+	{% if app.user and app.user.isverified == true %}
+		<section class="container d-flex flex-column justify-content-center mt-4 p-3 bg-dark">
+			{{ form_start(form) }}
+			{% set errors = form_errors(form) %}
+			{% if errors is empty %}
+				<div>
+					{{form_errors(form)  }}
+				</div>
 			{% else %}
-				<section class="container d-flex flex-column justify-content-center my-4">
-					{% for comment in comments.data %}
-						{% if comment.status != 1 %}
-							<p class="text-center fs-4 lh-sm my-5 px-5">
-								Patience... Tu pourras bientôt lire tous les commentaires validés de nos abonnés.
-																																									Laisses nous aussi un commentaire 😃.
-							</p>
-						{% else %}
-							<div class="row align-items-center">
-								<div class="col-2 d-flex justify-content-center">
-									{% if comment.user.avatar == null %}
-										<div class="align-self-center mb-2">
-											<img src="{{ asset('image/avatar.png') }}" alt="user-avatar">
-										</div>
-									{% else %}
-										<div class="align-self-center">
-											<img src="{{ asset('upload/avatar/' ~ comment.user.avatar) }}" height="60px" alt="user-avatar">
-										</div>
-									{% endif %}
-								</div>
-								<div class="col-10">
-									<ul class="list-group list-group-horizontal">
-										<li class="list-group-item">{{ comment.content }}</li>
-										<li class="list-group-item">Auteur
-											<span class="fw-semibold">{{ comment.user }}
-											</span>
-										</li>
-										<li class="list-group-item">Créé le
-											<span class="fw-semibold">
-												{{ comment.createdAt|format_datetime('short', 'none', locale='fr') }}
-											</span>
-										</li>
-									</ul>
-								</div>
-							</div>
-						{% endif %}
-					{% endfor %}
-				</section>
+				<div class="alert alert-danger">
+					{{form_errors(form)  }}
+				</div>
 			{% endif %}
-		{% endblock %}
+			<div class="d-flex flex-wrap justify-content-center my-3">
+				<div class="w-50 mx-5">
+					{{ form_row(form.content, {label: ' '}) }}
+				</div>
+				<div class="m-4 align-self-end">
+					<button type="submit" class="btn my-3">
+						{% trans %}Laisses un commentaire{% endtrans %}</button>
+					{{ form_end(form) }}
+				</div>
+			</div>
+		</section>
+	{% endif %}
+{% endblock %}
 
-		{% block commentsmore %}
-			{# Initialize variables for paging #}
-			{% if comments is not empty %}
-				{% set path = 'trick_slug' %}
-				{% set slug = trick.slug %}
-				{% set pages = comments.pages %}
-				{% set currentPage = comments.firstResult %}
-				<div class="d-flex justify-content-center">
-					{% include "_partial/_paging.html.twig" %}
-				</div>
-			{% endif %}
-			{# comments ++ #}
-			<div class="collapse" id="comment">
-				{% if comments|length > 10 %}
-					<div class="text-center mb-3">
-						<a data-bs-toggle="collapse" href="#comment" aria-expanded="false" aria-controls="comment"></a>
-						<button class="btn" type="button" data-bs-toggle="collapse" href="#comment" aria-expanded="false" aria-controls="comment">Plus de commentaire
-							{% if comments|length > 1 %}s
+{# comments if they are empty or not #}
+{% block commentsif %}
+	{% if comments is empty %}
+		<p class="text-center fs-4 my-5 px-5">
+			Cette figure de snowboard n'a pas encore de commentaire.
+			<br>
+			À ton clavier ⌨️.
+		</p>
+	{% else %}
+		<section class="container d-flex flex-column justify-content-center my-4">
+			{% for comment in comments.data %}
+				{% if comment.status != 1 %}
+					<p class="text-center fs-4 lh-sm my-5 px-5">
+						Patience... Tu pourras bientôt lire tous les commentaires validés de nos abonnés.																																									Laisses nous aussi un commentaire 😃.
+					</p>
+				{% else %}
+				{# à corriger la class row  #}
+					<div class="row align-items-center">
+						<div class="col-2 ">
+							{% if comment.user.avatar == null %}
+								<div class="align-self-end mb-2">
+									<img src="{{ asset('image/avatar.png') }}" alt="user-avatar">
+								</div>
+							{% else %}
+								<div class="align-self-center">
+									<img src="{{ asset('upload/avatar/' ~ comment.user.avatar) }}" height="60px" alt="user-avatar">
+								</div>
 							{% endif %}
-						</button>
+						</div>
+						<div class="col-10">
+							<ul class="list-group list-group-horizontal">
+								<li class="list-group-item">{{ comment.content }}</li>
+								<li class="list-group-item">Auteur
+									<span class="fw-semibold">{{ comment.user }}
+									</span>
+								</li>
+								<li class="list-group-item">Créé le
+									<span class="fw-semibold">
+										{{ comment.createdAt|format_datetime('short', 'none', locale='fr') }}
+									</span>
+								</li>
+							</ul>
+						</div>
 					</div>
-					{% for comment in comments|slice(11, comments|length) %}
-						{% if comment.status == 1 %}
-							<section class="d-flex flex-row justify-content-center">
-								<div class="mx-3 p-3">
-									{% if comment.user.avatar is empty %}
-										<img src="{{ asset('image/avatar.png') }}" alt="user-avatar">
-									{% else %}
-										<img src="{{ asset('upload/avatar/' ~ comment.user.avatar) }}" height="60px" alt="user-avatar">
-									{% endif %}
-								</div>
-								<div class="mx-3 my-2 p-3">
-									<ul class="list-group list-group-horizontal">
-										<li class="list-group-item">{{ comment.content }}</li>
-										<li class="list-group-item">Auteur
-											<span class="fw-semibold">{{ comment.user }}
-											</span>
-										</li>
-										<li class="list-group-item">Créé le
-											<span class="fw-semibold">
-												{{ comment.createdAt|format_datetime('short', 'none', locale='fr') }}
-											</span>
-										</li>
-									</ul>
-								</div>
-							{% endif %}
-						{% endfor %}
-					{% endif %}
-				</div>
-			{% endblock %}
+				{% endif %}
+			{% endfor %}
+		</section>
+	{% endif %}
+{% endblock %}
+
+{% block commentsmore %}
+	{# Initialize variables for paging #}
+	{% if comments is not empty %}
+		{% set path = 'trick_slug' %}
+		{% set slug = trick.slug %}
+		{% set pages = comments.pages %}
+		{% set currentPage = comments.firstResult %}
+		<div class="d-flex justify-content-center">
+			{% include "_partial/_paging.html.twig" %}
+		</div>
+	{% endif %}
+{% endblock %}
