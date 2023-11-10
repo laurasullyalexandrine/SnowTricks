@@ -189,7 +189,7 @@ class AppFixtures extends Fixture
             }
 
             // Adding comments
-            $nbCommentToAdd = rand(0, 30);
+            $nbCommentToAdd = rand(0, 5);
             $commentsAdded = [];
             for ($ct = 0; $ct < $nbCommentToAdd; $ct++) {
                 do {
