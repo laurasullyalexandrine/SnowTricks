@@ -2,16 +2,14 @@
 
 {% block body %}
 	<article class="row d-flex flex-column">
-		{% if app.user and app.user.isverified == true %}
+		{% if app.user and app.user.isverified and app.request.attributes.get('_route') == "trick_slug" and trick.medias|length > 0 %}
 			<div class="block-edit-delete d-flex justify-content-center position-absolute top-25 end-0 text-center">
-				{% if app.request.attributes.get('_route') == "trick_slug" %}
-					<a class="btn-edit me-3" href="{{ path('trick_edit', { slug: trick.slug } )}}">
-						<i class="fa-solid fa-pen fa-lg" style="color: #95a5a6;"></i>
-					</a>
-					<div>
-						{{ include('front/trick/_delete.html.twig') }}
-					</div>
-				{% endif %}
+				<a class="btn-edit me-3" href="{{ path('trick_edit', { slug: trick.slug } )}}">
+					<i class="fa-solid fa-pen fa-lg" style="color: #95a5a6;"></i>
+				</a>
+				<div>
+					{{ include('front/trick/_delete.html.twig') }}
+				</div>
 			</div>
 		{% endif %}
 
@@ -89,4 +87,4 @@
 		{% include "front/comment/comment.html.twig" %}
 
 	</article>
-	{% endblock %}
+{% endblock %}
