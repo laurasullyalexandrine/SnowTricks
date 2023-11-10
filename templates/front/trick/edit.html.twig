@@ -38,9 +38,11 @@
 				{{ trick.name }}</h1>
 			<section class="container">
 				<p class="align-self-center text-danger mt-3">Les champs marqués d'un * sont obligatoires.</p>
+				{% if app.request.attributes.get("_route") != "trick_edit" %}
 				<div class="align-self-center mt-3 mb-2">
 					{{ form_row(form.name, {'label': 'Nom *'}) }}
 				</div>
+				{% endif %}
 				<div class="align-self-center mb-2">
 					{{ form_row(form.description, {'label': 'Description *'}) }}
 				</div>
