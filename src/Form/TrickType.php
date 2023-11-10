@@ -14,21 +14,31 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class TrickType extends AbstractType
 {
+    public function __construct(
+        private RequestStack $requestStack
+    ) {
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        if ($this->requestStack->getCurrentRequest()->get("_route") !== "trick_edit") {
+
+            $builder
+                ->add('name', TextType::class, [
+                    'attr' => [
+                        'placeholder' => 'Nom de la figure',
+                        'class' =>  'form-control mb-3'
+                    ],
+                    'constraints' => [
+                        new NotBlank()
+                    ]
+                ]);
+        }
         $builder
-            ->add('name', TextType::class, [
-                'attr' => [
-                    'placeholder' => 'Nom de la figure',
-                    'class' =>  'form-control mb-3'
-                ],
-                'constraints' => [
-                    new NotBlank()
-                ]
-            ])
             ->add('description', TextareaType::class, [
                 'attr' => [
                     'placeholder' => 'Description de la figure',
