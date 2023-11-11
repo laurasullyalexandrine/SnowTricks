@@ -50,8 +50,8 @@ class Trick
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updated_at = null;
 
-    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Media::class, cascade: ['persist'], orphanRemoval: true)]
-    private Collection $medias;
+    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Image::class, cascade: ['persist'], orphanRemoval: true)]
+    private Collection $images;
 
     #[ORM\ManyToOne(inversedBy: 'tricks', cascade: ['persist'])]
     private ?User $user = null;
@@ -59,11 +59,15 @@ class Trick
     #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Comment::class, cascade: ['remove'])]
     private Collection $comments;
 
+    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Video::class)]
+    private Collection $videos;
+
     public function __construct()
     {
         $this->created_at = new \DateTimeImmutable();
-        $this->medias = new ArrayCollection();
+        $this->images = new ArrayCollection();
         $this->comments = new ArrayCollection();
+        $this->videos = new ArrayCollection();
     }
 
     public function __toString()
@@ -142,36 +146,36 @@ class Trick
     }
 
     /**
-     * @return Collection<int, Media>
+     * @return Collection<int, Image>
      */
-    public function getMedias(bool $excludeMainImage = false): Collection
+    public function getImages(bool $excludeMainImage = false): Collection
     {
-        $medias = clone $this->medias;
+        $images = clone $this->images;
         if ($excludeMainImage) {
             $mainImage = $this->getMainImage();
             if ($mainImage) {
-                $medias->removeElement($mainImage);
+                $images->removeElement($mainImage);
             }
         }
-        return $medias;
+        return $images;
     }
 
-    public function addMedia(Media $media): static
+    public function addImage(Image $image): static
     {
-        if (!$this->medias->contains($media)) {
-            $this->medias->add($media);
-            $media->setTrick($this);
+        if (!$this->images->contains($image)) {
+            $this->images->add($image);
+            $image->setTrick($this);
         }
 
         return $this;
     }
 
-    public function removeMedia(Media $media): static
+    public function removeImage(Image $image): static
     {
-        if ($this->medias->removeElement($media)) {
+        if ($this->images->removeElement($image)) {
             // set the owning side to null (unless already changed)
-            if ($media->getTrick() === $this) {
-                $media->setTrick(null);
+            if ($image->getTrick() === $this) {
+                $image->setTrick(null);
             }
         }
 
@@ -181,22 +185,20 @@ class Trick
     /**
      * Allows you to display only one image or the default image
      *
-     * @return Media
+     * @return Image
      */
-    public function getMainImage(): Media
+    public function getMainImage(): Image
     {
-        $defaultMedia = new Media();
-        $defaultMedia->setName(Media::DEFAULT_IMAGE);
-        if (!$this->medias) {
-            return $defaultMedia;
+        $defaultImage = new Image();
+        $defaultImage->setName(Image::DEFAULT_IMAGE);
+        if (!$this->images) {
+            return $defaultImage;
         }
         
-        foreach ($this->medias as $media) {
-            if ($media->getType() === Media::TYPE_IMAGE) {
-                return $media;
-            }
+        foreach ($this->images as $image) {
+                return $image;
         }
-        return $defaultMedia;
+        return $defaultImage;
     }
 
     public function getTags(): array
@@ -248,6 +250,36 @@ class Trick
             // set the owning side to null (unless already changed)
             if ($comment->getTrick() === $this) {
                 $comment->setTrick(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Video>
+     */
+    public function getVideos(): Collection
+    {
+        return $this->videos;
+    }
+
+    public function addVideo(Video $video): static
+    {
+        if (!$this->videos->contains($video)) {
+            $this->videos->add($video);
+            $video->setTrick($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVideo(Video $video): static
+    {
+        if ($this->videos->removeElement($video)) {
+            // set the owning side to null (unless already changed)
+            if ($video->getTrick() === $this) {
+                $video->setTrick(null);
             }
         }
 

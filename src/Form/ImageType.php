@@ -2,14 +2,14 @@
 
 namespace App\Form;
 
-use App\Entity\Media;
+use App\Entity\Image;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\File;
 
-class MediaType extends AbstractType
+class ImageType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -29,7 +29,7 @@ class MediaType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Media::class,
+            'data_class' => Image::class,
         ]);
     }
 }

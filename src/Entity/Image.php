@@ -2,17 +2,15 @@
 
 namespace App\Entity;
 
-use App\Repository\MediaRepository;
+use App\Repository\ImageRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-#[ORM\Entity(repositoryClass: MediaRepository::class)]
+#[ORM\Entity(repositoryClass: imageRepository::class)]
 #[ORM\HasLifecycleCallbacks]
-class Media
+class Image
 {
-    const BASE_PATH = 'upload/media';
-    const TYPE_IMAGE = 1;
-    const TYPE_VIDEO = 2;
+    const BASE_PATH = 'upload/image';
     const DEFAULT_IMAGE = 'default.png';
 
     #[ORM\Id]
@@ -29,7 +27,7 @@ class Media
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updated_at = null;
 
-    #[ORM\ManyToOne(inversedBy: 'medias', cascade: ['persist'])]
+    #[ORM\ManyToOne(inversedBy: 'images', cascade: ['persist'])]
     private ?Trick $trick = null;
 
     private ?UploadedFile $uploadedFile = null;
@@ -116,25 +114,6 @@ class Media
     public function saveFile(): void
     {
         $this->uploadedFile->move(__DIR__ . '/../../public/' . self::BASE_PATH, $this->name);
-    }
-
-    public function getType(): ?int
-    {
-        if (!file_exists("$this")) {
-            return null;
-        }
-
-        $mimeType = mime_content_type("$this");
-        [$type, $extension] = explode('/', $mimeType);
-        
-        switch ($type) {
-            case "image": 
-                return self::TYPE_IMAGE;
-            case "video":
-                return self::TYPE_VIDEO;
-            default:
-                return null;
-        }
     }
 
     /**

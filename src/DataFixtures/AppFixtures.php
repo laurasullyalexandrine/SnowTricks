@@ -5,7 +5,7 @@ namespace App\DataFixtures;
 use App\Entity\Comment;
 use Faker\Factory;
 use App\Entity\User;
-use App\Entity\Media;
+use App\Entity\Image;
 use App\Entity\Trick;
 use App\Entity\Trickgroup;
 use Doctrine\Persistence\ObjectManager;
@@ -205,7 +205,7 @@ class AppFixtures extends Fixture
             $tricksToAdd[] = $trick;
         }
 
-        // Media
+        // Image
         for ($i = 0; $i < 10; $i++) {
 
             // Create file name
@@ -216,11 +216,11 @@ class AppFixtures extends Fixture
 
             // Copy this file before moving it to the upload folder
             copy($file, $tempFile);
-            $media = new Media();
-            $media->setName($tempFile)
+            $image = new Image();
+            $image->setName($tempFile)
                 ->setTrick($tricksToAdd[$i]);
 
-            $manager->persist($media);
+            $manager->persist($image);
         }
 
         $manager->flush();
