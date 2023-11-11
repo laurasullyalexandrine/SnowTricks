@@ -29,12 +29,12 @@
 			     {{ form_row(form.trick_group, {'label': 'Groupe de figure *'}) }}
                 </div>
 
-				<ul class="medias"
-					data-index="{{ form.medias|length > 0 ? form.medias|last.vars.name + 1 : 0 }}"
-					data-prototype="{{ form_widget(form.medias.vars.prototype)|e('html_attr') }}"
+				<ul class="images"
+					data-index="{{ form.images|length > 0 ? form.images|last.vars.name + 1 : 0 }}"
+					data-prototype="{{ form_widget(form.images.vars.prototype)|e('html_attr') }}"
 				></ul>
 				<div>
-					<button type="button" class="add_item_link btn-add" data-collection-holder-class="medias">Ajoutes ton media</button>
+					<button type="button" class="add_item_link btn-add" data-collection-holder-class="images">Ajoutes ton image</button>
 					<button type="submit" class="btn">Créer ta figure</button>
 					{{ form_end(form) }}
 				</div>
@@ -56,13 +56,13 @@
 			
 			// li Tag
 			const item = document.createElement('li');
-				item.classList.add('media-item');
+				item.classList.add('image-item');
 
 			// Create a delete button
 			const btnDelete = document.createElement('button');
 				btnDelete.classList.add('btn-red-cross');
 				btnDelete.type = 'button';
-				btnDelete.innerText = "Supprimes ton media";
+				btnDelete.innerText = "Supprimes ton image";
 				btnDelete.style.color = '#f7021b';
 
 			// Create the delete cross
@@ -99,23 +99,23 @@
 		};
 
 		function deleteFormToCollection(indexItem) {
-			// Recover media and delete it
-			const media = document.getElementById('trick_medias_' + indexItem);
-			media.parentElement.remove();
+			// Recover image and delete it
+			const image = document.getElementById('trick_images_' + indexItem);
+			image.parentElement.remove();
 		};
 
-			document.querySelectorAll('.delete-media').forEach(bnt => {
-		btn.addEventListener("click", deleteMedia);
+			document.querySelectorAll('.delete-image').forEach(bnt => {
+		btn.addEventListener("click", deleteimage);
 		});
 
-		// Allows you to delete the media based on the click event
-		function deleteMedia(e) {
-		const mediaId = e.currentTarget.dataset.mediaId;
-		console.log(mediaId);
-		const media = document.getElementById('trick_media_' + mediaId);
+		// Allows you to delete the image based on the click event
+		function deleteimage(e) {
+		const imageId = e.currentTarget.dataset.imageId;
+		console.log(imageId);
+		const image = document.getElementById('trick_image_' + imageId);
 
-		if (media) {
-			media.remove();
+		if (image) {
+			image.remove();
 			}
 		}
 	</script>

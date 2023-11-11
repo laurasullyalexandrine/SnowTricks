@@ -2,7 +2,7 @@
 
 namespace App\Form;
 
-use App\Entity\Media;
+use App\Entity\Image;
 use App\Entity\Trick;
 use App\Entity\Trickgroup;
 use App\Repository\TrickgroupRepository;
@@ -62,16 +62,16 @@ class TrickType extends AbstractType
                     'class' => 'mb-3'
                 ]
             ])
-            ->add('medias', CollectionType::class, [
-                'entry_type' => MediaType::class,
+            ->add('images', CollectionType::class, [
+                'entry_type' => ImageType::class,
                 'entry_options' => [
                     'label' => false,
                 ],
                 'allow_add' => true,
                 'allow_delete' => true,
                 'delete_empty' =>
-                function (Media $media = null) {
-                    return null === $media || empty($media->getName());
+                function (Image $image = null) {
+                    return null === $image || empty($image->getName());
                 },
                 'by_reference' => false,
                 'label' => false,

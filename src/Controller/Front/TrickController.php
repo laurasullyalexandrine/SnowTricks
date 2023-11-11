@@ -2,13 +2,13 @@
 
 namespace App\Controller\Front;
 
-use App\Entity\Media;
+use App\Entity\Image;
 use App\Entity\Trick;
 use App\Entity\Comment;
 use App\Form\TrickType;
 use App\Form\CommentType;
 use App\Security\Voter\TrickVoter;
-use App\Repository\MediaRepository;
+use App\Repository\ImageRepository;
 use App\Repository\TrickRepository;
 use App\Repository\CommentRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -25,7 +25,7 @@ class TrickController extends AbstractController
         private TrickRepository $trickRepository,
         private CommentRepository $commentRepository,
         private EntityManagerInterface $manager,
-        private MediaRepository $imageRepository
+        private ImageRepository $imageRepository
     ) {
     }
 
@@ -96,12 +96,12 @@ class TrickController extends AbstractController
                 $trick->setUser($this->getUser());
 
                 // Retrieve images submitted from the form
-                $medias = $form->get('medias')->getData();
+                $images = $form->get('images')->getData();
 
                 // Add the images
-                foreach ($medias as $media) {
-                    $media->setTrick($trick);
-                    $this->manager->persist($media);
+                foreach ($images as $image) {
+                    $image->setTrick($trick);
+                    $this->manager->persist($image);
                 }
 
                 $this->manager->persist($trick);
@@ -150,19 +150,19 @@ class TrickController extends AbstractController
                 $trick = $form->getData();
                 $trick->setUpdatedAt(new \DateTimeImmutable());
 
-                // Compare the id of the uploaded media and that in the database
+                // Compare the id of the uploaded image and that in the database
                 foreach ($uploadedFiles as $key => $uploadedFile) {
-                    $mediaId = (int) str_replace('media_edit_', '', $key);
-                    $mediaFound = false;
-                    foreach ($trick->getMedias() as $media) {
-                        if ($mediaId === $media->getId()) {
-                            $mediaFound = true;
-                            $media->update($uploadedFile);
+                    $imageId = (int) str_replace('image_edit_', '', $key);
+                    $imageFound = false;
+                    foreach ($trick->getImages() as $image) {
+                        if ($imageId === $image->getId()) {
+                            $imageFound = true;
+                            $image->update($uploadedFile);
                             break;
                         }
                     }
-                    if (!$mediaFound) {
-                        throw new \Exception('Media introuvable.');
+                    if (!$imageFound) {
+                        throw new \Exception('Image introuvable.');
                     }
                 }
 
@@ -183,21 +183,21 @@ class TrickController extends AbstractController
     }
 
     #[IsGranted('ROLE_USER')]
-    #[Route('/suppression-media/{slug}/{media_id}', name: 'trick_media_delete', methods: ['GET', 'POST'])]
-    public function deleteMedia(
-        #[MapEntity(mapping: ['media_id' => 'id'])] Media $media,
+    #[Route('/suppression-image/{slug}/{image_id}', name: 'trick_image_delete', methods: ['GET', 'POST'])]
+    public function deleteImage(
+        #[MapEntity(mapping: ['image_id' => 'id'])] Image $image,
         Trick $trick,
         Request $request
     ): Response {
         try {
-            $trick->removeMedia($media);
+            $trick->removeImage($image);
 
             $this->manager->persist($trick);
             $this->manager->flush();
 
-            $this->addFlash('success', 'Ton media ' . $media->getId() . ' été supprimé.');
+            $this->addFlash('success', 'Ton image ' . $image->getId() . ' été supprimé.');
         } catch (\Exception $e) {
-            $this->addFlash('warning', 'Une erreur s\'est produite lors de la suppression du media de ta figure de snowboard ' . $trick->getName() . ' ' . $e->getMessage());
+            $this->addFlash('warning', 'Une erreur s\'est produite lors de la suppression du image de ta figure de snowboard ' . $trick->getName() . ' ' . $e->getMessage());
             return $this->redirect($request->headers->get('referer'));
         }
 

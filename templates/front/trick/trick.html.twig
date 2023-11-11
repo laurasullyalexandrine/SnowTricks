@@ -2,16 +2,14 @@
 
 {% block body %}
 	<article class="row d-flex flex-column">
-		{% if app.user and app.user.isverified == true %}
+		{% if app.user and app.user.isverified and app.request.attributes.get('_route') == "trick_slug" and trick.images|length > 0 %}
 			<div class="block-edit-delete d-flex justify-content-center position-absolute top-25 end-0 text-center">
-				{% if app.request.attributes.get('_route') == "trick_slug" %}
-					<a class="btn-edit me-3" href="{{ path('trick_edit', { slug: trick.slug } )}}">
-						<i class="fa-solid fa-pen fa-lg" style="color: #95a5a6;"></i>
-					</a>
-					<div>
-						{{ include('front/trick/_delete.html.twig') }}
-					</div>
-				{% endif %}
+				<a class="btn-edit me-3" href="{{ path('trick_edit', { slug: trick.slug } )}}">
+					<i class="fa-solid fa-pen fa-lg" style="color: #95a5a6;"></i>
+				</a>
+				<div>
+					{{ include('front/trick/_delete.html.twig') }}
+				</div>
 			</div>
 		{% endif %}
 
@@ -27,13 +25,13 @@
 			</section>
 		{% endblock %}
 
-		{# media management #}
-		{% macro mediaLoop(trick, withInput) %}
-			{% for media in trick.medias(true) %}
-				{% if media.type == constant('App\\Entity\\Media::TYPE_IMAGE') %}
-					<img class="media-tag rounded me-3 mb-3" src="{{ asset(media) }}" alt="image-snowboard-{{ trick.name }}"/>
-				{% elseif media.type == constant('App\\Entity\\Media::TYPE_VIDEO') %}
-					<video class="media-tag rounded me-3 mb-3" controls src="{{ asset(media) }}"></video>
+		{# image management #}
+		{% macro imageLoop(trick, withInput) %}
+			{% for image in trick.images(true) %}
+				{% if image.type == constant('App\\Entity\\Image::TYPE_IMAGE') %}
+					<img class="image-tag rounded me-3 mb-3" src="{{ asset(image) }}" alt="image-snowboard-{{ trick.name }}"/>
+				{% elseif image.type == constant('App\\Entity\\Image::TYPE_VIDEO') %}
+					<video class="image-tag rounded me-3 mb-3" controls src="{{ asset(image) }}"></video>
 				{% endif %}
 				<div>
 					{% if app.request.attributes.get('_route') == "trick_edit" %}
@@ -43,8 +41,8 @@
 			{% endfor %}
 		{% endmacro %}
 
-		{% block medias %}
-			{% include "front/media/media.html.twig" %}
+		{% block images %}
+			{% include "front/media/image.html.twig" %}
 		{% endblock %}
 
 		{# edit form #}
@@ -89,4 +87,4 @@
 		{% include "front/comment/comment.html.twig" %}
 
 	</article>
-	{% endblock %}
+{% endblock %}
