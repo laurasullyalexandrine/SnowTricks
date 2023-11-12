@@ -11,6 +11,9 @@ use App\Validator as MyConstraints;
 class Video
 {
     const TYPE_VIDEO = "video";
+    const URL_TYPE_UNDEFINED = 0;
+    const URL_TYPE_YOUTUBE = 1;
+    const URL_TYPE_DAILYMOTION = 2;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -88,5 +91,16 @@ class Video
         $this->trick = $trick;
 
         return $this;
+    }
+
+    public function getUrlType(): int 
+    {
+        if (str_contains($this->name, 'youtube')) {
+            return self::URL_TYPE_YOUTUBE;
+        } elseif (str_contains($this->name, 'dailymotion')) {
+            return self::URL_TYPE_DAILYMOTION;
+        } else {
+            return self::URL_TYPE_UNDEFINED;
+        }
     }
 }

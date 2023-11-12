@@ -8,9 +8,6 @@ use Symfony\Component\Validator\ConstraintValidator;
 
 class VideoTagValidator extends ConstraintValidator
 {
-    const EMBED = "<embed";
-    const IFRAME = "<iframe";
-
     public function __construct(private RequestStack $requestStack)
     {
     }
@@ -22,7 +19,8 @@ class VideoTagValidator extends ConstraintValidator
         if (null === $value || '' === $value) {
             return;
         }
-
+        filter_var($value);
+        htmlentities($value);
        if (!preg_match('/^<iframe/', $value) && (!preg_match('/^<embed/', $value))) {
             $this->context->buildViolation($constraint->message)
             ->setParameter('{{ value }}', $value)
