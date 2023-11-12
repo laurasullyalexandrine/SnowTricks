@@ -1,6 +1,6 @@
-@startuml Media
+@startuml Video
 
-Class Media {
+Class Video {
 
     - name : string
     - date : string
