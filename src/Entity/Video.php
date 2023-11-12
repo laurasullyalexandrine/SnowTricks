@@ -5,7 +5,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\VideoRepository;
-
+use App\Validator as MyConstraints;
 
 #[ORM\Entity(repositoryClass: VideoRepository::class)]
 class Video
@@ -18,6 +18,7 @@ class Video
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[MyConstraints\VideoTag()]
     private ?string $name = null;
 
     #[ORM\Column]

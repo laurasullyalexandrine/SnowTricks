@@ -2,9 +2,7 @@
 
 namespace App\Controller\Front;
 
-use App\Entity\Image;
 use App\Entity\Trick;
-use App\Entity\Video;
 use App\Entity\Comment;
 use App\Form\TrickType;
 use App\Form\CommentType;
@@ -17,7 +15,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -27,8 +24,59 @@ class TrickController extends AbstractController
         private TrickRepository $trickRepository,
         private CommentRepository $commentRepository,
         private EntityManagerInterface $manager,
-        private ImageRepository $imageRepository
+        private ImageRepository $imageRepository,
+
     ) {
+    }
+
+    #[IsGranted('ROLE_USER')]
+    #[Route('/nouvelle-figure-de-snowboard', name: 'trick_create', methods: ['GET', 'POST'])]
+    public function create(Request $request): Response
+    {
+        $trick = new Trick();
+
+        $form = $this->createForm(TrickType::class, $trick);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            try {
+                // Save the user connected to the figure being created
+                $trick->setUser($this->getUser());
+
+                // Retrieve images submitted from the form
+                $images = $form->get('images')->getData();
+                // Add the images
+                foreach ($images as $image) {
+                    $image->setTrick($trick);
+                    $this->manager->persist($image);
+                }
+
+                // Retrieve videos submitted from the form
+                $videos = $form->get('videos')->getData();
+
+                // Add the videos
+                foreach ($videos as $video) {
+                    $video->setTrick($trick);
+                    $this->manager->persist($video);
+                }
+
+                $this->manager->persist($trick);
+
+                $this->manager->flush();
+
+                $this->addFlash('success', 'Ta figure a été créée.');
+                return $this->redirectToRoute('home');
+            } catch (\Exception $e) {
+                $this->addFlash('error', 'Une erreur est survenue lors de la création de ta figure erreur : ' . $e->getMessage());
+                return $this->redirect($request->headers->get('referer'));
+            }
+        }
+        return $this->render('front/trick/create.html.twig', [
+            'form' => $form->createView(),
+            'trick' => $trick,
+        ]);
     }
 
     #[Route('/figure-de-snowboard/{slug}', name: 'trick_slug', methods: ['GET', 'POST'])]
@@ -81,57 +129,6 @@ class TrickController extends AbstractController
         ]);
     }
 
-
-    #[IsGranted('ROLE_USER')]
-    #[Route('/nouvelle-figure-de-snowboard', name: 'trick_create', methods: ['GET', 'POST'])]
-    public function create(Request $request): Response
-    {
-        $trick = new Trick();
-
-        $form = $this->createForm(TrickType::class, $trick);
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-
-            try {
-                // Save the user connected to the figure being created
-                $trick->setUser($this->getUser());
-
-                // Retrieve images submitted from the form
-                $images = $form->get('images')->getData();
-                // Add the images
-                foreach ($images as $image) {
-                    $image->setTrick($trick);
-                    $this->manager->persist($image);
-                }
-
-                // Retrieve videos submitted from the form
-                $videos = $form->get('videos')->getData();
-
-                // Add the videos
-                foreach ($videos as $video) {
-                    $video->setTrick($trick);
-                    $this->manager->persist($video);
-                }
-
-                $this->manager->persist($trick);
-
-                $this->manager->flush();
-
-                $this->addFlash('success', 'Ta figure a été créée.');
-                return $this->redirectToRoute('home');
-            } catch (\Exception $e) {
-                $this->addFlash('error', 'Une erreur est survenue lors de la création de ta figure erreur : ' . $e->getMessage());
-                return $this->redirect($request->headers->get('referer'));
-            }
-        }
-        return $this->render('front/trick/create.html.twig', [
-            'form' => $form->createView(),
-            'trick' => $trick,
-        ]);
-    }
-
     #[IsGranted('ROLE_USER')]
     #[Route('/modification-figure-de-snowboard/{slug}', name: 'trick_edit', methods: ['GET', 'POST'])]
     public function edit(
@@ -167,6 +164,12 @@ class TrickController extends AbstractController
                     $videoId = (int) str_replace('video_edit_', '', $keys);
                     foreach ($trick->getVideos() as $video) {
                         if ($videoId === $video->getId()) {
+
+                            if ((!preg_match('/^<iframe/', $data) && (!preg_match('/^<embed/', $data)))) {
+                                $message = 'Ce lien n’est pas valide ' . '"'. $data . '"' . '. Merci de vérifier qu’il commence bien par <embed ou <iframe.';
+                                $this->addFlash('danger', $message);
+                                return $this->redirect($request->headers->get('referer'));
+                            }
                             $video->setName($data);
                             break;
                         }
@@ -205,7 +208,7 @@ class TrickController extends AbstractController
         ]);
     }
 
-    
+
     #[IsGranted('ROLE_USER')]
     #[Route('/suppression-media/{slug}/{type}/{media_id}', name: 'trick_media_delete', methods: ['GET', 'POST'])]
     public function deleteMedia(
