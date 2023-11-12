@@ -50,24 +50,22 @@ class Trick
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updated_at = null;
 
-    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Image::class, cascade: ['persist'], orphanRemoval: true)]
-    private Collection $images;
-
     #[ORM\ManyToOne(inversedBy: 'tricks', cascade: ['persist'])]
     private ?User $user = null;
 
     #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Comment::class, cascade: ['remove'])]
     private Collection $comments;
 
-    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Video::class, cascade: ['persist'], orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Image::class)]
+    private Collection $images;
+
+    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Video::class)]
     private Collection $videos;
 
     public function __construct()
     {
         $this->created_at = new \DateTimeImmutable();
-        $this->images = new ArrayCollection();
         $this->comments = new ArrayCollection();
-        $this->videos = new ArrayCollection();
     }
 
     public function __toString()
@@ -145,59 +143,59 @@ class Trick
         return $this;
     }
 
-    /**
-     * @return Collection<int, Image>
-     */
-    public function getImages(bool $excludeMainImage = false): Collection
-    {
-        $images = clone $this->images;
-        if ($excludeMainImage) {
-            $mainImage = $this->getMainImage();
-            if ($mainImage) {
-                $images->removeElement($mainImage);
-            }
-        }
-        return $images;
-    }
+    // /**
+    //  * @return Collection<int, Image>
+    //  */
+    // public function getImages(bool $excludeMainImage = false): Collection
+    // {
+    //     $images = clone $this->images;
+    //     if ($excludeMainImage) {
+    //         $mainImage = $this->getMainImage();
+    //         if ($mainImage) {
+    //             $images->removeElement($mainImage);
+    //         }
+    //     }
+    //     return $images;
+    // }
 
-    public function addImage(Image $image): static
-    {
-        if (!$this->images->contains($image)) {
-            $this->images->add($image);
-            $image->setTrick($this);
-        }
+    // public function addImage(Image $image): static
+    // {
+    //     if (!$this->images->contains($image)) {
+    //         $this->images->add($image);
+    //         $image->setTrick($this);
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    public function removeImage(Image $image): static
-    {
-        if ($this->images->removeElement($image)) {
-            // set the owning side to null (unless already changed)
-            if ($image->getTrick() === $this) {
-                $image->setTrick(null);
-            }
-        }
+    // public function removeImage(Image $image): static
+    // {
+    //     if ($this->images->removeElement($image)) {
+    //         // set the owning side to null (unless already changed)
+    //         if ($image->getTrick() === $this) {
+    //             $image->setTrick(null);
+    //         }
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    /**
-     * Allows you to display only one image or the default image
-     *
-     * @return Image
-     */
-    public function getMainImage(): Image
-    {
-        $defaultImage = new Image();
-        $defaultImage->setName(Image::DEFAULT_IMAGE);
+    // /**
+    //  * Allows you to display only one image or the default image
+    //  *
+    //  * @return Image
+    //  */
+    // public function getMainImage(): Image
+    // {
+    //     $defaultImage = new Image();
+    //     $defaultImage->setName(Image::DEFAULT_IMAGE);
         
-        foreach ($this->images as $image) {
-                return $image;
-        }
+    //     foreach ($this->images as $image) {
+    //             return $image;
+    //     }
  
-        return $defaultImage;
-    }
+    //     return $defaultImage;
+    // }
 
     public function getTags(): array
     {
@@ -248,6 +246,66 @@ class Trick
             // set the owning side to null (unless already changed)
             if ($comment->getTrick() === $this) {
                 $comment->setTrick(null);
+            }
+        }
+
+        return $this;
+    }
+
+    // /**
+    //  * @return Collection<int, Video>
+    //  */
+    // public function getVideos(): Collection
+    // {
+    //     return $this->videos;
+    // }
+
+    // public function addVideo(Video $video): static
+    // {
+    //     if (!$this->videos->contains($video)) {
+    //         $this->videos->add($video);
+    //         $video->setTrick($this);
+    //     }
+
+    //     return $this;
+    // }
+
+    // public function removeVideo(Video $video): static
+    // {
+    //     if ($this->videos->removeElement($video)) {
+    //         // set the owning side to null (unless already changed)
+    //         if ($video->getTrick() === $this) {
+    //             $video->setTrick(null);
+    //         }
+    //     }
+
+    //     return $this;
+    // }
+
+    /**
+     * @return Collection<int, Image>
+     */
+    public function getImages(): Collection
+    {
+        return $this->images;
+    }
+
+    public function addImage(Image $image): static
+    {
+        if (!$this->images->contains($image)) {
+            $this->images->add($image);
+            $image->setTrick($this);
+        }
+
+        return $this;
+    }
+
+    public function removeImage(Image $image): static
+    {
+        if ($this->images->removeElement($image)) {
+            // set the owning side to null (unless already changed)
+            if ($image->getTrick() === $this) {
+                $image->setTrick(null);
             }
         }
 

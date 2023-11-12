@@ -2,12 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\ImageRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\ImageRepository;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-#[ORM\Entity(repositoryClass: imageRepository::class)]
-#[ORM\HasLifecycleCallbacks]
+#[ORM\Entity(repositoryClass: ImageRepository::class)]
 class Image
 {
     const BASE_PATH = 'upload/image';
@@ -102,10 +101,9 @@ class Image
     #[ORM\PrePersist]
     public function setFileName(): void
     {
-        $this->uploadedFile = new UploadedFile($this->name, 'test', null, null, true); 
+        $this->uploadedFile = new UploadedFile($this->name, 'test', null, null, true);
         $this->name = uniqid() . '.' . $this->uploadedFile->guessExtension();
     }
-
     /**
      * Function to save and to update the recorded file
      *
@@ -116,7 +114,6 @@ class Image
     {
         $this->uploadedFile->move(__DIR__ . '/../../public/' . self::BASE_PATH, $this->name);
     }
-
     /**
      * Function that allows you to update uploaded files
      *
