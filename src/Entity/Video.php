@@ -2,16 +2,15 @@
 
 namespace App\Entity;
 
+
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\VideoRepository;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+
 
 #[ORM\Entity(repositoryClass: VideoRepository::class)]
 class Video
 {
-    const BASE_PATH = 'upload/video';
+    const TYPE_VIDEO = "video";
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -27,14 +26,18 @@ class Video
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updated_at = null;
 
-    private ?UploadedFile $uploadedFile = null;
 
-    #[ORM\ManyToOne(inversedBy: 'videos')]
+    #[ORM\ManyToOne(inversedBy: 'videos', cascade: ['persist'])]
     private ?Trick $trick = null;
+
+    public function __construct()
+    {
+        $this->created_at = new \DateTimeImmutable();
+    }
 
     public function __toString()
     {
-        return self::BASE_PATH . '/' . $this->name;
+        return $this->name;
     }
 
     public function getId(): ?int
@@ -78,39 +81,6 @@ class Video
         return $this;
     }
 
-    /**
-     * Function to edit name of image upload
-     */
-    #[ORM\PrePersist]
-    public function setFileName(): void
-    {
-        $this->uploadedFile = new UploadedFile($this->name, 'test', null, null, true);
-        $this->name = uniqid() . '.' . $this->uploadedFile->guessExtension();
-    }
-
-    /**
-     * Function to save and to update the recorded file
-     *
-     * @return void
-     */
-    #[ORM\PostPersist, ORM\PostUpdate]
-    public function saveFile(): void
-    {
-        $this->uploadedFile->move(__DIR__ . '/../../public/' . self::BASE_PATH, $this->name);
-    }
-
-    /**
-     * Function that allows you to update uploaded files
-     *
-     * @param UploadedFile $uploadedFile
-     * @return void
-     */
-    public function update(UploadedFile $uploadedFile): void
-    {
-        $this->uploadedFile = $uploadedFile;
-        $this->name = uniqid() . '.' . $this->uploadedFile->guessExtension();
-    }
-
     public function getTrick(): ?Trick
     {
         return $this->trick;
@@ -118,6 +88,7 @@ class Video
 
     public function setTrick(?Trick $trick): static
     {
+        
         $this->trick = $trick;
 
         return $this;

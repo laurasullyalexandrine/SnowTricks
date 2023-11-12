@@ -1,0 +1,12 @@
+@startuml Image
+
+Class Image {
+
+    - name : string
+    - date : string
+
+    + uploadedFile()
+
+}
+
+@enduml

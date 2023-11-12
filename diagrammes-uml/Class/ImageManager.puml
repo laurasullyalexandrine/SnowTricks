@@ -1,0 +1,9 @@
+@startuml ImageManager
+
+Class ImageManager {
+
+    + uploadImage(Image Image, Trick trick)
+    + updateImage(Image Image, Trick trick)
+    + deleteImage(Image Image, Trick trick)
+
+}

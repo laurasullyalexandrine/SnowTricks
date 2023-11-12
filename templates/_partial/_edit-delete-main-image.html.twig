@@ -1,8 +1,9 @@
-
-    <label class="btn-edit me-3">
-        <input type="file" name="image_edit_{{ trick.mainImage.id }}" id="image_edit_{{ trick.mainImage.id }}" style="display: none">
-        <i class="fa-solid fa-pen fa-lg" style="color: #95a5a6;"></i>
-    </label>
-    <a class="btn-delete" href="{{ path('trick_image_delete', { slug: trick.slug, image_id: trick.mainImage.id })}}" onclick="return confirm('Es-tu sûr de vouloir supprimer le image ' + {{ trick.mainImage.id }} + ' ?');">
-        <i class="fa-solid fa-trash-can fa-lg" style="color: #2980b9;"></i>
-    </a>
+{% if trick.images|length > 0 %}
+	<label class="btn-edit me-3">
+		<input type="file" name="image_edit_{{ trick.mainImage.id }}" id="image_edit_{{ trick.mainImage.id }}" style="display: none">
+		<i class="fa-solid fa-pen fa-lg" style="color: #95a5a6;"></i>
+	</label>
+	<a class="btn-delete" href="{{ path('trick_media_delete', { slug: trick.slug, type: constant('App\\Entity\\image::TYPE_IMAGE'), media_id: trick.mainImage.id }) }}" onclick="return confirm('Es-tu sûr de vouloir supprimer le media ' + {{ trick.mainImage.id }} + ' ?');">
+		<i class="fa-solid fa-trash-can fa-lg" style="color: #2980b9;"></i>
+	</a>
+{% endif %}

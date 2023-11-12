@@ -1,0 +1,9 @@
+@startuml VideoManager
+
+Class VideoManager {
+
+    + uploadVideo(Video Video, Trick trick)
+    + updateVideo(Video Video, Trick trick)
+    + deleteVideo(Video Video, Trick trick)
+
+}

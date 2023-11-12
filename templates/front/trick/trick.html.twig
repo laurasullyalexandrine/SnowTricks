@@ -26,23 +26,8 @@
 		{% endblock %}
 
 		{# image management #}
-		{% macro imageLoop(trick, withInput) %}
-			{% for image in trick.images(true) %}
-				{% if image.type == constant('App\\Entity\\Image::TYPE_IMAGE') %}
-					<img class="image-tag rounded me-3 mb-3" src="{{ asset(image) }}" alt="image-snowboard-{{ trick.name }}"/>
-				{% elseif image.type == constant('App\\Entity\\Image::TYPE_VIDEO') %}
-					<video class="image-tag rounded me-3 mb-3" controls src="{{ asset(image) }}"></video>
-				{% endif %}
-				<div>
-					{% if app.request.attributes.get('_route') == "trick_edit" %}
-						{% include "_partial/_edit-delete-image.html.twig" with { withInput: withInput } %}
-					{% endif %}
-				</div>
-			{% endfor %}
-		{% endmacro %}
-
-		{% block images %}
-			{% include "front/media/image.html.twig" %}
+		{% block medias %}
+			{% include "front/media/media.html.twig" %}
 		{% endblock %}
 
 		{# edit form #}

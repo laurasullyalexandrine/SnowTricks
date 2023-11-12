@@ -2,12 +2,14 @@
 
 !include Comment.puml
 !include User.puml 
-!include Media.puml 
+!include Image.puml 
+!include Video.puml 
 !include Trickgroup.puml
 !include TrickManager.puml
 !include CommentManager.puml
 !include UserManager.puml
-!include MediaManager.puml
+!include ImageManager.puml
+!include VideoManager.puml
 
 Class Trick {
     
@@ -18,14 +20,16 @@ Class Trick {
     
 }
 
-Media *--"1" Trick: have <
+Image *--"1" Trick: have <
+Video *--"1" Trick: have <
 Trickgroup "1"-* Trick: have <
 Trick *--"1" User: create <
 Trick "1"-* Comment: have <>
 
 Comment *--"1" User: add <
 TrickManager -- Trick: exec
-MediaManager -- Media: exec
+ImageManager -- Image: exec
+VideoManager -- Video: exec
 CommentManager -- Comment: exec
 UserManager - User: exec
 

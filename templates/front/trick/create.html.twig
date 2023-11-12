@@ -33,8 +33,15 @@
 					data-index="{{ form.images|length > 0 ? form.images|last.vars.name + 1 : 0 }}"
 					data-prototype="{{ form_widget(form.images.vars.prototype)|e('html_attr') }}"
 				></ul>
+
+				<ul class="videos"
+					data-index="{{ form.videos|length > 0 ? form.videos|last.vars.name + 1 : 0 }}"
+					data-prototype="{{ form_widget(form.videos.vars.prototype)|e('html_attr') }}"
+				></ul>
+
 				<div>
-					<button type="button" class="add_item_link btn-add" data-collection-holder-class="images">Ajoutes ton image</button>
+					<button type="button" class="add_item_image_link btn-add" data-collection-holder-class="images">Ajoutes ton image</button>
+					<button type="button" class="add_item_video_link btn-add" data-collection-holder-class="videos">Ajoutes ta video</button>
 					<button type="submit" class="btn">Créer ta figure</button>
 					{{ form_end(form) }}
 				</div>
@@ -45,12 +52,12 @@
 {% block javascripts %}
 	<script>
 		document
-			.querySelectorAll('.add_item_link')
+			.querySelectorAll('.add_item_image_link')
 			.forEach(btn => {
-				btn.addEventListener("click", addFormToCollection)
+				btn.addEventListener("click", addFormToCollectionImage)
 			});
 
-		function addFormToCollection(e) {
+		function addFormToCollectionImage(e) {
 			// ul Tag
 			const collectionHolder = document.querySelector('.' + e.currentTarget.dataset.collectionHolderClass);
 			
@@ -94,11 +101,11 @@
 	
 			// Listen to the event click on the btn btnDelete to activate the deletion
 			btnDelete.addEventListener("click", function() {
-				deleteFormToCollection(indexItem);
+				deleteFormToCollectionVideo(indexItem);
 			});
 		};
 
-		function deleteFormToCollection(indexItem) {
+		function deleteFormToCollectionVideo(indexItem) {
 			// Recover image and delete it
 			const image = document.getElementById('trick_images_' + indexItem);
 			image.parentElement.remove();
@@ -112,10 +119,86 @@
 		function deleteimage(e) {
 		const imageId = e.currentTarget.dataset.imageId;
 		console.log(imageId);
-		const image = document.getElementById('trick_image_' + imageId);
+		const image = document.getElementById('trick_images_' + imageId);
 
 		if (image) {
 			image.remove();
+			}
+		}
+
+		// -----------------------Add video
+			document
+			.querySelectorAll('.add_item_video_link')
+			.forEach(btn => {
+				btn.addEventListener("click", addFormToCollectionVideo)
+			});
+
+		function addFormToCollectionVideo(e) {
+			// ul Tag
+			const collectionHolder = document.querySelector('.' + e.currentTarget.dataset.collectionHolderClass);
+			
+			// li Tag
+			const item = document.createElement('li');
+				item.classList.add('video-item');
+
+			// Create a delete button
+			const btnDelete = document.createElement('button');
+				btnDelete.classList.add('btn-red-cross');
+				btnDelete.type = 'button';
+				btnDelete.innerText = "Supprimes ta video";
+				btnDelete.style.color = '#f7021b';
+
+			// Create the delete cross
+			const redCross = document.createElement('i');
+				redCross.classList.add('fa-solid');
+				redCross.classList.add('fa-xmark');
+				redCross.classList.add('fa-lg');
+				redCross.style.color = '#f7021b';
+	
+				// Add the cross to the btnDelete button
+				btnDelete.appendChild(redCross);
+
+				item.innerHTML += collectionHolder
+				.dataset
+				.prototype
+				.replace(
+				/__name__/g,
+				collectionHolder.dataset.index
+				);
+
+			collectionHolder.appendChild(item);
+
+			// Add the btnDelete button and the redCross to the li tag
+			item.appendChild(btnDelete);
+			item.appendChild(redCross);
+
+			// Store index of div tag created in prototype
+			let indexItem = collectionHolder.dataset.index++;
+	
+			// Listen to the event click on the btn btnDelete to activate the deletion
+			btnDelete.addEventListener("click", function() {
+				deleteFormToCollectionImage(indexItem);
+			});
+		};
+
+		function deleteFormToCollectionImage(indexItem) {
+			// Recover video and delete it
+			const video = document.getElementById('trick_videos_' + indexItem);
+			video.parentElement.remove();
+		};
+
+			document.querySelectorAll('.delete-video').forEach(bnt => {
+		btn.addEventListener("click", deletevideo);
+		});
+
+		// Allows you to delete the video based on the click event
+		function deletevideo(e) {
+		const videoId = e.currentTarget.dataset.videoId;
+		console.log(videoId);
+		const video = document.getElementById('trick_videos_' + videoId);
+
+		if (video) {
+			video.remove();
 			}
 		}
 	</script>

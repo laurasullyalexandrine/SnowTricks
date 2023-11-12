@@ -12,6 +12,7 @@ class Image
 {
     const BASE_PATH = 'upload/image';
     const DEFAULT_IMAGE = 'default.png';
+    const TYPE_IMAGE = "image";
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
