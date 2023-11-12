@@ -1,11 +1,11 @@
 <div class="mt-2 me-4 align-self-end">
-    <label for="image_edit_{{ image.id }}" class="btn-edit me-3">
-        <i class="fa-solid fa-pen fa-sm" style="color: #95a5a6;"></i>
-    </label>
-    {% if withInput and image %}
-        <input type="file" name="image_edit_{{ image.id }}" id="image_edit_{{ image.id }}" style="display: none">
-    {% endif %}
-    <a class="btn-delete" href="{{ path('trick_media_delete', { slug: trick.slug, type: constant('App\\Entity\\image::TYPE_IMAGE'), media_id: image.id }) }}" onclick="return confirm('Es-tu sûr de vouloir supprimer le media ' + {{ image.id }} + ' ?');">
-        <i class="fa-solid fa-trash-can fa-sm" style="color: #0984e3;"></i>
-    </a>
+	<label for="image_edit_{{ image.id }}" class="btn-edit me-3">
+		<i class="fa-solid fa-pen fa-sm" style="color: #95a5a6;"></i>
+	</label>
+	{% if withInput and image %}
+		<input type="file" name="image_edit_{{ image.id }}" id="image_edit_{{ image.id }}" style="display: none">
+	{% endif %}
+	<a class="btn-delete" href="{{ path('trick_media_delete', { slug: trick.slug, type: constant('App\\Entity\\image::TYPE_IMAGE'), media_id: image.id }) }}" onclick="return confirm('Es-tu sûr de vouloir supprimer le media ' + {{ image.id }} + ' ?');">
+		<i class="fa-solid fa-trash-can fa-sm" style="color: #0984e3;"></i>
+	</a>
 </div>

@@ -151,8 +151,7 @@ class TrickController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             try {
-
-                $datasTrick = $request->request->all();
+                $datasRequest = $request->request->all();
 
                 // Retrieve the form's uploadeFile object
                 $files = $request->files;
@@ -163,24 +162,16 @@ class TrickController extends AbstractController
                 $trick = $form->getData();
                 $trick->setUpdatedAt(new \DateTimeImmutable());
 
-                // Compare video ID and database ID
-                $videoFound = false;
-                foreach ($datasTrick as $keyData => $data) {
-                    if (preg_match('/video_edit_\d+/', $keyData)) {
-                        $videoId = (int) str_replace("video_edit_", "", $keyData);
-                            foreach ($trick->getVideos() as $video) {
-                                if ($videoId === $video->getId()) {
-                                    $videoFound = true;
-                                    $video->setName($data);
-                                    break;
-                                }
-                            }
+                // Compare the ID of the video and that in the database
+                foreach ($datasRequest as $keys => $data) {
+                    $videoId = (int) str_replace('video_edit_', '', $keys);
+                    foreach ($trick->getVideos() as $video) {
+                        if ($videoId === $video->getId()) {
+                            $video->setName($data);
+                            break;
+                        }
                     }
                 }
-       
-                // if ($videoFound) {
-                //     throw new \Exception('Video introuvable.');
-                // }
 
                 // Compare the ID of the uploaded image and that in the database
                 foreach ($uploadedFiles as $key => $uploadedFile) {
@@ -194,7 +185,7 @@ class TrickController extends AbstractController
                         }
                     }
                     if (!$imageFound) {
-                        throw new \Exception('Image introuvable.');
+                        throw new \Exception('Media introuvable.');
                     }
                 }
 
@@ -214,6 +205,7 @@ class TrickController extends AbstractController
         ]);
     }
 
+    
     #[IsGranted('ROLE_USER')]
     #[Route('/suppression-media/{slug}/{type}/{media_id}', name: 'trick_media_delete', methods: ['GET', 'POST'])]
     public function deleteMedia(

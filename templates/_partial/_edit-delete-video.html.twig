@@ -1,11 +1,11 @@
 <div class="mt-2 me-4 align-self-end">
-    {% if withInput %}
-        <label for="video_edit_{{ video.id }}" class="btn-edit me-3">
-            <input type="text" name="video_edit_{{ video.id }}" id="video_edit_{{ video.id }}" style="display: none" onclick="document.getElementById('video_edit_{{ video.id }}').style.display = 'block'; return false;">
-            <i class="fa-solid fa-pen fa-sm" style="color: #95a5a6;"></i>
-        </label>
-    {% endif %}
-    <a class="btn-delete" href="{{ path('trick_media_delete', { slug: trick.slug, type: constant('App\\Entity\\video::TYPE_VIDEO'), media_id: video.id }) }}" onclick="return confirm('Es-tu sûr de vouloir supprimer la vidéo ' + {{ video.id }} + ' ?');">
-        <i class="fa-solid fa-trash-can fa-sm" style="color: #0984e3;"></i>
-    </a>
+	<label for="video_edit_{{ video.id }}" class="btn-edit me-3" onclick="document.getElementById('video_edit_{{ video.id }}').style.display = 'block'; return false;">
+		<i class="fa-solid fa-pen fa-sm" style="color: #95a5a6;"></i>
+	</label>
+	{% if withInput and video %}
+		<input type="text" name="video_edit_{{ video.id }}" id="video_edit_{{ video.id }}" style="display: none" value="{{ video.name }}">
+	{% endif %}
+	<a class="btn-delete" href="{{ path('trick_media_delete', { slug: trick.slug, type: constant('App\\Entity\\video::TYPE_VIDEO'), media_id: video.id }) }}" onclick="return confirm('Es-tu sûr de vouloir supprimer la vidéo ' + {{ video.id }} + ' ?');">
+		<i class="fa-solid fa-trash-can fa-sm" style="color: #0984e3;"></i>
+	</a>
 </div>
