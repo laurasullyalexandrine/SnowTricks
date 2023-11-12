@@ -4,17 +4,20 @@ namespace App\Form;
 
 use App\Entity\Image;
 use App\Entity\Trick;
+use App\Entity\Video;
+use App\Form\VideoType;
 use App\Entity\Trickgroup;
 use App\Repository\TrickgroupRepository;
+use App\Repository\VideoRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use Symfony\Component\HttpFoundation\RequestStack;
 
 class TrickType extends AbstractType
 {
@@ -72,6 +75,21 @@ class TrickType extends AbstractType
                 'delete_empty' =>
                 function (Image $image = null) {
                     return null === $image || empty($image->getName());
+                },
+                'by_reference' => false,
+                'label' => false,
+                'mapped' => false,
+            ])
+            ->add('videos', CollectionType::class, [
+                'entry_type' => VideoType::class,
+                'entry_options' => [
+                    'label' => false,
+                ],
+                'allow_add' => true,
+                'allow_delete' => true,
+                'delete_empty' =>
+                function (Video $video = null) {
+                    return null === $video || empty($video->getName());
                 },
                 'by_reference' => false,
                 'label' => false,

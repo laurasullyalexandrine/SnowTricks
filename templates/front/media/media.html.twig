@@ -1,14 +1,27 @@
 {# image management #}
 {% macro imageLoop(trick, withInput) %}
 	{% for image in trick.images(true) %}
-		{% if image.type == constant('App\\Entity\\image::TYPE_IMAGE') %}
-			<img class="image-tag rounded me-3 mb-3" src="{{ asset(image) }}" alt="image-snowboard-{{ trick.name }}"/>
-		{% elseif image.type == constant('App\\Entity\\image::TYPE_VIDEO') %}
-			<video class="image-tag rounded me-3 mb-3" controls src="{{ asset(image) }}"></video>
-		{% endif %}
+		<img class="media-tag rounded me-3 mb-3" src="{{ asset(image) }}" alt="image-snowboard-{{ trick.name }}"/>
 		<div>
 			{% if app.request.attributes.get('_route') == "trick_edit" %}
 				{% include "_partial/_edit-delete-image.html.twig" with { withInput: withInput } %}
+			{% endif %}
+		</div>
+	{% endfor %}
+{% endmacro %}
+
+{# video management #}
+{% macro videoLoop(trick, withInput) %}
+	{% for video in trick.videos %}
+		<div>
+			{{ video.name|raw }}
+			<embed src="{{ video.name|raw }}" type="video/webm" with="250" height="170"/>
+			<iframe src="{{ video.name|raw }}" with="250" height="170" frameborder="0" allowfullscreen></iframe>
+		</div>
+
+		<div>
+			{% if app.request.attributes.get('_route') == "trick_edit" %}
+				{% include "_partial/_edit-delete-video.html.twig" with { withInput: withInput } %}
 			{% endif %}
 		</div>
 	{% endfor %}
@@ -18,6 +31,7 @@
 <section class="d-none d-sm-none d-md-block d-lg-block">
 	<div class="d-flex flex-wrap justify-content-center py-3 bg-black">
 		{{ _self.imageLoop(trick, 1) }}
+		{{ _self.videoLoop(trick, 1) }}
 	</div>
 </section>
 <section class="d-block d-sm-block d-md-none d-lg-none">
@@ -32,6 +46,7 @@
 		<div class="d-flex flex-column py-3 bg-black">
 			<div class="align-self-center">
 				{{ _self.imageLoop(trick, 0) }}
+				{{ _self.videoLoop(trick, 0) }}
 			</div>
 		</div>
 	</div>

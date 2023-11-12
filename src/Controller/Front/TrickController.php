@@ -4,6 +4,7 @@ namespace App\Controller\Front;
 
 use App\Entity\Image;
 use App\Entity\Trick;
+use App\Entity\Video;
 use App\Entity\Comment;
 use App\Form\TrickType;
 use App\Form\CommentType;
@@ -11,13 +12,14 @@ use App\Security\Voter\TrickVoter;
 use App\Repository\ImageRepository;
 use App\Repository\TrickRepository;
 use App\Repository\CommentRepository;
+use App\Repository\VideoRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class TrickController extends AbstractController
 {
@@ -79,6 +81,7 @@ class TrickController extends AbstractController
         ]);
     }
 
+
     #[IsGranted('ROLE_USER')]
     #[Route('/nouvelle-figure-de-snowboard', name: 'trick_create', methods: ['GET', 'POST'])]
     public function create(Request $request): Response
@@ -97,11 +100,19 @@ class TrickController extends AbstractController
 
                 // Retrieve images submitted from the form
                 $images = $form->get('images')->getData();
-
                 // Add the images
                 foreach ($images as $image) {
                     $image->setTrick($trick);
                     $this->manager->persist($image);
+                }
+
+                // Retrieve videos submitted from the form
+                $videos = $form->get('videos')->getData();
+
+                // Add the videos
+                foreach ($videos as $video) {
+                    $video->setTrick($trick);
+                    $this->manager->persist($video);
                 }
 
                 $this->manager->persist($trick);
@@ -140,9 +151,11 @@ class TrickController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             try {
+
+                $datasTrick = $request->request->all();
+
                 // Retrieve the form's uploadeFile object
                 $files = $request->files;
-
                 // Retrieve submitted files
                 $uploadedFiles = array_filter($files->all());
 
@@ -150,7 +163,26 @@ class TrickController extends AbstractController
                 $trick = $form->getData();
                 $trick->setUpdatedAt(new \DateTimeImmutable());
 
-                // Compare the id of the uploaded image and that in the database
+                // Compare video ID and database ID
+                $videoFound = false;
+                foreach ($datasTrick as $keyData => $data) {
+                    if (preg_match('/video_edit_\d+/', $keyData)) {
+                        $videoId = (int) str_replace("video_edit_", "", $keyData);
+                            foreach ($trick->getVideos() as $video) {
+                                if ($videoId === $video->getId()) {
+                                    $videoFound = true;
+                                    $video->setName($data);
+                                    break;
+                                }
+                            }
+                    }
+                }
+       
+                // if ($videoFound) {
+                //     throw new \Exception('Video introuvable.');
+                // }
+
+                // Compare the ID of the uploaded image and that in the database
                 foreach ($uploadedFiles as $key => $uploadedFile) {
                     $imageId = (int) str_replace('image_edit_', '', $key);
                     $imageFound = false;
@@ -183,19 +215,28 @@ class TrickController extends AbstractController
     }
 
     #[IsGranted('ROLE_USER')]
-    #[Route('/suppression-image/{slug}/{image_id}', name: 'trick_image_delete', methods: ['GET', 'POST'])]
-    public function deleteImage(
-        #[MapEntity(mapping: ['image_id' => 'id'])] Image $image,
+    #[Route('/suppression-media/{slug}/{type}/{media_id}', name: 'trick_media_delete', methods: ['GET', 'POST'])]
+    public function deleteMedia(
+        string $type,
+        int $media_id,
+        ImageRepository $imageRepository,
+        VideoRepository $videoRepository,
         Trick $trick,
         Request $request
     ): Response {
         try {
-            $trick->removeImage($image);
+            if ($type === 'image') {
+                $media = $imageRepository->findOneById($media_id);
+                $trick->removeImage($media);
+            } elseif ($type === 'video') {
+                $media = $videoRepository->findOneById($media_id);
+                $trick->removeVideo($media);
+            }
 
             $this->manager->persist($trick);
             $this->manager->flush();
 
-            $this->addFlash('success', 'Ton image ' . $image->getId() . ' été supprimé.');
+            $this->addFlash('success', 'Ton media ' . $media->getId() . ' a été supprimé.');
         } catch (\Exception $e) {
             $this->addFlash('warning', 'Une erreur s\'est produite lors de la suppression du image de ta figure de snowboard ' . $trick->getName() . ' ' . $e->getMessage());
             return $this->redirect($request->headers->get('referer'));
@@ -203,6 +244,7 @@ class TrickController extends AbstractController
 
         return $this->redirect($request->headers->get('referer'));
     }
+
 
     #[IsGranted('ROLE_USER')]
     #[Route('/supprimer-la-figure-de-snowboard/{slug}', name: 'trick_delete', methods: ['POST', 'DELETE'])]
@@ -214,20 +256,19 @@ class TrickController extends AbstractController
             throw $this->createNotFoundException('Aucun utilisateur connecté.');
             return $this->redirectToRoute('login');
         }
-        
+
         $this->denyAccessUnlessGranted(TrickVoter::DELETE, $trick);
 
         try {
             if (!$trick) {
                 throw $this->createNotFoundException('Figure non trouvée.');
             }
-         
+
             $this->manager->remove($trick);
             $this->manager->flush();
 
             $this->addFlash('success', 'Ta figure de snowboard ' . $trick->getName() . ' a été supprimée.');
             return $this->redirectToRoute('home');
-            
         } catch (\Exception $e) {
             $this->addFlash('warning', 'Une erreur s\'est produite lors de la suppression de ta figure de snowboard ' . $trick->getName() . ' ' . $e->getMessage());
             return $this->redirect($request->headers->get('referer'));

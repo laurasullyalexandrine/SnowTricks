@@ -191,13 +191,11 @@ class Trick
     {
         $defaultImage = new Image();
         $defaultImage->setName(Image::DEFAULT_IMAGE);
-        if (!$this->images) {
-            return $defaultImage;
-        }
         
         foreach ($this->images as $image) {
                 return $image;
         }
+ 
         return $defaultImage;
     }
 
