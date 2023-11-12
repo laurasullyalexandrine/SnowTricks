@@ -166,7 +166,7 @@ class TrickController extends AbstractController
                         if ($videoId === $video->getId()) {
 
                             if ((!preg_match('/^<iframe/', $data) && (!preg_match('/^<embed/', $data)))) {
-                                $message = 'Ce lien n’est pas valide ' . '"'. $data . '"' . '. Merci de vérifier qu’il commence bien par <embed ou <iframe.';
+                                $message = 'Ce lien n’est pas valide ' . '"' . $data . '"' . '. Merci de vérifier qu’il commence bien par <embed ou <iframe.';
                                 $this->addFlash('danger', $message);
                                 return $this->redirect($request->headers->get('referer'));
                             }
