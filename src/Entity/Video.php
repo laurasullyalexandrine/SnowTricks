@@ -51,6 +51,9 @@ class Video
 
     public function setName(string $name): static
     {
+        if (preg_match('/ src="([^"]*)"/', $name, $matches)) {
+            $name = $matches[1] ?? $name;
+        }
         $this->name = $name;
 
         return $this;

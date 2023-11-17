@@ -180,22 +180,22 @@ class Trick
     //     return $this;
     // }
 
-    // /**
+    /**
     //  * Allows you to display only one image or the default image
     //  *
     //  * @return Image
     //  */
-    // public function getMainImage(): Image
-    // {
-    //     $defaultImage = new Image();
-    //     $defaultImage->setName(Image::DEFAULT_IMAGE);
+    public function getMainImage(): Image
+    {
+        $defaultImage = new Image();
+        $defaultImage->setName(Image::DEFAULT_IMAGE);
         
-    //     foreach ($this->images as $image) {
-    //             return $image;
-    //     }
+        foreach ($this->images as $image) {
+                return $image;
+        }
  
-    //     return $defaultImage;
-    // }
+        return $defaultImage;
+    }
 
     public function getTags(): array
     {

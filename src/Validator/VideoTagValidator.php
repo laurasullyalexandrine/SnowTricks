@@ -19,9 +19,9 @@ class VideoTagValidator extends ConstraintValidator
         if (null === $value || '' === $value) {
             return;
         }
-        filter_var($value);
-        htmlentities($value);
-       if (!preg_match('/^<iframe/', $value) && (!preg_match('/^<embed/', $value))) {
+
+       if (!preg_match('/ src="([^"]*)"/', $value) && !str_starts_with("https://", $value)) {
+            // dd($value);
             $this->context->buildViolation($constraint->message)
             ->setParameter('{{ value }}', $value)
             ->addViolation();
