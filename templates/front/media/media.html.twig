@@ -15,12 +15,9 @@
 {# video management #}
 {% macro videoLoop(trick, withInput) %}
 	{% for video in trick.videos %}
-		<div clas="d-flex">
+		<div class="d-flex flex-wrap">
 			<div class="mb-3 me-3">
-				{{ video.name|raw }}
-				<embed type="video/webm" src="{{ video.name|raw }}"/>
-				<iframe src="{{ video.name|raw }}" frameborder="0" allowfullscreen></iframe>
-			</div>
+				<iframe src="{{ video.name }}" frameborder="0" allowfullscreen></iframe>
 			<div>
 				{% if app.request.attributes.get('_route') == "trick_edit" %}
 					{% include "_partial/_edit-delete-video.html.twig" with { withInput: withInput } %}

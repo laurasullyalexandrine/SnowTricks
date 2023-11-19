@@ -2,10 +2,9 @@
 
 namespace App\Entity;
 
-
-use Doctrine\ORM\Mapping as ORM;
 use App\Repository\VideoRepository;
-
+use Doctrine\ORM\Mapping as ORM;
+use App\Validator as MyConstraints;
 
 #[ORM\Entity(repositoryClass: VideoRepository::class)]
 class Video
@@ -18,6 +17,7 @@ class Video
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[MyConstraints\VideoTag()]
     private ?string $name = null;
 
     #[ORM\Column]
@@ -25,7 +25,6 @@ class Video
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updated_at = null;
-
 
     #[ORM\ManyToOne(inversedBy: 'videos', cascade: ['persist'])]
     private ?Trick $trick = null;
@@ -35,14 +34,14 @@ class Video
         $this->created_at = new \DateTimeImmutable();
     }
 
-    public function __toString()
-    {
-        return $this->name;
-    }
-
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function __toString()
+    {
+        return $this->name;
     }
 
     public function getName(): ?string
@@ -52,6 +51,9 @@ class Video
 
     public function setName(string $name): static
     {
+        if (preg_match('/ src="([^"]*)"/', $name, $matches)) {
+            $name = $matches[1] ?? $name;
+        }
         $this->name = $name;
 
         return $this;
@@ -88,7 +90,6 @@ class Video
 
     public function setTrick(?Trick $trick): static
     {
-        
         $this->trick = $trick;
 
         return $this;

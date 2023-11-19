@@ -6,7 +6,7 @@ use App\Repository\ImageRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-#[ORM\Entity(repositoryClass: imageRepository::class)]
+#[ORM\Entity(repositoryClass: ImageRepository::class)]
 #[ORM\HasLifecycleCallbacks]
 class Image
 {
@@ -102,8 +102,14 @@ class Image
     #[ORM\PrePersist]
     public function setFileName(): void
     {
-        $this->uploadedFile = new UploadedFile($this->name, 'test', null, null, true); 
-        $this->name = uniqid() . '.' . $this->uploadedFile->guessExtension();
+        $this->uploadedFile = new UploadedFile($this->name, 'test', null, null, true);
+        $default = 'default';
+       
+        if (preg_match('/^default/', strstr($this->name, $default))) {
+           $this->name = strstr($this->name, $default);
+        } else {
+            $this->name = uniqid() . '.' . $this->uploadedFile->guessExtension();
+        }
     }
 
     /**
