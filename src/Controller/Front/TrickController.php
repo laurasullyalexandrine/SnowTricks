@@ -118,7 +118,6 @@ class TrickController extends AbstractController
 
                 // Add the images
                 foreach ($images as $image) {
-                    // $image->setFileName();
                     $image->setTrick($trick);
                     $this->manager->persist($image);
                 }
@@ -135,7 +134,7 @@ class TrickController extends AbstractController
 
                 $this->manager->flush();
 
-                $this->addFlash('success', 'Ta figure a été créée.');
+                $this->addFlash('success', 'Ta figure ' . '"' . $trick->getName() . '"' . ' a été créée.');
                 return $this->redirectToRoute('home');
             } catch (\Exception $e) {
                 $this->addFlash('error', 'Une erreur est survenue lors de la création de ta figure erreur : ' . $e->getMessage());
@@ -209,7 +208,7 @@ class TrickController extends AbstractController
                 $this->manager->persist($trick);
                 $this->manager->flush();
 
-                $this->addFlash('success', 'Ta figure ' . $trick->getName() . ' a été modifiée.');
+                $this->addFlash('success', 'Ta figure ' . '"' . $trick->getName() . '"' . ' a été modifiée.');
                 return $this->redirect($request->headers->get('referer'));
             } catch (\Exception $e) {
                 $this->addFlash('warning', 'Une erreur s\'est produite lors de la modification de ta figure de snowboard  ' . '"' . $trick->getName() . '"' . ' ' . $e->getMessage());
@@ -245,7 +244,7 @@ class TrickController extends AbstractController
             $this->manager->persist($trick);
             $this->manager->flush();
 
-            $this->addFlash('success', 'Ton media a été supprimé.');
+            $this->addFlash('success', 'Ton media' . '"' . $media->getId() . '"' . 'a été supprimé.');
         } catch (\Exception $e) {
             $this->addFlash('warning', 'Une erreur s\'est produite lors de la suppression du média de ta figure de snowboard  ' . '"' . $trick->getName() . '"' . ' ' . $e->getMessage());
             return $this->redirect($request->headers->get('referer'));
