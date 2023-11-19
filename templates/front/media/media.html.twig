@@ -15,7 +15,7 @@
 {# video management #}
 {% macro videoLoop(trick, withInput) %}
 	{% for video in trick.videos %}
-		<div class="d-flex flex-column">
+		<div class="d-flex flex-wrap">
 			<div class="mb-3 me-3">
 				<iframe src="{{ video.name }}" frameborder="0" allowfullscreen></iframe>
 			<div>
