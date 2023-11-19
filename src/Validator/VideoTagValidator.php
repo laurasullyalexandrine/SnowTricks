@@ -21,7 +21,6 @@ class VideoTagValidator extends ConstraintValidator
         }
 
        if (!preg_match('/ src="([^"]*)"/', $value) && !str_starts_with("https://", $value)) {
-            // dd($value);
             $this->context->buildViolation($constraint->message)
             ->setParameter('{{ value }}', $value)
             ->addViolation();

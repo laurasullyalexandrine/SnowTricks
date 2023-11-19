@@ -2,7 +2,7 @@
 
 {% block body %}
 	<article class="row d-flex flex-column">
-		{% if app.user and app.user.isverified and app.request.attributes.get('_route') == "trick_slug" and trick.images|length > 0 %}
+		{% if app.user and app.user.isverified %}
 			<div class="block-edit-delete d-flex justify-content-center position-absolute top-25 end-0 text-center">
 				<a class="btn-edit me-3" href="{{ path('trick_edit', { slug: trick.slug } )}}">
 					<i class="fa-solid fa-pen fa-lg" style="color: #95a5a6;"></i>
@@ -15,7 +15,7 @@
 
 		{# main title and image #}
 		{% block maintrick %}
-			<section class="py-5 {% if trick.mainImage.name == " default.png" %} bg-body {% else %} bg-black {% endif %}">
+			<section class="py-5 {% if trick.mainImage.name matches '{^default}' %} bg-body {% else %} bg-black {% endif %}">
 				<h1 class="position-absolute top-25 start-50">
 					<span class="trick-name fs-1 mt-lg-3 position-absolute top-0 start-50 translate-middle badge">{{ trick.name }}</span>
 				</h1>

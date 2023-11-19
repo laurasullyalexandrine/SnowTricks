@@ -121,7 +121,9 @@ li {
     background-color: #000;
 }
 
-.media-tag {
+.media-tag,
+iframe,
+embed {
     max-width: 250px;
     min-height: 170px;
 }
@@ -135,11 +137,6 @@ li {
 #thumbnail {
     max-width: 16rem;
     max-height: 16rem;
-}
-
-iframe, embed {
-    width: 250px;
-    height: 170px;
 }
 
 /* NAV FOOTER */
